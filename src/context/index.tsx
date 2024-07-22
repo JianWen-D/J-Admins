@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
-import { AuthProvider } from './authContext';
-import { CommonProvider } from './commonContext';
+import { ReactNode } from "react";
+import { AuthProvider } from "./authContext";
+import { CommonProvider } from "./commonContext";
 
 export const AppProviders = ({ children }: { children: ReactNode }) => {
   return (

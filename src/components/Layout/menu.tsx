@@ -1,4 +1,3 @@
-import React from "react";
 import {
   AppstoreOutlined,
   MailOutlined,
@@ -6,6 +5,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
+import { useNavigate } from "react-router";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -20,8 +20,8 @@ const items: MenuItem[] = [
         label: "Item 1",
         type: "group",
         children: [
-          { key: "1", label: "Option 1" },
-          { key: "2", label: "Option 2" },
+          { key: "/", label: "Option 1" },
+          { key: "/about", label: "Option 2" },
         ],
       },
       {
@@ -73,19 +73,23 @@ const items: MenuItem[] = [
     children: [
       { key: "13", label: "Option 13" },
       { key: "14", label: "Option 14" },
+      { key: "15", label: "Option 15" },
+      { key: "16", label: "Option 16" },
     ],
   },
 ];
 
 const JMenu = () => {
-  const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
+  const navigate = useNavigate();
+  const onClick = (key: string) => {
+    navigate(key);
+    // console.log("click ", e);
   };
 
   return (
     <Menu
       // theme="dark"
-      onClick={onClick}
+      onClick={({ key }) => onClick(key)}
       style={{ width: 256 }}
       defaultSelectedKeys={["1"]}
       defaultOpenKeys={["sub1"]}

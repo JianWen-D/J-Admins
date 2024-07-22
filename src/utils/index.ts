@@ -1,5 +1,5 @@
-import { RouteTypesList } from '../types/config';
-export const getAllRouterList = (list: RouteTypesList[]) => {
+// import { RouteTypesList } from '../types/config';
+export const getAllRouterList = (list: any[]) => {
   return list.reduce((prev: any, next: any) => {
     if (next.routes) {
       return [
@@ -20,8 +20,8 @@ export const getAllRouterList = (list: RouteTypesList[]) => {
  * @returns
  */
 export const filterInvalidData = (data: any) => {
-  return Object.keys(data).reduce((prev: Object, next: string) => {
-    if (data[next] === undefined || data[next] === null || data[next] === '') {
+  return Object.keys(data).reduce((prev: object, next: string) => {
+    if (data[next] === undefined || data[next] === null || data[next] === "") {
       return prev;
     }
     return {

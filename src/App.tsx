@@ -1,12 +1,17 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 // import "./App.css";
 import { ConfigProvider } from "antd";
 import locale from "antd/locale/zh_CN";
 import { useAuth, useCommon } from "./utils/hooks";
 import JLogin from "./components/Login";
 import JLayout from "./components/Layout";
+import { Outlet } from "react-router";
+import LoadingSuspense from "./components/Loading";
 
-const App = () => {
+interface AppProps {
+  miniProgram: boolean | undefined;
+}
+const App = (props: AppProps) => {
   const { isLogin, onLogin } = useAuth();
   const { loading, setLoading } = useCommon();
 
@@ -18,21 +23,33 @@ const App = () => {
       onLogin(data);
     }, 5000);
   };
+
   return (
-    <Suspense fallback={<span>loading</span>}>
-      <ConfigProvider
-        locale={locale}
-        theme={{
-          token: {
-            colorPrimary: "#2d8cf0",
-            borderRadius: 4,
-            controlHeight: 36,
-          },
-        }}
-      >
+    <ConfigProvider
+      locale={locale}
+      theme={{
+        token: {
+          colorPrimary: "#2d8cf0",
+          borderRadius: 4,
+          controlHeight: 36,
+        },
+      }}
+    >
+      {props.miniProgram && (
+        <div id="container">
+          <Suspense fallback={<LoadingSuspense />}>
+            <Outlet></Outlet>
+          </Suspense>
+        </div>
+      )}
+      {!props.miniProgram && (
         <div className="app">
           {isLogin ? (
-            <JLayout logoSrc="https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png"></JLayout>
+            <JLayout logoSrc="https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png">
+              <Suspense fallback={<LoadingSuspense />}>
+                <Outlet></Outlet>
+              </Suspense>
+            </JLayout>
           ) : (
             <JLogin
               title="管理后台"
@@ -42,8 +59,8 @@ const App = () => {
             />
           )}
         </div>
-      </ConfigProvider>
-    </Suspense>
+      )}
+    </ConfigProvider>
   );
 };
 

@@ -2,7 +2,7 @@ import { Button, Layout, Tooltip } from "antd";
 import JMenu from "./menu";
 import "./index.less";
 import JApplication from "./Application";
-import { useState } from "react";
+import React, { useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
 import JLayoutHeader from "./header";
 import JHeaderBreadcrumb from "./breadcrumb";
@@ -10,6 +10,7 @@ const { Sider, Header, Content, Footer } = Layout;
 
 interface JLayoutProps {
   logoSrc: string;
+  children: React.ReactElement | null;
 }
 
 const JLayout = (props: JLayoutProps) => {
@@ -99,12 +100,15 @@ const JLayout = (props: JLayoutProps) => {
             <JLayoutHeader></JLayoutHeader>
           </Header>
           <JHeaderBreadcrumb></JHeaderBreadcrumb>
-          <Content style={{ margin: "0 16px", overflow: "initial" }}></Content>
+          <Content style={{ margin: "0 16px", overflow: "initial" }}>
+            {props.children}
+          </Content>
           <Footer style={{ textAlign: "center" }}>
-            Ying cai ©{new Date().getFullYear()} Created by Janvem
+            yingcaifuwu.top ©{new Date().getFullYear()} Created by Janvem
           </Footer>
         </Layout>
       </Layout>
+      {/* 应用选择 */}
       {appsVisable && (
         <JApplication
           appId={appId}

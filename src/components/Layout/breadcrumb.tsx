@@ -1,37 +1,22 @@
 import { Breadcrumb } from "antd";
+import { useMatches } from "react-router";
 
 const JHeaderBreadcrumb = () => {
+  const Matches = useMatches();
   return (
     <div
       style={{
-        // backgroundColor: "#fff",
-        height: 32,
-        padding: "0 12px",
+        lineHeight: 32,
+        padding: "8px 12px",
         display: "flex",
         alignItems: "center",
       }}
     >
       <Breadcrumb
-        separator=""
-        items={[
-          {
-            href: "",
-            title: "Application Center",
-          },
-          {
-            type: "separator",
-          },
-          {
-            href: "",
-            title: "Application List",
-          },
-          {
-            type: "separator",
-          },
-          {
-            title: "An Application",
-          },
-        ]}
+        items={Matches.map((item: any) => ({
+          href: item.pathname,
+          title: item.data.title,
+        }))}
       />
     </div>
   );
