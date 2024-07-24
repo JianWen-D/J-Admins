@@ -7,7 +7,7 @@ const JHeaderBreadcrumb = () => {
     <div
       style={{
         lineHeight: 32,
-        padding: "8px 12px",
+        padding: "12px 16px",
         display: "flex",
         alignItems: "center",
       }}

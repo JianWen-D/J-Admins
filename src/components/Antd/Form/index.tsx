@@ -12,7 +12,7 @@ import {
   Select,
 } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { JFormColumnsProps, JFormProps } from "./types";
+import { JFormItemProps, JFormProps } from "./types";
 // import JUploadImage from './JUploadImage';
 
 const { RangePicker } = DatePicker;
@@ -38,8 +38,8 @@ const initForm = (
       >
         <Row>
           {options
-            .filter((item: JFormColumnsProps) => item.show)
-            .map((item: JFormColumnsProps, index: number) => {
+            .filter((item: JFormItemProps) => item.show)
+            .map((item: JFormItemProps, index: number) => {
               switch (item.type) {
                 case "input":
                   return (

@@ -12,8 +12,14 @@ export const AuthContext = React.createContext<
 
 AuthContext.displayName = "AuthContext";
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>({});
+export const AuthProvider = ({
+  children,
+  userInfo,
+}: {
+  children: ReactNode;
+  userInfo?: any;
+}) => {
+  const [user, setUser] = useState<any>(userInfo || {});
   // const history = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
 

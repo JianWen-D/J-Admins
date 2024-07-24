@@ -5,8 +5,9 @@ import locale from "antd/locale/zh_CN";
 import { useAuth, useCommon } from "./utils/hooks";
 import JLogin from "./components/Login";
 import JLayout from "./components/Layout";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import LoadingSuspense from "./components/Loading";
+import JAuth from "./components/Auth";
 
 interface AppProps {
   miniProgram: boolean | undefined;
@@ -14,6 +15,7 @@ interface AppProps {
 const App = (props: AppProps) => {
   const { isLogin, onLogin } = useAuth();
   const { loading, setLoading } = useCommon();
+  const location = useLocation();
 
   // 出发登录
   const handleLogin = (data: any) => {
@@ -38,7 +40,9 @@ const App = (props: AppProps) => {
       {props.miniProgram && (
         <div id="container">
           <Suspense fallback={<LoadingSuspense />}>
-            <Outlet></Outlet>
+            <JAuth type="page" authKey={location.pathname}>
+              <Outlet></Outlet>
+            </JAuth>
           </Suspense>
         </div>
       )}
@@ -47,7 +51,9 @@ const App = (props: AppProps) => {
           {isLogin ? (
             <JLayout logoSrc="https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png">
               <Suspense fallback={<LoadingSuspense />}>
-                <Outlet></Outlet>
+                <JAuth type="page" authKey={location.pathname}>
+                  <Outlet></Outlet>
+                </JAuth>
               </Suspense>
             </JLayout>
           ) : (

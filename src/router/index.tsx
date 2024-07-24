@@ -23,7 +23,7 @@ const router = (miniProgram: boolean | undefined) => [
       {
         path: "",
         id: "home",
-        loader: () => ({ title: "首页" }),
+        loader: () => ({ title: "首页", desc: "应用首页" }),
         element: lazyComponent("Home"),
       },
       {

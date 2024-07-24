@@ -2,10 +2,24 @@ import { ReactNode } from "react";
 import { AuthProvider } from "./authContext";
 import { CommonProvider } from "./commonContext";
 
-export const AppProviders = ({ children }: { children: ReactNode }) => {
+interface AuthProps {
+  page: string[];
+  element: string[];
+  api: string[];
+}
+
+export const AppProviders = ({
+  children,
+  auth,
+  userInfo,
+}: {
+  children: ReactNode;
+  auth?: AuthProps;
+  userInfo: any;
+}) => {
   return (
-    <CommonProvider>
-      <AuthProvider>{children}</AuthProvider>
+    <CommonProvider auth={auth}>
+      <AuthProvider userInfo={userInfo}>{children}</AuthProvider>
     </CommonProvider>
   );
 };

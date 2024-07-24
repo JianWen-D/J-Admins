@@ -1,5 +1,5 @@
 export interface JFormProps {
-  options: JFormColumnsProps[];
+  options: JFormItemProps[];
   columns?: number;
   labelCol?: {
     span: number;
@@ -9,7 +9,7 @@ export interface JFormProps {
   };
 }
 
-export interface JFormColumnsProps {
+export interface JFormItemProps {
   type:
     | "input" // 输入框
     | "password" // 输入框

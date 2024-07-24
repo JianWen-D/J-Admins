@@ -5,6 +5,11 @@ interface ConfigProps {
     APP_ID: string; // 应用ID
     APP_ROUTER: string; // 应用根路由
   };
+  AUTH_WHITE: {
+    page: string[];
+    element: string[];
+    api: string[];
+  };
 }
 
 const config: ConfigProps = {
@@ -13,6 +18,11 @@ const config: ConfigProps = {
     OPEN: import.meta.env.VITE_APP_MINI_PROGRAM,
     APP_ID: import.meta.env.VITE_APP_APP_ID,
     APP_ROUTER: import.meta.env.VITE_APP_APP_ROUTE,
+  },
+  AUTH_WHITE: {
+    page: ["/about", "/"],
+    element: [],
+    api: [],
   },
 };
 

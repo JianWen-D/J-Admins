@@ -10,6 +10,7 @@ import renderWithQiankun, {
 } from "vite-plugin-qiankun/dist/helper";
 import "./public-path.js";
 import router from "./router/index.tsx";
+import request from "./api/index.ts";
 
 let root: any = null;
 const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
@@ -18,6 +19,10 @@ const render = (props: any) => {
   const _router = createBrowserRouter(router(miniProgram), {
     basename: miniProgram ? config.MINI_PROGRAM.APP_ROUTER : "/",
   });
+  // 存储token
+  if (props.token) {
+    request.setToken(props.token);
+  }
   root =
     root ||
     ReactDOM.createRoot(
@@ -27,7 +32,7 @@ const render = (props: any) => {
     );
   root.render(
     <Provider store={store}>
-      <AppProviders>
+      <AppProviders auth={props.auth} userInfo={props.userInfo}>
         <RouterProvider router={_router}></RouterProvider>
       </AppProviders>
     </Provider>
