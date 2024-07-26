@@ -7,7 +7,7 @@ const { Title, Text } = Typography;
 interface JPageProps {
   title: string;
   desc: string;
-  children: React.ReactElement;
+  children: React.ReactNode;
 }
 
 const JPage = (props: JPageProps) => {

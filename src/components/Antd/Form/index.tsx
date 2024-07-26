@@ -10,6 +10,7 @@ import {
   Radio,
   Row,
   Select,
+  TimePicker,
 } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { JFormItemProps, JFormProps } from "./types";
@@ -275,7 +276,7 @@ const initForm = (
                       </Form.Item>
                     </Col>
                   );
-                case "timeRange":
+                case "dateRange":
                   return (
                     <Col key={index} span={24 / (item.columns || columns)}>
                       <Form.Item
@@ -286,9 +287,24 @@ const initForm = (
                         rules={item.rules || []}
                       >
                         <RangePicker
+                          picker={item.pickerType || "date"}
                           showTime={{ format: "HH:mm" }}
                           format="YYYY-MM-DD HH:mm"
                         />
+                      </Form.Item>
+                    </Col>
+                  );
+                case "time":
+                  return (
+                    <Col key={index} span={24 / (item.columns || columns)}>
+                      <Form.Item
+                        labelCol={item.labelCol || labelCol}
+                        wrapperCol={item.wrapperCol || wrapperCol}
+                        name={item.key}
+                        label={item.label}
+                        rules={item.rules || []}
+                      >
+                        <TimePicker format="HH:mm" />
                       </Form.Item>
                     </Col>
                   );

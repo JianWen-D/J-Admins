@@ -12,20 +12,19 @@ export interface JFormProps {
 export interface JFormItemProps {
   type:
     | "input" // 输入框
-    | "password" // 输入框
+    | "password" // 密码
     | "textarea" // 文本框
-    | "number" // 数字输入框
+    | "number" // 数字
     | "select" // 选择框
     | "radio" // 单选框
-    | "date" // 日期选择
-    | "timeRange" // 日期范围选择
-    | "time" // 时间选择
     | "checkbox" // 多选
+    | "date" // 日期选择
+    | "dateRange" // 日期范围选择
+    | "time" // 时间选择
     | "image" // 图片
     | "color" // 颜色选择
     | "cascader" // 层级选择
-    | "slot" // 自定义
-    | undefined;
+    | "slot"; // 自定义
   columns?: number; // 布局
   // 文本宽度
   labelCol?: {
@@ -47,7 +46,7 @@ export interface JFormItemProps {
   inputType?: string;
   // 占位文本
   placeholder?: string;
-  // 键盘🚢
+  // 键盘
   onKeyUp?: (e: { keyCode: number }) => void;
   // 数据源： select，radio，checkbox
   options?: any[];
@@ -68,4 +67,11 @@ export interface JFormItemProps {
   // 展示时间
   showTime?: boolean;
   length?: number;
+  width?: number;
+  pickerType?: "date" | "week" | "month" | "quarter" | "year";
+  format?: string;
+  color?: {
+    [key: string | number]: string;
+  };
+  mode?: "multiple" | undefined;
 }
