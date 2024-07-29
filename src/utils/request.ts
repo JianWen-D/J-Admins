@@ -43,6 +43,12 @@ export interface RequestCustomConfigType {
   retryCurrentCount?: number;
 }
 
+export interface ApiResultProps<T> {
+  code: "0" | string;
+  data: T;
+  msg: string;
+}
+
 export interface RequestParamsType {
   url: string;
   method?: Method;
@@ -218,6 +224,13 @@ class JAxios {
     this.token = token;
   }
   /**
+   * 获取token
+   * @param token token
+   */
+  getToken() {
+    return (window as any).localStorage.getItem(this.tokenKey);
+  }
+  /**
    * 清除token
    * @param token token
    */
@@ -357,7 +370,7 @@ class JAxios {
   ): AxiosRequestConfig {
     // 每个请求的唯一key
     const requestKey = this.generateReqKey(requestConfig);
-    let _config: any = requestConfig;
+    const _config: any = requestConfig;
     _config.requestKey = requestKey;
     // 自定义请求头
     if (customConfig.customHeader) {
@@ -393,7 +406,7 @@ class JAxios {
    * @param config 请求配置项
    * @returns 返回请求结果
    */
-  async get<T>(config: RequestParamsType): Promise<T> {
+  async get<T>(config: RequestParamsType): Promise<ApiResultProps<T>> {
     return this.request(
       {
         method: "GET",
@@ -410,7 +423,7 @@ class JAxios {
    * @param config 请求配置项
    * @returns 返回请求结果
    */
-  async post<T>(config: RequestParamsType): Promise<T> {
+  async post<T>(config: RequestParamsType): Promise<ApiResultProps<T>> {
     return this.request(
       {
         method: "POST",
@@ -426,7 +439,7 @@ class JAxios {
    * @param config 请求配置项
    * @returns 返回请求结果
    */
-  async put<T>(config: RequestParamsType): Promise<T> {
+  async put<T>(config: RequestParamsType): Promise<ApiResultProps<T>> {
     return this.request(
       {
         method: "PUT",
@@ -442,7 +455,7 @@ class JAxios {
    * @param config 请求配置项
    * @returns 返回请求结果
    */
-  async delete<T>(config: RequestParamsType): Promise<T> {
+  async delete<T>(config: RequestParamsType): Promise<ApiResultProps<T>> {
     return this.request(
       {
         method: "DELETE",
@@ -458,7 +471,7 @@ class JAxios {
    * @param config 请求配置项
    * @returns 返回请求结果
    */
-  async form<T>(config: RequestParamsType): Promise<T> {
+  async form<T>(config: RequestParamsType): Promise<ApiResultProps<T>> {
     return this.request(
       {
         method: "POST",
@@ -479,7 +492,7 @@ class JAxios {
    * @param config 请求配置项
    * @returns 返回请求结果
    */
-  async upload<T>(config: RequestParamsType): Promise<T> {
+  async upload<T>(config: RequestParamsType): Promise<ApiResultProps<T>> {
     const toFormData = function (params: any = {}) {
       const formData = new FormData();
       Object.keys(params).forEach((key) => {

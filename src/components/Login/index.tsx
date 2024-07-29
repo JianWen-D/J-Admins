@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JForm from "../Antd/Form";
 import { Button, Checkbox, Col, Form, Row } from "antd";
 import "./index.less";
@@ -21,7 +21,7 @@ interface JLoginProps {
 const JLogin = (props: JLoginProps) => {
   const {
     loading = false,
-    applicationName = "admin",
+    applicationName = "",
     title = "后台管理系统",
     logoSrc = "",
     onSubmit = () => {},
@@ -32,6 +32,20 @@ const JLogin = (props: JLoginProps) => {
       ? true
       : false
   );
+
+  useEffect(() => {
+    if (remember) {
+      const account = JSON.parse(
+        localStorage.getItem(
+          `${applicationName}_account`.toLocaleUpperCase()
+        ) as string
+      );
+      formRef.setFieldsValue({
+        username: account.username,
+        password: account.password,
+      });
+    }
+  }, []);
 
   // 登录
   const handleLogin = () => {

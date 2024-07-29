@@ -1,10 +1,14 @@
 import { EditOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Flex, Tooltip, Typography } from "antd";
 import { MenuProps } from "antd/lib";
-import React from "react";
+import request from "../../api";
 const { Text } = Typography;
 
-const JLayoutHeader: React.FC = () => {
+interface JLayoutHeaderProps {
+  username: string;
+}
+
+const JLayoutHeader = (props: JLayoutHeaderProps) => {
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -25,12 +29,17 @@ const JLayoutHeader: React.FC = () => {
       ),
     },
   ];
+
+  const handleLogout = () => {
+    request.clearToken();
+  };
+
   return (
     <Flex style={{ height: 64 }} justify={"flex-end"} align={"center"}>
       <Dropdown menu={{ items }} placement="bottomRight" arrow>
         <Flex style={{ height: 64 }} justify={"center"} align={"center"}>
           <Avatar icon={<UserOutlined />} />
-          <Text style={{ marginLeft: 8 }}>Administrator</Text>
+          <Text style={{ marginLeft: 8 }}>{props.username || ""}</Text>
         </Flex>
       </Dropdown>
       <Tooltip title="退出" placement="bottom">
@@ -38,6 +47,9 @@ const JLayoutHeader: React.FC = () => {
           style={{ marginLeft: 8 }}
           type="text"
           icon={<LogoutOutlined />}
+          onClick={() => {
+            handleLogout();
+          }}
         ></Button>
       </Tooltip>
     </Flex>

@@ -26,6 +26,7 @@ const request = new JAxios({
     wait: 2000,
     count: 3,
   },
+  tokenPrefix: config.APP_NAME,
 });
 
 export default request;

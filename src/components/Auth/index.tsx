@@ -16,7 +16,7 @@ const JAuth = (props: JAuthProps) => {
   }
   // 判断页面和元素权限
   if (!authKey) {
-    return children;
+    return <JNoFound />;
   }
   return auth[type].find((item: string) => item === authKey) ? (
     children

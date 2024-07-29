@@ -79,7 +79,11 @@ const items: MenuItem[] = [
   },
 ];
 
-const JMenu = () => {
+interface JMenuProps {
+  menu: any[];
+}
+
+const JMenu = (props: JMenuProps) => {
   const navigate = useNavigate();
   const onClick = (key: string) => {
     navigate(key);
@@ -90,11 +94,11 @@ const JMenu = () => {
     <Menu
       // theme="dark"
       onClick={({ key }) => onClick(key)}
-      style={{ width: 256 }}
+      style={{ width: 256, overflowX: "hidden" }}
       defaultSelectedKeys={["1"]}
       defaultOpenKeys={["sub1"]}
       mode="inline"
-      items={items}
+      items={props.menu}
     />
   );
 };

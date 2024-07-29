@@ -15,8 +15,8 @@ interface JApplicationProps {
 interface AppItemProps {
   id: string;
   name: string;
-  desc: string;
-  logo: string;
+  remark: string;
+  icon: string;
   link: string;
 }
 
@@ -37,9 +37,9 @@ const JApplication = (props: JApplicationProps) => {
                   <Badge.Ribbon text="当前选择" color="volcano">
                     <Card hoverable className="j-app-card">
                       <Meta
-                        avatar={<Avatar src={item.logo} />}
+                        avatar={<Avatar src={item.icon} />}
                         title={item.name}
-                        description={item.desc}
+                        description={item.remark}
                       />
                     </Card>
                   </Badge.Ribbon>
@@ -56,9 +56,9 @@ const JApplication = (props: JApplicationProps) => {
                   }}
                 >
                   <Meta
-                    avatar={<Avatar src={item.logo} />}
+                    avatar={<Avatar src={item.icon} />}
                     title={item.name}
-                    description={item.desc}
+                    description={item.remark}
                   />
                 </Card>
               </Col>

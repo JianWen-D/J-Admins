@@ -2,11 +2,41 @@ import { Button, Layout, Tooltip } from "antd";
 import JMenu from "./menu";
 import "./index.less";
 import JApplication from "./Application";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
 import JLayoutHeader from "./header";
 import JHeaderBreadcrumb from "./breadcrumb";
+import { useAuth } from "../../utils/hooks";
+import { formatMenuListToTree, PermissionTypes } from "../../utils";
+import { MenuProps } from "antd/lib";
+import * as Icons from "@ant-design/icons";
 const { Sider, Header, Content, Footer } = Layout;
+
+export type MenuItem = Required<MenuProps>["items"][number];
+
+const getItem = (
+  label: React.ReactNode,
+  key: React.Key,
+  icon: string | null,
+  children?: MenuItem[],
+  type?: "group"
+): MenuItem => {
+  const Icon = (Icons as any)[`${icon}`];
+  return (children || []).length !== 0
+    ? ({
+        key,
+        icon: icon && <Icon />,
+        children: children || null,
+        label,
+        type,
+      } as MenuItem)
+    : ({
+        key,
+        icon: icon && <Icon />,
+        label,
+        type,
+      } as MenuItem);
+};
 
 interface JLayoutProps {
   logoSrc: string;
@@ -14,45 +44,29 @@ interface JLayoutProps {
 }
 
 const JLayout = (props: JLayoutProps) => {
-  const [appId, setAppId] = useState<string>("1");
+  const { appList, user, appInfo, changeActiveApp } = useAuth();
   const [appsVisable, setAppsVisable] = useState<boolean>(false);
-  const appList = [
-    {
-      id: "1",
-      name: "管理中心",
-      desc: "管理中心",
-      logo: "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
-      link: "/",
-    },
-    {
-      id: "2",
-      name: "管理中心2",
-      desc: "管理中心2",
-      logo: "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
-      link: "/",
-    },
-    {
-      id: "3",
-      name: "管理中心3",
-      desc: "管理中心3",
-      logo: "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
-      link: "/",
-    },
-    {
-      id: "4",
-      name: "管理中心4",
-      desc: "管理中心4",
-      logo: "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
-      link: "/",
-    },
-    {
-      id: "5",
-      name: "管理中心5",
-      desc: "管理中心5",
-      logo: "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
-      link: "/",
-    },
-  ];
+
+  const formatMenuTreeData = (menuTreeList: PermissionTypes[]): MenuItem[] => {
+    return menuTreeList.reduce((prev: MenuItem[], next: PermissionTypes) => {
+      return [
+        ...prev,
+        getItem(
+          next.name,
+          next.value,
+          next.icon || null,
+          next.children.map((item) =>
+            getItem(item.name, item.value, item.icon || null)
+          )
+        ),
+      ];
+    }, []);
+  };
+
+  const formatMenuList = useMemo(() => {
+    return formatMenuTreeData(formatMenuListToTree(appInfo.permissionList));
+  }, [appInfo]);
+
   return (
     <>
       <Layout hasSider>
@@ -60,7 +74,8 @@ const JLayout = (props: JLayoutProps) => {
           theme="light"
           width={256}
           style={{
-            overflow: "auto",
+            overflowY: "auto",
+            overflowX: "hidden",
             height: "100vh",
             position: "fixed",
             left: 0,
@@ -70,7 +85,7 @@ const JLayout = (props: JLayoutProps) => {
         >
           <div className="j-sider-header">
             <img className="j-sider-logo" src={props.logoSrc || ""}></img>
-            <div className="j-sider-text">管理中心</div>
+            <div className="j-sider-text">{appInfo.name || "-"}</div>
             <Tooltip title="切换应用">
               <Button
                 type="text"
@@ -81,7 +96,7 @@ const JLayout = (props: JLayoutProps) => {
               />
             </Tooltip>
           </div>
-          <JMenu />
+          <JMenu menu={formatMenuList} />
         </Sider>
         <Layout
           style={{
@@ -97,7 +112,7 @@ const JLayout = (props: JLayoutProps) => {
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
             }}
           >
-            <JLayoutHeader></JLayoutHeader>
+            <JLayoutHeader username={user.name}></JLayoutHeader>
           </Header>
           <JHeaderBreadcrumb></JHeaderBreadcrumb>
           <Content style={{ margin: "0 16px", overflow: "initial" }}>
@@ -111,10 +126,11 @@ const JLayout = (props: JLayoutProps) => {
       {/* 应用选择 */}
       {appsVisable && (
         <JApplication
-          appId={appId}
+          appId={appInfo.id}
           appList={appList}
           onChange={(id) => {
-            setAppId(id);
+            changeActiveApp(id);
+            setAppsVisable(false);
           }}
           onCancel={() => {
             setAppsVisable(false);
