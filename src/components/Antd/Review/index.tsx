@@ -1,5 +1,6 @@
-import { Badge, Tag } from "antd";
+import { Badge, Image, Tag } from "antd";
 import dayjs from "dayjs";
+import { isNil } from "lodash";
 import { useMemo } from "react";
 
 interface JReviewProps {
@@ -15,7 +16,6 @@ interface JReviewProps {
     | "dateRange" // 日期范围选择
     | "time" // 时间选择
     | "image" // 图片
-    | "color" // 颜色选择
     | "cascader" // 层级选择
     | "slot"; // 自定义
   data: any;
@@ -32,7 +32,15 @@ interface JReviewProps {
 }
 
 const JReview = (props: JReviewProps) => {
-  const formatType = useMemo(() => {
+  const formatDom = useMemo(() => {
+    // 空值的时候直接返回
+    if (isNil(props.data)) {
+      return props.data || "-";
+    }
+    // 图片
+    if (["image"].includes(props.type)) {
+      return <Image width={36} src={props.data} />;
+    }
     // 日期
     if (["date"].includes(props.type)) {
       return dayjs(props.data).format(props.format || "YYYY-MM-DD HH:mm:ss");
@@ -49,6 +57,7 @@ const JReview = (props: JReviewProps) => {
         props.format || "YYYY/MM/DD HH:mm:ss"
       )}`;
     }
+    // 单选
     if (
       ["radio", "select"].includes(props.type) &&
       Array.isArray(props.options) &&
@@ -67,6 +76,7 @@ const JReview = (props: JReviewProps) => {
       }
       return props.data;
     }
+    // 多选
     if (
       ["select", "checkbox"].includes(props.type) &&
       Array.isArray(props.options)
@@ -86,7 +96,7 @@ const JReview = (props: JReviewProps) => {
     return props.data;
   }, [props]);
 
-  return formatType;
+  return formatDom;
 };
 
 export default JReview;

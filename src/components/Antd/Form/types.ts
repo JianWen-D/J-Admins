@@ -22,7 +22,6 @@ export interface JFormItemProps {
     | "dateRange" // 日期范围选择
     | "time" // 时间选择
     | "image" // 图片
-    | "color" // 颜色选择
     | "cascader" // 层级选择
     | "slot"; // 自定义
   columns?: number; // 布局
@@ -62,11 +61,13 @@ export interface JFormItemProps {
   disabled?: boolean;
   // 内容变动回调方法
   onChange?: (val: string | number | boolean) => void;
+  // 是否编辑
+  edit?: boolean;
   // 是否展示
   show?: boolean;
   // 展示时间
   showTime?: boolean;
-  length?: number;
+  maxCount?: number;
   width?: number;
   pickerType?: "date" | "week" | "month" | "quarter" | "year";
   format?: string;

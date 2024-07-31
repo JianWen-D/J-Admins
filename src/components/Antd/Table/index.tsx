@@ -17,23 +17,25 @@ interface JTableProps {
 }
 const JTable = (props: JTableProps) => {
   const tableColumns: ColumnProps<any>[] = useMemo(() => {
-    const formatColumns = props.columns.map((item) => ({
-      title: item.label,
-      dataIndex: item.key,
-      key: item.key,
-      width: item.width || 160,
-      render: (value: any) => (
-        <JReview
-          type={item.type}
-          data={value}
-          format={item.format}
-          options={item.options}
-          props={item.optionsProps}
-          color={item.color}
-          mode={item.mode}
-        ></JReview>
-      ),
-    }));
+    const formatColumns = props.columns
+      .filter((item) => item.show)
+      .map((item) => ({
+        title: item.label,
+        dataIndex: item.key,
+        key: item.key,
+        width: item.width || 160,
+        render: (value: any) => (
+          <JReview
+            type={item.type}
+            data={value}
+            format={item.format}
+            options={item.options}
+            props={item.optionsProps}
+            color={item.color}
+            mode={item.mode}
+          ></JReview>
+        ),
+      }));
     if (props.operation) {
       return [
         ...formatColumns,

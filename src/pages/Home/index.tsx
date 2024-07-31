@@ -11,6 +11,8 @@ import {
 } from "@ant-design/icons";
 import JTable from "../../components/Antd/Table";
 import { JFormItemProps } from "../../components/Antd/Form/types";
+import JCheck from "../../components/Antd/Check";
+import JEdit from "../../components/Antd/Edit";
 
 const HomePage = () => {
   const RouteLoaderData = useRouteLoaderData("home");
@@ -25,23 +27,45 @@ const HomePage = () => {
 
   const columns: JFormItemProps[] = [
     {
+      type: "image",
+      key: "avatar",
+      label: "头像",
+      edit: true,
+      show: true,
+      width: 100,
+      maxCount: 2,
+      columns: 1,
+      labelCol: {
+        span: 3,
+      },
+    },
+    {
       type: "input",
-      key: "name",
-      label: "名字",
+      key: "phone",
+      label: "手机号",
+      edit: true,
       show: true,
       width: 200,
     },
     {
-      type: "radio",
-      key: "gender",
-      label: "性别",
+      type: "input",
+      key: "email",
+      label: "邮箱",
+      edit: true,
+      show: true,
+      width: 200,
+    },
+    {
+      type: "select",
+      key: "user",
+      label: "用户",
       options: [
         {
-          label: "男",
+          label: "用户1",
           value: 1,
         },
         {
-          label: "女",
+          label: "用户2",
           value: 2,
         },
       ],
@@ -53,27 +77,54 @@ const HomePage = () => {
         label: "label",
         value: "value",
       },
+      edit: true,
       show: true,
       width: 200,
     },
     {
       type: "date",
-      key: "brithday",
+      key: "createdTime",
       label: "创建日期",
       show: true,
       width: 200,
     },
     {
-      type: "time",
-      key: "time",
-      label: "执行时间",
+      type: "date",
+      key: "lastLoginTime",
+      label: "最近登陆时间",
       show: true,
       width: 200,
     },
     {
-      type: "dateRange",
-      key: "dateRange",
+      type: "date",
+      key: "updatedTime",
       label: "更新时间",
+      show: true,
+      width: 200,
+    },
+    {
+      type: "radio",
+      key: "status",
+      label: "状态",
+      options: [
+        {
+          label: "正常",
+          value: 1,
+        },
+        {
+          label: "禁用",
+          value: 0,
+        },
+      ],
+      color: {
+        1: "green",
+        0: "red",
+      },
+      optionsProps: {
+        label: "label",
+        value: "value",
+      },
+      edit: true,
       show: true,
       width: 200,
     },
@@ -104,9 +155,18 @@ const HomePage = () => {
         ]}
         additionButton={
           <>
-            <Button type="primary" icon={<PlusOutlined />}>
-              新增
-            </Button>
+            <JEdit
+              title="123"
+              options={columns}
+              data={{}}
+              onSubmit={(data) => {
+                console.log(data);
+              }}
+            >
+              <Button type="primary" icon={<PlusOutlined />}>
+                新增
+              </Button>
+            </JEdit>
           </>
         }
         onSubmit={() => {}}
@@ -115,23 +175,37 @@ const HomePage = () => {
       <JTable
         data={[
           {
-            name: "小明",
-            brithday: "2024-01-01",
-            time: "2024-01-01 06:30",
-            dateRange: ["2024-01-31 06:30", "2024-01-01 06:30"],
-            gender: 1,
-            gender1: [1, 2, 3],
+            avatar:
+              "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
+            phone: "12345678901",
+            email: "123456789@qq.com",
+            createdTime: "2024-01-01 23:59:59",
+            lastLoginTime: "2024-01-01 06:30:59",
+            updatedTime: "2024-12-01 06:30:59",
+            user: 1,
+            status: 0,
           },
         ]}
-        operation={(record) => {
+        operation={(text, record) => {
           return (
             <>
-              <Button type="link" icon={<EyeOutlined />}>
-                查看
-              </Button>
-              <Button type="link" icon={<EditOutlined />}>
-                编辑
-              </Button>
+              <JCheck title="123" options={columns} data={record}>
+                <Button type="link" icon={<EyeOutlined />}>
+                  查看
+                </Button>
+              </JCheck>
+              <JEdit
+                title="123"
+                options={columns}
+                data={record}
+                onSubmit={(data) => {
+                  console.log(data);
+                }}
+              >
+                <Button type="link" icon={<EditOutlined />}>
+                  编辑
+                </Button>
+              </JEdit>
               <Button type="link" icon={<DeleteOutlined />}>
                 删除
               </Button>

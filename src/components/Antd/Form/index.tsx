@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { JFormItemProps, JFormProps } from "./types";
-// import JUploadImage from './JUploadImage';
+import JImage from "../Image";
 
 const { RangePicker } = DatePicker;
 
@@ -39,7 +39,7 @@ const initForm = (
       >
         <Row>
           {options
-            .filter((item: JFormItemProps) => item.show)
+            .filter((item: JFormItemProps) => item.edit)
             .map((item: JFormItemProps, index: number) => {
               switch (item.type) {
                 case "input":
@@ -318,7 +318,7 @@ const initForm = (
                         label={item.label}
                         rules={item.rules || []}
                       >
-                        {/* <JUploadImage length={item.length || 1} onChange={item?.onChange} /> */}
+                        <JImage maxCount={item.maxCount || 1} />
                       </Form.Item>
                     </Col>
                   );
