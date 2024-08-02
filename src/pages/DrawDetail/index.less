@@ -1,0 +1,38 @@
+.draw-detail-page {
+  // max-height: 100%;
+  height: calc(100vh - 189px);
+  background-color: #fff;
+  // padding: 12px;
+  border-radius: 6px;
+  display: flex;
+  overflow: hidden;
+  > .draw-detail-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > .draw-canvas {
+      background-size: 100%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+  }
+  > .draw-detail-aside {
+    width: 480px;
+    border-left: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    > .draw-detail-form {
+      flex: 1;
+      padding: 12px 8px 0;
+      overflow: hidden;
+    }
+    > .draw-detail-ctrl {
+      height: 64px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+  }
+}

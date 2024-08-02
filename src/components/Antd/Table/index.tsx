@@ -13,6 +13,7 @@ interface JTableProps {
   pageSize?: number;
   pageTotal?: number;
   onPageChange?: (pageNum: number, pageSize: number) => void;
+  operationWidth?: number;
   operation?: (text: any, record: any) => React.ReactNode;
 }
 const JTable = (props: JTableProps) => {
@@ -44,7 +45,7 @@ const JTable = (props: JTableProps) => {
           dataIndex: "operation",
           key: "operation",
           fixed: "right",
-          width: 360,
+          width: props.operationWidth || 300,
           align: "center",
           render: (text: any, record: any) => {
             return props.operation && props.operation(text, record);
@@ -61,6 +62,9 @@ const JTable = (props: JTableProps) => {
         dataSource={props.data}
         columns={tableColumns}
         pagination={false}
+        scroll={{
+          x: "100%",
+        }}
       />
       <div className={Style.JTablePagination}>
         <Pagination

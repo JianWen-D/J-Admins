@@ -24,7 +24,7 @@ const config: ConfigProps = {
     APP_ROUTER: import.meta.env.VITE_APP_APP_ROUTE,
   },
   AUTH_WHITE: {
-    page: ["/about", "/"],
+    page: ["/about", "/", "/draw", "/drawDetail"],
     element: [],
     api: [],
   },

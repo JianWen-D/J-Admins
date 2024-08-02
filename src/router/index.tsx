@@ -32,6 +32,18 @@ const router = (miniProgram: boolean | undefined) => [
         loader: () => ({ title: "关于" }),
         element: lazyComponent("About"),
       },
+      {
+        path: "/draw",
+        id: "draw",
+        loader: () => ({ title: "图片模版设置" }),
+        element: lazyComponent("Draw"),
+      },
+      {
+        path: "/drawDetail",
+        id: "drawDetail",
+        loader: () => ({ title: "图片模版设置详情" }),
+        element: lazyComponent("DrawDetail"),
+      },
     ],
   },
   {
