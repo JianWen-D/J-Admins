@@ -77,7 +77,7 @@ const JLogin = (props: JLoginProps) => {
             required: true,
           },
         ],
-        show: true,
+        edit: true,
       },
       {
         label: "",
@@ -92,7 +92,7 @@ const JLogin = (props: JLoginProps) => {
             handleLogin();
           }
         },
-        show: true,
+        edit: true,
       },
       {
         label: "",
@@ -128,7 +128,7 @@ const JLogin = (props: JLoginProps) => {
             </Row>
           );
         },
-        show: true,
+        edit: true,
       },
     ],
   });

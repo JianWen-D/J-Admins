@@ -41,7 +41,7 @@ export const AuthProvider = ({
       `${config.APP_NAME}_ACTIVE_APP`.toLocaleUpperCase()
     ) || config.APP_ID
   );
-  const [isLogin, setIsLogin] = useState(request.getToken() || true);
+  const [isLogin, setIsLogin] = useState(request.getToken() || false);
 
   useEffect(() => {
     if (request.getToken()) {
