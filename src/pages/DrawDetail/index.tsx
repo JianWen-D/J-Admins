@@ -126,14 +126,17 @@ const DrawDetailPage = () => {
           {bgImg && (
             <Draggable
               bounds="parent"
-              scale={0.5}
               onDrag={(e, ui) => {
                 // const {x, y} = this.state.deltaPosition;
                 console.log(ui);
               }}
             >
               <div
-                style={{ width: 100, height: 100, backgroundColor: "#aaa" }}
+                style={{
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "#aaa",
+                }}
               ></div>
             </Draggable>
           )}

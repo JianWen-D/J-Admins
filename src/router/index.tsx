@@ -33,6 +33,12 @@ const router = (miniProgram: boolean | undefined) => [
         element: lazyComponent("About"),
       },
       {
+        path: "/application",
+        id: "application",
+        loader: () => ({ title: "系统设置" }),
+        element: lazyComponent("Application"),
+      },
+      {
         path: "/draw",
         id: "draw",
         loader: () => ({ title: "图片模版设置" }),
@@ -44,28 +50,29 @@ const router = (miniProgram: boolean | undefined) => [
         loader: () => ({ title: "图片模版设置详情" }),
         element: lazyComponent("DrawDetail"),
       },
+      {
+        path: "*",
+        id: "nofund",
+        loader: () => ({ title: "页面不存在" }),
+        element: (
+          <Result
+            status="404"
+            title="404"
+            subTitle="抱歉，该页面不存在"
+            extra={
+              <Button
+                type="primary"
+                onClick={() => {
+                  window.history.go(-1);
+                }}
+              >
+                返回上一页
+              </Button>
+            }
+          />
+        ),
+      },
     ],
-  },
-  {
-    path: "*",
-    id: "nofund",
-    element: (
-      <Result
-        status="404"
-        title="404"
-        subTitle="抱歉，该页面不存在"
-        extra={
-          <Button
-            type="primary"
-            onClick={() => {
-              window.history.go(-1);
-            }}
-          >
-            返回上一页
-          </Button>
-        }
-      />
-    ),
   },
 ];
 

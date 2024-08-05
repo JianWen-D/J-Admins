@@ -19,7 +19,7 @@ interface fetchLoginResultProps {
  */
 export const getPasswordKey = () => {
   return request.get<string>({
-    url: "/user-service/auth/getPasswordKey",
+    url: "/auth-service/getPasswordKey",
     params: {},
     config: {
       isNeedToken: false,
@@ -34,7 +34,7 @@ export const getPasswordKey = () => {
  */
 export const fetchLogin = (params: fetchLoginProps) => {
   return request.post<fetchLoginResultProps>({
-    url: "/user-service/auth/login",
+    url: "/auth-service/login",
     params,
     config: {
       isNeedToken: false,
@@ -49,7 +49,7 @@ export const fetchLogin = (params: fetchLoginProps) => {
  */
 export const getUserInfo = () => {
   return request.get<any>({
-    url: "/user-service/auth/getUserInfo",
+    url: "/auth-service/getUserInfo",
     params: {},
   });
 };
@@ -61,7 +61,7 @@ export const getUserInfo = () => {
  */
 export const getApplicationListByUser = () => {
   return request.get<any>({
-    url: "/application-service/application/getApplicationListByUser",
+    url: "/base-service/application/getApplicationListByUser",
     params: {},
   });
 };
@@ -73,7 +73,7 @@ export const getApplicationListByUser = () => {
  */
 export const getApplicationInfo = (id: string) => {
   return request.get<any>({
-    url: `/user-service/auth/getApplicationInfo/${id}`,
+    url: `/auth-service/getApplicationInfo/${id}`,
     params: {},
   });
 };
