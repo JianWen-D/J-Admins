@@ -4,7 +4,7 @@ import { Descriptions, Modal, type DescriptionsProps } from "antd";
 import JReview from "../Review";
 
 interface JCheckProps {
-  title: string;
+  titleKey: string;
   width?: number;
   options: JFormItemProps[];
   data: any;
@@ -45,7 +45,7 @@ const JCheck = (props: JCheckProps) => {
       </div>
       <Modal
         width={props.width || 1000}
-        title={props.title}
+        title={props.titleKey ? props.data[props.titleKey] || "-" : "-"}
         open={visible}
         onCancel={() => {
           setVisible(false);

@@ -4,7 +4,7 @@ import { Modal } from "antd";
 import JForm from "../Form";
 
 interface JEditProps {
-  title: string;
+  titleKey: string;
   width?: number;
   options: JFormItemProps[];
   data: any;
@@ -49,7 +49,7 @@ const JEdit = (props: JEditProps) => {
       </div>
       <Modal
         width={props.width || 1000}
-        title={props.title}
+        title={props.titleKey ? props.data[props.titleKey] || "-" : "-"}
         open={visible}
         onCancel={() => {
           setVisible(false);

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData, useMatches, useRouteLoaderData } from "react-router";
 import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
@@ -13,22 +13,51 @@ import JTable from "../../components/Antd/Table";
 import { JFormItemProps } from "../../components/Antd/Form/types";
 import JCheck from "../../components/Antd/Check";
 import JEdit from "../../components/Antd/Edit";
+import {
+  ApplicationProps,
+  getApplicationPage,
+} from "../../api/types/application";
+import { useMount } from "ahooks";
 
 const ApplicationPage = () => {
   const RouteLoaderData = useRouteLoaderData("home");
   const LoaderData: any = useLoaderData();
   const Matches = useMatches();
+  // 基础变量
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
 
-  useEffect(() => {
-    console.log(Matches);
-    console.log(LoaderData);
-    console.log(RouteLoaderData);
-  }, []);
+  //
+  const [list, setList] = useState<ApplicationProps[]>([]);
+
+  useMount(() => {
+    fetchgetApplicationPage(1, 10);
+  });
+
+  const fetchgetApplicationPage = async (
+    pageNum?: number,
+    pageSize?: number,
+    searchParams?: any
+  ) => {
+    const params = {
+      pageNum: pageNum || 1,
+      pageSize: pageSize || 10,
+      ...searchParams,
+    };
+    const result = await getApplicationPage(params);
+    if (result.code === "0") {
+      setTotal(result.data.total);
+      setPageNum(result.data.pages);
+      setPageSize(result.data.size);
+      setList(result.data.records);
+    }
+  };
 
   const columns: JFormItemProps[] = [
     {
       type: "input",
-      key: "phone",
+      key: "name",
       label: "应用名",
       edit: true,
       show: true,
@@ -36,7 +65,7 @@ const ApplicationPage = () => {
     },
     {
       type: "input",
-      key: "email",
+      key: "appKey",
       label: "应用Key",
       edit: true,
       show: true,
@@ -44,7 +73,7 @@ const ApplicationPage = () => {
     },
     {
       type: "input",
-      key: "email",
+      key: "entry",
       label: "应用地址(entry)",
       edit: true,
       show: true,
@@ -52,7 +81,7 @@ const ApplicationPage = () => {
     },
     {
       type: "input",
-      key: "应用路由",
+      key: "activeRule",
       label: "应用路由",
       edit: true,
       show: true,
@@ -60,23 +89,9 @@ const ApplicationPage = () => {
     },
     {
       type: "input",
-      key: "email",
+      key: "container",
       label: "容器元素ID",
       edit: true,
-      show: true,
-      width: 200,
-    },
-    {
-      type: "date",
-      key: "createdTime",
-      label: "创建日期",
-      show: true,
-      width: 200,
-    },
-    {
-      type: "date",
-      key: "updatedTime",
-      label: "更新时间",
       show: true,
       width: 200,
     },
@@ -106,6 +121,35 @@ const ApplicationPage = () => {
       show: true,
       width: 200,
     },
+    {
+      type: "textarea",
+      key: "remark",
+      label: "备注",
+      edit: true,
+      show: true,
+      width: 200,
+      columns: 1,
+      labelCol: {
+        span: 3,
+      },
+      wrapperCol: {
+        span: 21,
+      },
+    },
+    {
+      type: "date",
+      key: "createdTime",
+      label: "创建日期",
+      show: true,
+      width: 200,
+    },
+    {
+      type: "date",
+      key: "updatedTime",
+      label: "更新时间",
+      show: true,
+      width: 200,
+    },
   ];
 
   return (
@@ -114,27 +158,15 @@ const ApplicationPage = () => {
         options={[
           {
             type: "input",
-            key: "name1",
+            key: "name",
             label: "应用名",
-            show: true,
-          },
-          {
-            type: "input",
-            key: "name2",
-            label: "名字",
-            show: true,
-          },
-          {
-            type: "input",
-            key: "name3",
-            label: "名字",
-            show: true,
+            edit: true,
           },
         ]}
         additionButton={
           <>
             <JEdit
-              title="123"
+              titleKey="name"
               options={columns}
               data={{}}
               onSubmit={(data) => {
@@ -147,33 +179,26 @@ const ApplicationPage = () => {
             </JEdit>
           </>
         }
-        onSubmit={() => {}}
-        onReload={() => {}}
+        onSubmit={(params) => {
+          console.log(params);
+          fetchgetApplicationPage(pageNum, pageSize, params);
+        }}
+        onReload={() => {
+          fetchgetApplicationPage(pageNum, pageSize);
+        }}
       ></JPageCtrl>
       <JTable
-        data={[
-          {
-            avatar:
-              "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png",
-            phone: "12345678901",
-            email: "123456789@qq.com",
-            createdTime: "2024-01-01 23:59:59",
-            lastLoginTime: "2024-01-01 06:30:59",
-            updatedTime: "2024-12-01 06:30:59",
-            user: 1,
-            status: 0,
-          },
-        ]}
+        data={list}
         operation={(text, record) => {
           return (
             <>
-              <JCheck title="123" options={columns} data={record}>
+              <JCheck titleKey="name" options={columns} data={record}>
                 <Button type="link" icon={<EyeOutlined />}>
                   查看
                 </Button>
               </JCheck>
               <JEdit
-                title="123"
+                titleKey="name"
                 options={columns}
                 data={record}
                 onSubmit={(data) => {
@@ -191,10 +216,12 @@ const ApplicationPage = () => {
           );
         }}
         columns={columns}
-        pageNum={1}
-        pageTotal={10}
-        pageSize={10}
-        onPageChange={() => {}}
+        pageNum={pageNum}
+        pageTotal={total}
+        pageSize={pageSize}
+        onPageChange={(pageNum, pageSize) => {
+          fetchgetApplicationPage(pageNum, pageSize);
+        }}
       ></JTable>
     </JPage>
   );
