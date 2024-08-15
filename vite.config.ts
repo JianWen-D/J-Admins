@@ -70,7 +70,7 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/api": {
           // 当遇到 /api 路径时，将其转换成 target 的值
-          target: "http://127.0.0.1:7001/",
+          target: env.VITE_APP_API_HOST_PROXY,
           changeOrigin: true,
           rewrite: (pre) => pre.replace(/^\/api/, ""), // 将 /api 重写为空
         },

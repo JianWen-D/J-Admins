@@ -56,6 +56,19 @@ const ApplicationPage = () => {
 
   const columns: JFormItemProps[] = [
     {
+      type: "image",
+      key: "icon",
+      label: "应用图标",
+      edit: true,
+      show: true,
+      width: 100,
+      maxCount: 2,
+      columns: 1,
+      labelCol: {
+        span: 3,
+      },
+    },
+    {
       type: "input",
       key: "name",
       label: "应用名",
