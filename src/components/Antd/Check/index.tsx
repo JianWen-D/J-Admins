@@ -1,19 +1,25 @@
 import { useMemo, useState } from "react";
 import { JFormItemProps } from "../Form/types";
-import { Descriptions, Modal, type DescriptionsProps } from "antd";
+import { Descriptions, message, Modal, type DescriptionsProps } from "antd";
 import JReview from "../Review";
 
 interface JCheckProps {
   titleKey: string;
   width?: number;
   options: JFormItemProps[];
-  data: any;
+  id?: string;
   children?: React.ReactElement;
+  loadDataApi?: any;
 }
 
 const JCheck = (props: JCheckProps) => {
   const [visible, setVisible] = useState<boolean>(false);
-  const options: DescriptionsProps["items"] = useMemo(() => {
+  const [data, setData] = useState<{
+    [key: string]: any;
+  }>({});
+  const options = (data: {
+    [key: string]: any;
+  }): DescriptionsProps["items"] => {
     return props.options
       .filter((item) => item.show)
       .map((item) => ({
@@ -22,7 +28,7 @@ const JCheck = (props: JCheckProps) => {
         children: (
           <JReview
             type={item.type}
-            data={props.data[item.key]}
+            data={data[item.key]}
             format={item.format}
             options={item.options}
             props={item.optionsProps}
@@ -31,21 +37,37 @@ const JCheck = (props: JCheckProps) => {
           ></JReview>
         ),
       }));
-  }, [props.data, props.options]);
+  };
+
+  const handleClick = async (callback: () => void) => {
+    if (props.loadDataApi && props.id) {
+      const result = await props.loadDataApi(props.id);
+      if (result.code === "0") {
+        setData(result.data);
+        callback();
+      } else {
+        message.error(result.msg || "获取信息失败");
+      }
+      return;
+    }
+    callback();
+  };
 
   return (
     <>
       <div
         style={{ display: "inline-block" }}
         onClick={() => {
-          setVisible(true);
+          handleClick(() => {
+            setVisible(true);
+          });
         }}
       >
         {props.children}
       </div>
       <Modal
         width={props.width || 1000}
-        title={props.titleKey ? props.data[props.titleKey] || "-" : "-"}
+        title={props.titleKey ? data[props.titleKey] || "-" : "-"}
         open={visible}
         onCancel={() => {
           setVisible(false);
@@ -54,7 +76,7 @@ const JCheck = (props: JCheckProps) => {
         footer={false}
         closable={false}
       >
-        <Descriptions bordered items={options} />
+        <Descriptions bordered items={options(data)} />
       </Modal>
     </>
   );

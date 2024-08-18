@@ -66,10 +66,16 @@ const JReview = (props: JReviewProps) => {
       const findData = props.options.find(
         (item) => item[props.props?.value as string] === props.data
       );
+      console.log(
+        props.options,
+        props.props,
+        findData[props.props?.label as string]
+      );
       if (findData) {
         return (
           <Badge
             color={props.color && props.color[props.data]}
+            status="default"
             text={findData[props.props?.label as string]}
           />
         );
@@ -93,7 +99,7 @@ const JReview = (props: JReviewProps) => {
         ];
       }, []);
     }
-    return props.data;
+    return props.data || "-";
   }, [props]);
 
   return formatDom;

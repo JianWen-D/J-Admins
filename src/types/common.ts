@@ -11,13 +11,15 @@ export interface ApiResultProps<T> {
  * 基础接口的参数
  */
 export interface BaseApiProps {
-  id: string;
-  createdTime: string;
-  createdBy: string;
-  updatedTime: string;
-  updatedBy: string;
-  status: 0 | 1;
-  deleted: 0 | 1;
+  id?: string;
+  createdTime?: string;
+  createdBy?: string;
+  updatedTime?: string;
+  updatedBy?: string;
+  status?: 0 | 1;
+  deleted?: 0 | 1;
+  deletedTime?: string;
+  deletedBy?: string;
 }
 
 /**

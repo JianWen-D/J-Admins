@@ -1,7 +1,7 @@
-import { BasePageProps } from "../../types/common";
+import { BaseApiProps, BasePageProps } from "../../types/common";
 import request from "../index";
 
-export interface ApplicationProps {
+export interface ApplicationProps extends BaseApiProps {
   icon: string; // 应用ICON
   name: string; // 应用名称
   appKey: string; // 应用Key
@@ -21,5 +21,53 @@ export const getApplicationPage = (params: any) => {
   return request.post<BasePageProps<ApplicationProps>>({
     url: `/base-service/application/page?pageSize=${pageSize}&pageNum=${pageNum}`,
     params: otherParams,
+  });
+};
+
+/**
+ * 根据ID获取信息
+ * @param id
+ * @returns
+ */
+export const getApplicationById = (id: string) => {
+  return request.get<ApplicationProps>({
+    url: `/base-service/application/getInfo/${id}`,
+    params: {},
+  });
+};
+
+/**
+ * 创建
+ * @param params
+ * @returns
+ */
+export const createApplication = (params: any) => {
+  return request.post<ApplicationProps>({
+    url: `/base-service/application`,
+    params: params,
+  });
+};
+
+/**
+ * 更新
+ * @param params
+ * @returns
+ */
+export const updateApplication = (params: any) => {
+  return request.put<ApplicationProps>({
+    url: `/base-service/application/${params.id}`,
+    params: params,
+  });
+};
+
+/**
+ * 删除
+ * @param params
+ * @returns
+ */
+export const deletedApplication = (id: string) => {
+  return request.delete<ApplicationProps>({
+    url: `/base-service/application/${id}`,
+    params: {},
   });
 };

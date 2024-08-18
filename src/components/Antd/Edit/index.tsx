@@ -1,19 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { JFormItemProps } from "../Form/types";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import JForm from "../Form";
 
 interface JEditProps {
-  titleKey: string;
+  titleKey?: string;
+  title?: string;
   width?: number;
   options: JFormItemProps[];
-  data: any;
+  id?: string;
   children?: React.ReactElement;
   onSubmit: (data: any) => void;
+  loadDataApi?: any;
 }
 
 const JEdit = (props: JEditProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+  const [data, setData] = useState<{
+    [key: string]: any;
+  }>({});
   const options: JFormItemProps[] = useMemo(() => {
     return props.options.filter((item) => item.edit);
   }, [props.options]);
@@ -24,17 +29,31 @@ const JEdit = (props: JEditProps) => {
   });
 
   useEffect(() => {
-    FormRef.setFieldsValue(props.data);
+    FormRef.setFieldsValue(data);
   }, [visible]);
 
   const handleSubmit = () => {
     FormRef.validateFields().then((res) => {
       props.onSubmit({
-        ...props.data,
+        ...data,
         ...res,
       });
       setVisible(false);
     });
+  };
+
+  const handleClick = async (callback: () => void) => {
+    if (props.loadDataApi && props.id) {
+      const result = await props.loadDataApi(props.id);
+      if (result.code === "0") {
+        setData(result.data);
+        callback();
+      } else {
+        message.error(result.msg || "获取信息失败");
+      }
+      return;
+    }
+    callback();
   };
 
   return (
@@ -42,14 +61,18 @@ const JEdit = (props: JEditProps) => {
       <div
         style={{ display: "inline-block" }}
         onClick={() => {
-          setVisible(true);
+          handleClick(() => {
+            setVisible(true);
+          });
         }}
       >
         {props.children}
       </div>
       <Modal
         width={props.width || 1000}
-        title={props.titleKey ? props.data[props.titleKey] || "-" : "-"}
+        title={
+          props.titleKey ? data[props.titleKey] || "-" : props.title || "-"
+        }
         open={visible}
         onCancel={() => {
           setVisible(false);

@@ -6,6 +6,7 @@ import axios, {
   AxiosResponse,
   Method,
 } from "axios";
+import { filterInvalidData } from ".";
 export interface RequestCustomConfigType {
   // 请求域名地址
   baseURL?: string;
@@ -444,7 +445,7 @@ class JAxios {
       {
         method: "PUT",
         url: config.url,
-        data: config.params,
+        data: filterInvalidData(config.params),
         ...config.options,
       },
       config.config
@@ -476,7 +477,7 @@ class JAxios {
       {
         method: "POST",
         url: config.url,
-        params: config.params,
+        data: config.params,
         ...config.options,
       },
       {

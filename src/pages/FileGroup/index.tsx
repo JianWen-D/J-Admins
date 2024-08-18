@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useLoaderData, useMatches, useRouteLoaderData } from "react-router";
+import { useState } from "react";
+import { useLoaderData } from "react-router";
 import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
 import { Button, message, Modal } from "antd";
@@ -15,32 +15,31 @@ import { JFormItemProps } from "../../components/Antd/Form/types";
 import JCheck from "../../components/Antd/Check";
 import JEdit from "../../components/Antd/Edit";
 import {
-  ApplicationProps,
-  createApplication,
-  deletedApplication,
-  getApplicationById,
-  getApplicationPage,
-  updateApplication,
-} from "../../api/types/application";
+  FileGroupProps,
+  createFileGroup,
+  deletedFileGroup,
+  getFileGroupById,
+  getFileGroupPage,
+  updateFileGroup,
+} from "../../api/types/filtGroup";
 import { useMount } from "ahooks";
 
 const { confirm } = Modal;
 
-const ApplicationPage = () => {
+const FileGroupPage = () => {
   const LoaderData: any = useLoaderData();
   // 基础变量
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
-
   //
-  const [list, setList] = useState<ApplicationProps[]>([]);
+  const [list, setList] = useState<FileGroupProps[]>([]);
 
   useMount(() => {
-    fetchgetApplicationPage(1, 10);
+    fetchgetFileGroupPage(1, 10);
   });
 
-  const fetchgetApplicationPage = async (
+  const fetchgetFileGroupPage = async (
     pageNum?: number,
     pageSize?: number,
     searchParams?: any
@@ -50,7 +49,7 @@ const ApplicationPage = () => {
       pageSize: pageSize || 10,
       ...searchParams,
     };
-    const result = await getApplicationPage(params);
+    const result = await getFileGroupPage(params);
     if (result.code === "0") {
       setTotal(result.data.total);
       setPageNum(result.data.pages);
@@ -61,55 +60,48 @@ const ApplicationPage = () => {
 
   const columns: JFormItemProps[] = [
     {
-      type: "image",
-      key: "icon",
-      label: "应用图标",
-      edit: true,
+      type: "input",
+      key: "id",
+      label: "文件组ID",
       show: true,
-      width: 100,
-      maxCount: 1,
-      columns: 1,
-      labelCol: {
-        span: 3,
-      },
-      groupId: "f20f4a8cb29620bd2dfcc1aacd690988",
+      width: 280,
     },
     {
       type: "input",
-      key: "name",
-      label: "应用名",
+      key: "groupName",
+      label: "文件组名称",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "appKey",
-      label: "应用Key",
+      key: "bucket",
+      label: "bucket",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "entry",
-      label: "应用地址(entry)",
+      key: "maxSize",
+      label: "最大文件大小",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "activeRule",
-      label: "应用路由",
+      key: "allowFileType",
+      label: "文件类型",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "container",
-      label: "容器元素ID",
+      key: "path",
+      label: "文件存放路径",
       edit: true,
       show: true,
       width: 200,
@@ -171,21 +163,21 @@ const ApplicationPage = () => {
     },
   ];
 
-  const handleCreate = async (params: ApplicationProps) => {
-    const result = await createApplication(params);
+  const handleCreate = async (params: FileGroupProps) => {
+    const result = await createFileGroup(params);
     if (result.code === "0") {
       message.success("创建成功");
-      fetchgetApplicationPage(pageNum, 10);
+      fetchgetFileGroupPage(pageNum, 10);
     } else {
       message.error(result.msg || "创建失败");
     }
   };
 
-  const handleUpdate = async (params: ApplicationProps) => {
-    const result = await updateApplication(params);
+  const handleUpdate = async (params: FileGroupProps) => {
+    const result = await updateFileGroup(params);
     if (result.code === "0") {
       message.success("更新成功");
-      fetchgetApplicationPage(pageNum, 10);
+      fetchgetFileGroupPage(pageNum, 10);
     } else {
       message.error(result.msg || "更新失败");
     }
@@ -197,10 +189,10 @@ const ApplicationPage = () => {
       icon: <ExclamationCircleFilled />,
       onOk() {
         return new Promise((resolve, reject) => {
-          deletedApplication(id).then((result) => {
+          deletedFileGroup(id).then((result) => {
             if (result.code === "0") {
               message.success("删除成功");
-              fetchgetApplicationPage(pageNum, 10);
+              fetchgetFileGroupPage(pageNum, 10);
               resolve(true);
             } else {
               message.error(result.msg || "删除失败");
@@ -241,10 +233,10 @@ const ApplicationPage = () => {
         }
         onSubmit={(params) => {
           console.log(params);
-          fetchgetApplicationPage(pageNum, pageSize, params);
+          fetchgetFileGroupPage(pageNum, pageSize, params);
         }}
         onReload={() => {
-          fetchgetApplicationPage(pageNum, pageSize);
+          fetchgetFileGroupPage(pageNum, pageSize);
         }}
       ></JPageCtrl>
       <JTable
@@ -256,7 +248,7 @@ const ApplicationPage = () => {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getApplicationById}
+                loadDataApi={getFileGroupById}
               >
                 <Button type="link" icon={<EyeOutlined />}>
                   查看
@@ -266,7 +258,7 @@ const ApplicationPage = () => {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getApplicationById}
+                loadDataApi={getFileGroupById}
                 onSubmit={(data) => {
                   handleUpdate(data);
                 }}
@@ -292,11 +284,11 @@ const ApplicationPage = () => {
         pageTotal={total}
         pageSize={pageSize}
         onPageChange={(pageNum, pageSize) => {
-          fetchgetApplicationPage(pageNum, pageSize);
+          fetchgetFileGroupPage(pageNum, pageSize);
         }}
       ></JTable>
     </JPage>
   );
 };
 
-export default ApplicationPage;
+export default FileGroupPage;

@@ -3,13 +3,15 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Image, message, Modal, Upload } from "antd";
 import type { RcFile } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
+import { uploadFile } from "../../../api/types/common";
 // import { uploadFile } from "../../api/file";
 
 interface JUploadImageProps {
-  value?: string[];
-  onChange?: (value: UploadFile[] | string) => void;
+  value?: string[] | string;
+  onChange?: (value: string[] | string) => void;
   maxCount: number;
   accept?: string[];
+  groupId: string | undefined;
 }
 
 const getBase64 = (file: RcFile): Promise<string> =>
@@ -25,11 +27,15 @@ const JUploadImage: React.FC<JUploadImageProps> = ({
   onChange,
   maxCount = 1,
   accept = [".png", ".PNG", ".jpg", ".JPG", ".jpeg", "JPEG"],
+  groupId = "",
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
   const fileList = useMemo(() => {
+    if (value === "") {
+      return [];
+    }
     return (Array.isArray(value) ? value : [value]).map((item: string) => ({
       name: item,
       uid: item,
@@ -67,23 +73,21 @@ const JUploadImage: React.FC<JUploadImageProps> = ({
     if (!file) {
       message.error("请选择图片");
     }
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // formData.append('groupId', 'a1aff2af5c6d2abd0251538e88483e30');
-    // const result: any = await uploadFile(formData);
-    // if (result.code === '0') {
-    //   setFile(null);
-    //   setFileList([
-    //     {
-    //       uid: result.data.id,
-    //       name: result.data.fileName,
-    //       url: result.data.url,
-    //     },
-    //     ...fileList,
-    //   ]);
-    //   onChange?.([result.data.url, ...fileList.map((item) => item.url)]);
-    //   message.success('上传成功');
-    // }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("groupId", groupId);
+    const result = await uploadFile(formData);
+    if (result.code === "0") {
+      setFile(null);
+      if (maxCount === 1) {
+        onChange?.(result.data.url);
+      } else {
+        onChange?.([result.data.url, ...fileList.map((item) => item.url)]);
+      }
+      message.success("上传成功");
+    } else {
+      message.error(result.msg || "上传失败");
+    }
   };
 
   return (
@@ -98,7 +102,9 @@ const JUploadImage: React.FC<JUploadImageProps> = ({
         onPreview={handlePreview}
         multiple={maxCount > 0}
         onRemove={(file) => {
-          const _fileList = fileList.filter((item) => item.url !== file.url);
+          const _fileList = fileList
+            .filter((item) => item.url !== file.url)
+            .map((item) => item.url);
           onChange?.(maxCount > 1 ? _fileList : _fileList.join(","));
         }}
       >
@@ -116,14 +122,6 @@ const JUploadImage: React.FC<JUploadImageProps> = ({
           <Image wrapperStyle={{ display: "none" }} src={previewImage} />
         </Image.PreviewGroup>
       )}
-      {/* <Modal
-        open={previewOpen}
-        title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <img alt="example" style={{ width: "100%" }} src={previewImage} />
-      </Modal> */}
     </>
   );
 };

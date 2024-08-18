@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useLoaderData, useMatches, useRouteLoaderData } from "react-router";
+import { useState } from "react";
+import { useLoaderData } from "react-router";
 import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
-import { Button, message, Modal } from "antd";
+import { Button, message, Modal, Tag } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -15,32 +15,43 @@ import { JFormItemProps } from "../../components/Antd/Form/types";
 import JCheck from "../../components/Antd/Check";
 import JEdit from "../../components/Antd/Edit";
 import {
-  ApplicationProps,
-  createApplication,
-  deletedApplication,
-  getApplicationById,
-  getApplicationPage,
-  updateApplication,
-} from "../../api/types/application";
+  UserProps,
+  createUser,
+  deletedUser,
+  getUserById,
+  getUserPage,
+  updateUser,
+} from "../../api/types/user";
 import { useMount } from "ahooks";
+import { getDictList } from "../../api/types/dict";
 
 const { confirm } = Modal;
 
-const ApplicationPage = () => {
+const UserPage = () => {
   const LoaderData: any = useLoaderData();
   // 基础变量
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
-
+  const [dictList, setDictList] = useState<any>({
+    Gender: "",
+  });
   //
-  const [list, setList] = useState<ApplicationProps[]>([]);
+  const [list, setList] = useState<UserProps[]>([]);
 
   useMount(() => {
-    fetchgetApplicationPage(1, 10);
+    fetchgetUserPage(1, 10);
+    fetchgetDictList();
   });
 
-  const fetchgetApplicationPage = async (
+  const fetchgetDictList = async () => {
+    const result = await getDictList(["Gender"]);
+    if (result.code === "0") {
+      setDictList(result.data);
+    }
+  };
+
+  const fetchgetUserPage = async (
     pageNum?: number,
     pageSize?: number,
     searchParams?: any
@@ -50,7 +61,7 @@ const ApplicationPage = () => {
       pageSize: pageSize || 10,
       ...searchParams,
     };
-    const result = await getApplicationPage(params);
+    const result = await getUserPage(params);
     if (result.code === "0") {
       setTotal(result.data.total);
       setPageNum(result.data.pages);
@@ -62,8 +73,8 @@ const ApplicationPage = () => {
   const columns: JFormItemProps[] = [
     {
       type: "image",
-      key: "icon",
-      label: "应用图标",
+      key: "avatar",
+      label: "用户头像",
       edit: true,
       show: true,
       width: 100,
@@ -72,47 +83,68 @@ const ApplicationPage = () => {
       labelCol: {
         span: 3,
       },
-      groupId: "f20f4a8cb29620bd2dfcc1aacd690988",
+      groupId: "7cd169f80fa6da7d7b97a1320bc029eb",
+    },
+    {
+      type: "input",
+      key: "nickName",
+      label: "昵称",
+      edit: true,
+      show: true,
+      width: 200,
     },
     {
       type: "input",
       key: "name",
-      label: "应用名",
+      label: "姓名",
+      edit: true,
+      show: true,
+      width: 200,
+    },
+    {
+      type: "select",
+      key: "gender",
+      label: "性别",
+      edit: true,
+      show: true,
+      width: 200,
+      options: (dictList.Gender || []).map((item: any) => ({
+        ...item,
+        dictCode: Number(item.dictCode),
+      })),
+      optionsProps: {
+        label: "dictName",
+        value: "dictCode",
+      },
+      color: {
+        1: "blue",
+        2: "red",
+      },
+    },
+    {
+      type: "input",
+      key: "idCard",
+      label: "身份证",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "appKey",
-      label: "应用Key",
-      edit: true,
+      key: "createdByApplicationName",
+      label: "用户来源",
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "entry",
-      label: "应用地址(entry)",
-      edit: true,
+      key: "accountId",
+      label: "账号",
       show: true,
       width: 200,
-    },
-    {
-      type: "input",
-      key: "activeRule",
-      label: "应用路由",
-      edit: true,
-      show: true,
-      width: 200,
-    },
-    {
-      type: "input",
-      key: "container",
-      label: "容器元素ID",
-      edit: true,
-      show: true,
-      width: 200,
+      render: (text) => {
+        return text ? <Tag color="blue">已绑定</Tag> : <Tag>未绑定</Tag>;
+      },
     },
     {
       type: "radio",
@@ -171,21 +203,21 @@ const ApplicationPage = () => {
     },
   ];
 
-  const handleCreate = async (params: ApplicationProps) => {
-    const result = await createApplication(params);
+  const handleCreate = async (params: UserProps) => {
+    const result = await createUser(params);
     if (result.code === "0") {
       message.success("创建成功");
-      fetchgetApplicationPage(pageNum, 10);
+      fetchgetUserPage(pageNum, 10);
     } else {
       message.error(result.msg || "创建失败");
     }
   };
 
-  const handleUpdate = async (params: ApplicationProps) => {
-    const result = await updateApplication(params);
+  const handleUpdate = async (params: UserProps) => {
+    const result = await updateUser(params);
     if (result.code === "0") {
       message.success("更新成功");
-      fetchgetApplicationPage(pageNum, 10);
+      fetchgetUserPage(pageNum, 10);
     } else {
       message.error(result.msg || "更新失败");
     }
@@ -197,10 +229,10 @@ const ApplicationPage = () => {
       icon: <ExclamationCircleFilled />,
       onOk() {
         return new Promise((resolve, reject) => {
-          deletedApplication(id).then((result) => {
+          deletedUser(id).then((result) => {
             if (result.code === "0") {
               message.success("删除成功");
-              fetchgetApplicationPage(pageNum, 10);
+              fetchgetUserPage(pageNum, 10);
               resolve(true);
             } else {
               message.error(result.msg || "删除失败");
@@ -240,11 +272,10 @@ const ApplicationPage = () => {
           </>
         }
         onSubmit={(params) => {
-          console.log(params);
-          fetchgetApplicationPage(pageNum, pageSize, params);
+          fetchgetUserPage(pageNum, pageSize, params);
         }}
         onReload={() => {
-          fetchgetApplicationPage(pageNum, pageSize);
+          fetchgetUserPage(pageNum, pageSize);
         }}
       ></JPageCtrl>
       <JTable
@@ -256,7 +287,7 @@ const ApplicationPage = () => {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getApplicationById}
+                loadDataApi={getUserById}
               >
                 <Button type="link" icon={<EyeOutlined />}>
                   查看
@@ -266,7 +297,7 @@ const ApplicationPage = () => {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getApplicationById}
+                loadDataApi={getUserById}
                 onSubmit={(data) => {
                   handleUpdate(data);
                 }}
@@ -292,11 +323,11 @@ const ApplicationPage = () => {
         pageTotal={total}
         pageSize={pageSize}
         onPageChange={(pageNum, pageSize) => {
-          fetchgetApplicationPage(pageNum, pageSize);
+          fetchgetUserPage(pageNum, pageSize);
         }}
       ></JTable>
     </JPage>
   );
 };
 
-export default ApplicationPage;
+export default UserPage;

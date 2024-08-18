@@ -17,7 +17,7 @@ const router = (miniProgram: boolean | undefined) => [
   {
     path: "/",
     id: "layout",
-    loader: () => ({ title: "系统中心" }),
+    loader: () => ({ title: "英才中台" }),
     element: <App miniProgram={miniProgram}></App>,
     children: [
       {
@@ -33,10 +33,46 @@ const router = (miniProgram: boolean | undefined) => [
         element: lazyComponent("About"),
       },
       {
-        path: "/application",
+        path: "/system/application",
         id: "application",
-        loader: () => ({ title: "系统设置" }),
+        loader: () => ({ title: "应用管理", desc: "管理整个中台应用程序" }),
         element: lazyComponent("Application"),
+      },
+      {
+        path: "/system/fileGroup",
+        id: "fileGroup",
+        loader: () => ({
+          title: "文件管理",
+          desc: "管理中台的所有上传文件以及图片",
+        }),
+        element: lazyComponent("FileGroup"),
+      },
+      {
+        path: "/system/dict",
+        id: "dict",
+        loader: () => ({
+          title: "字典管理",
+          desc: "管理中台的所有字典信息",
+        }),
+        element: lazyComponent("Dict"),
+      },
+      {
+        path: "/system/user",
+        id: "user",
+        loader: () => ({
+          title: "用户管理",
+          desc: "管理中台的所有用户信息",
+        }),
+        element: lazyComponent("User"),
+      },
+      {
+        path: "/system/account",
+        id: "account",
+        loader: () => ({
+          title: "账号管理",
+          desc: "管理中台的所有账号信息",
+        }),
+        element: lazyComponent("Account"),
       },
       {
         path: "/draw",

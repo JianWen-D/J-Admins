@@ -112,7 +112,10 @@ const JLayout = (props: JLayoutProps) => {
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
             }}
           >
-            <JLayoutHeader username={user.name}></JLayoutHeader>
+            <JLayoutHeader
+              username={user.name}
+              avatar={user.avatar}
+            ></JLayoutHeader>
           </Header>
           <JHeaderBreadcrumb></JHeaderBreadcrumb>
           <Content style={{ margin: "0 16px", overflow: "initial" }}>

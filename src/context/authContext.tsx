@@ -122,7 +122,9 @@ export const AuthProvider = ({
   const handleLogin = async () => {
     fetchGetUserInfo();
   };
-  const handleLogout = async () => {};
+  const handleLogout = async () => {
+    setIsLogin(false);
+  };
 
   return (
     <AuthContext.Provider

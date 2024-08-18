@@ -318,7 +318,11 @@ const initForm = (
                         label={item.label}
                         rules={item.rules || []}
                       >
-                        <JImage maxCount={item.maxCount || 1} />
+                        <JImage
+                          groupId={item.groupId}
+                          maxCount={item.maxCount || 1}
+                          accept={item.accept}
+                        />
                       </Form.Item>
                     </Col>
                   );

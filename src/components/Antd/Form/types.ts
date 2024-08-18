@@ -75,4 +75,7 @@ export interface JFormItemProps {
     [key: string | number]: string;
   };
   mode?: "multiple" | undefined;
+  groupId?: string;
+  accept?: string[];
+  render?: (text: string, record: any, index: number) => React.ReactElement;
 }

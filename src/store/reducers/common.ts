@@ -7,7 +7,6 @@ const CommonReducer = createSlice({
   },
   reducers: {
     handleLoadingChange(state, { payload }) {
-      console.log("loading change: " + payload);
       state.loading = payload;
     },
   },
