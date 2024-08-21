@@ -8,6 +8,7 @@ import {
   EditOutlined,
   ExclamationCircleFilled,
   EyeOutlined,
+  MenuOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import JTable from "../../components/Antd/Table";
@@ -23,6 +24,7 @@ import {
   updateApplication,
 } from "../../api/types/application";
 import { useMount } from "ahooks";
+import PermissionEdit from "./permission";
 
 const { confirm } = Modal;
 
@@ -35,6 +37,9 @@ const ApplicationPage = () => {
 
   //
   const [list, setList] = useState<ApplicationProps[]>([]);
+  const [permissionEditVisible, setPermissionEditVisible] =
+    useState<boolean>(false);
+  const [applicationId, setApplicationId] = useState<string>("");
 
   useMount(() => {
     fetchgetApplicationPage(1, 10);
@@ -214,88 +219,124 @@ const ApplicationPage = () => {
   };
 
   return (
-    <JPage title={LoaderData.title} desc={LoaderData.desc}>
-      <JPageCtrl
-        options={[
-          {
-            type: "input",
-            key: "name",
-            label: "应用名",
-            edit: true,
-          },
-        ]}
-        additionButton={
-          <>
-            <JEdit
-              titleKey="name"
-              options={columns}
-              onSubmit={(data) => {
-                handleCreate(data);
-              }}
-            >
-              <Button type="primary" icon={<PlusOutlined />}>
-                新增
-              </Button>
-            </JEdit>
-          </>
-        }
-        onSubmit={(params) => {
-          console.log(params);
-          fetchgetApplicationPage(pageNum, pageSize, params);
-        }}
-        onReload={() => {
-          fetchgetApplicationPage(pageNum, pageSize);
-        }}
-      ></JPageCtrl>
-      <JTable
-        data={list}
-        operation={(text, record) => {
-          return (
+    <>
+      <JPage title={LoaderData.title} desc={LoaderData.desc}>
+        <JPageCtrl
+          options={[
+            {
+              type: "input",
+              key: "name",
+              label: "应用名",
+              edit: true,
+            },
+          ]}
+          additionButton={
             <>
-              <JCheck
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getApplicationById}
-              >
-                <Button type="link" icon={<EyeOutlined />}>
-                  查看
-                </Button>
-              </JCheck>
               <JEdit
                 titleKey="name"
                 options={columns}
-                id={record.id}
-                loadDataApi={getApplicationById}
                 onSubmit={(data) => {
-                  handleUpdate(data);
+                  handleCreate(data);
                 }}
               >
-                <Button type="link" icon={<EditOutlined />}>
-                  编辑
+                <Button type="primary" icon={<PlusOutlined />}>
+                  新增
                 </Button>
               </JEdit>
-              <Button
-                type="link"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  handleDeleted(record.id);
-                }}
-              >
-                删除
-              </Button>
             </>
-          );
+          }
+          onSubmit={(params) => {
+            console.log(params);
+            fetchgetApplicationPage(pageNum, pageSize, params);
+          }}
+          onReload={() => {
+            fetchgetApplicationPage(pageNum, pageSize);
+          }}
+        ></JPageCtrl>
+        <JTable
+          data={list}
+          operationWidth={300}
+          operation={(text, record) => {
+            return (
+              <>
+                <JCheck
+                  titleKey="name"
+                  options={columns}
+                  id={record.id}
+                  loadDataApi={getApplicationById}
+                >
+                  <Button type="link" icon={<EyeOutlined />}>
+                    查看
+                  </Button>
+                </JCheck>
+                <JEdit
+                  titleKey="name"
+                  options={columns}
+                  id={record.id}
+                  loadDataApi={getApplicationById}
+                  onSubmit={(data) => {
+                    handleUpdate(data);
+                  }}
+                >
+                  <Button type="link" icon={<EditOutlined />}>
+                    编辑
+                  </Button>
+                </JEdit>
+                <Button
+                  type="link"
+                  icon={<DeleteOutlined />}
+                  onClick={() => {
+                    handleDeleted(record.id);
+                  }}
+                >
+                  删除
+                </Button>
+                <Button
+                  type="link"
+                  icon={<MenuOutlined />}
+                  onClick={() => {
+                    setApplicationId(record.id);
+                    setPermissionEditVisible(true);
+                  }}
+                >
+                  权限列表
+                </Button>
+              </>
+            );
+          }}
+          columns={columns}
+          pageNum={pageNum}
+          pageTotal={total}
+          pageSize={pageSize}
+          onPageChange={(pageNum, pageSize) => {
+            fetchgetApplicationPage(pageNum, pageSize);
+          }}
+        ></JTable>
+      </JPage>
+      <Modal
+        title="权限列表"
+        width={1200}
+        open={permissionEditVisible}
+        destroyOnClose
+        styles={{
+          body: {
+            padding: "24px 0",
+          },
         }}
-        columns={columns}
-        pageNum={pageNum}
-        pageTotal={total}
-        pageSize={pageSize}
-        onPageChange={(pageNum, pageSize) => {
-          fetchgetApplicationPage(pageNum, pageSize);
+        onCancel={() => {
+          setPermissionEditVisible(false);
+          setApplicationId("");
         }}
-      ></JTable>
-    </JPage>
+        onOk={() => {}}
+      >
+        <PermissionEdit
+          applicationId={applicationId}
+          onSelect={(id) => {
+            // setSelectUserId(id);
+          }}
+        ></PermissionEdit>
+      </Modal>
+    </>
   );
 };
 

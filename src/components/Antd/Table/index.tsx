@@ -75,22 +75,24 @@ const JTable = (props: JTableProps) => {
         rowKey={"id"}
         rowSelection={props.rowSelection || undefined}
       />
-      <div className={Style.JTablePagination}>
-        <Pagination
-          total={props.pageTotal || 0}
-          showTotal={(total) => `共 ${total} 条数据`}
-          defaultPageSize={props.pageSize || 10}
-          defaultCurrent={props.pageNum || 1}
-          showQuickJumper
-          pageSizeOptions={[10, 20, 50, 100, 200, 500]}
-          onChange={(page, pageSize) => {
-            props.onPageChange && props.onPageChange(page, pageSize);
-          }}
-          onShowSizeChange={(current, size) => {
-            props.onPageChange && props?.onPageChange(current, size);
-          }}
-        />
-      </div>
+      {(props.showPage || true) && (
+        <div className={Style.JTablePagination}>
+          <Pagination
+            total={props.pageTotal || 0}
+            showTotal={(total) => `共 ${total} 条数据`}
+            defaultPageSize={props.pageSize || 10}
+            defaultCurrent={props.pageNum || 1}
+            showQuickJumper
+            pageSizeOptions={[10, 20, 50, 100, 200, 500]}
+            onChange={(page, pageSize) => {
+              props.onPageChange && props.onPageChange(page, pageSize);
+            }}
+            onShowSizeChange={(current, size) => {
+              props.onPageChange && props?.onPageChange(current, size);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

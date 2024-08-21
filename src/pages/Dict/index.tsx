@@ -34,6 +34,7 @@ const DictPage = () => {
   const [total, setTotal] = useState<number>(0);
   //
   const [list, setList] = useState<DictProps[]>([]);
+  const [parentId, setParentId] = useState<string>("");
 
   useMount(() => {
     fetchgetDictPage(1, 10);
@@ -133,12 +134,17 @@ const DictPage = () => {
   ];
 
   const handleCreate = async (params: DictProps) => {
-    const result = await createDict(params);
+    const result = await createDict({
+      ...params,
+      parentCode: parentId || null,
+    });
     if (result.code === "0") {
       message.success("创建成功");
+      setParentId("");
       fetchgetDictPage(pageNum, 10);
     } else {
       message.error(result.msg || "创建失败");
+      setParentId("");
     }
   };
 
@@ -210,6 +216,7 @@ const DictPage = () => {
       ></JPageCtrl>
       <JTable
         data={list}
+        operationWidth={300}
         operation={(text, record) => {
           return (
             <>
@@ -245,6 +252,24 @@ const DictPage = () => {
               >
                 删除
               </Button>
+              <JEdit
+                titleKey="name"
+                options={columns}
+                onSubmit={(data) => {
+                  handleCreate(data);
+                }}
+              >
+                <Button
+                  type="link"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    setParentId(record.dictCode);
+                    // handleDeleted(record.id);
+                  }}
+                >
+                  新增子字典
+                </Button>
+              </JEdit>
             </>
           );
         }}
