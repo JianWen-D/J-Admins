@@ -233,7 +233,7 @@ const ApplicationPage = () => {
           additionButton={
             <>
               <JEdit
-                titleKey="name"
+                // titleKey="name"
                 options={columns}
                 onSubmit={(data) => {
                   handleCreate(data);
@@ -315,7 +315,7 @@ const ApplicationPage = () => {
       </JPage>
       <Modal
         title="权限列表"
-        width={1200}
+        width={1400}
         open={permissionEditVisible}
         destroyOnClose
         styles={{
@@ -327,7 +327,7 @@ const ApplicationPage = () => {
           setPermissionEditVisible(false);
           setApplicationId("");
         }}
-        onOk={() => {}}
+        footer={false}
       >
         <PermissionEdit
           applicationId={applicationId}

@@ -34,6 +34,7 @@ const config: ConfigProps = {
       "/system/dict",
       "/system/user",
       "/system/account",
+      "/system/role",
     ],
     element: [],
     api: [],

@@ -73,6 +73,8 @@ export default defineConfig(({ mode }) => {
           target: env.VITE_APP_API_HOST_PROXY,
           changeOrigin: true,
           rewrite: (pre) => pre.replace(/^\/api/, ""), // 将 /api 重写为空
+          secure: false,
+          // ssl: true,
         },
       },
     },

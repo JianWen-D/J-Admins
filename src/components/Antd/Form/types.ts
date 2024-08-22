@@ -23,6 +23,7 @@ export interface JFormItemProps {
     | "time" // 时间选择
     | "image" // 图片
     | "cascader" // 层级选择
+    | "icon" // 图标
     | "slot"; // 自定义
   columns?: number; // 布局
   // 文本宽度

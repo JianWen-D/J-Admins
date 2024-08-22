@@ -15,6 +15,7 @@ import {
 import { FormInstance } from "antd/lib/form";
 import { JFormItemProps, JFormProps } from "./types";
 import JImage from "../Image";
+import JIconSelect from "../IconSelect/index";
 
 const { RangePicker } = DatePicker;
 
@@ -343,6 +344,20 @@ const initForm = (
                             item.placeholder || `请选择${item.label}.`
                           }
                         />
+                      </Form.Item>
+                    </Col>
+                  );
+                case "icon":
+                  return (
+                    <Col key={index} span={24 / (item.columns || columns)}>
+                      <Form.Item
+                        labelCol={item.labelCol || labelCol}
+                        wrapperCol={item.wrapperCol || wrapperCol}
+                        name={item.key}
+                        label={item.label}
+                        rules={item.rules || []}
+                      >
+                        <JIconSelect />
                       </Form.Item>
                     </Col>
                   );

@@ -43,46 +43,48 @@ const JPageCtrl = (props: JPageCtrlProps) => {
   };
   return (
     <div className="j-search-box">
-      <div
-        className="j-search-form-box"
-        style={{
-          height: unfold
-            ? props.options.length % 4 === 0
-              ? Math.floor(props.options.length / 4 + 1) * 60
-              : Math.ceil(props.options.length / 4) * 60
-            : 60,
-        }}
-      >
-        <div className="j-search-form">{searchFormDom}</div>
-        <div className="j-search-form-ctrl">
-          <Button
-            className="j-search-ctrl-btn"
-            type="primary"
-            onClick={handleSubmit}
-            icon={<SearchOutlined />}
-          >
-            查询
-          </Button>
-          <Button
-            className="j-search-ctrl-btn"
-            onClick={handleReset}
-            icon={<ReloadOutlined />}
-          >
-            重置
-          </Button>
-          {props.options.length > 3 && (
+      {props.options.length > 0 && (
+        <div
+          className="j-search-form-box"
+          style={{
+            height: unfold
+              ? props.options.length % 4 === 0
+                ? Math.floor(props.options.length / 4 + 1) * 60
+                : Math.ceil(props.options.length / 4) * 60
+              : 60,
+          }}
+        >
+          <div className="j-search-form">{searchFormDom}</div>
+          <div className="j-search-form-ctrl">
             <Button
               className="j-search-ctrl-btn"
-              type="link"
-              onClick={() => setUnfold(!unfold)}
+              type="primary"
+              onClick={handleSubmit}
+              icon={<SearchOutlined />}
             >
-              {unfold ? "收起" : "展开"}
-              {unfold && <UpOutlined />}
-              {!unfold && <DownOutlined />}
+              查询
             </Button>
-          )}
+            <Button
+              className="j-search-ctrl-btn"
+              onClick={handleReset}
+              icon={<ReloadOutlined />}
+            >
+              重置
+            </Button>
+            {props.options.length > 3 && (
+              <Button
+                className="j-search-ctrl-btn"
+                type="link"
+                onClick={() => setUnfold(!unfold)}
+              >
+                {unfold ? "收起" : "展开"}
+                {unfold && <UpOutlined />}
+                {!unfold && <DownOutlined />}
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <div className="j-search-ctrl-second">
         <div className="j-search-ctrl-second-item">{additionButton}</div>
         <div className="j-search-ctrl-second-item">

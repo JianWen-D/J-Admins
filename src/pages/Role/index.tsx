@@ -1,20 +1,8 @@
 import { useState } from "react";
+import { useLoaderData } from "react-router";
+import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
-import { JFormItemProps } from "../../components/Antd/Form/types";
-import { useMount } from "ahooks";
-import JTable from "../../components/Antd/Table";
-import { getDictList } from "../../api/types/dict";
-import {
-  createPermission,
-  deletedPermission,
-  getPermissionById,
-  getTreeListByApplicationId,
-  PermissionProps,
-  updatePermission,
-} from "../../api/types/permission";
-import JCheck from "../../components/Antd/Check";
-import { Button, message, Modal } from "antd";
-import JEdit from "../../components/Antd/Edit";
+import { Button, message, Modal, Tag } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -22,96 +10,86 @@ import {
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
+import JTable from "../../components/Antd/Table";
+import { JFormItemProps } from "../../components/Antd/Form/types";
+import JCheck from "../../components/Antd/Check";
+import JEdit from "../../components/Antd/Edit";
+import {
+  RoleProps,
+  createRole,
+  deletedRole,
+  getRoleById,
+  getRolePage,
+  updateRole,
+} from "../../api/types/role";
+import { useMount } from "ahooks";
+import { getDictList } from "../../api/types/dict";
 
 const { confirm } = Modal;
 
-const PermissionEdit = (props: {
-  applicationId: string;
-  onSelect: (id: React.Key) => void;
-}) => {
-  //
-  const [list, setList] = useState<PermissionProps[]>([]);
+const RolePage = () => {
+  const LoaderData: any = useLoaderData();
+  // 基础变量
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
   const [dictList, setDictList] = useState<any>({
-    PermissionType: "",
+    Gender: "",
   });
+  //
+  const [list, setList] = useState<RoleProps[]>([]);
 
   useMount(() => {
-    fetchGetPermission();
+    fetchgetRolePage(1, 10);
     fetchgetDictList();
   });
 
   const fetchgetDictList = async () => {
-    const result = await getDictList(["PermissionType"]);
+    const result = await getDictList(["Gender"]);
     if (result.code === "0") {
       setDictList(result.data);
     }
   };
 
-  const fetchGetPermission = async () => {
-    const result = await getTreeListByApplicationId(props.applicationId);
+  const fetchgetRolePage = async (
+    pageNum?: number,
+    pageSize?: number,
+    searchParams?: any
+  ) => {
+    const params = {
+      pageNum: pageNum || 1,
+      pageSize: pageSize || 10,
+      ...searchParams,
+    };
+    const result = await getRolePage(params);
     if (result.code === "0") {
-      setList(result.data);
+      setTotal(result.data.total);
+      setPageNum(result.data.pages);
+      setPageSize(result.data.size);
+      setList(result.data.records);
     }
   };
 
   const columns: JFormItemProps[] = [
     {
-      type: "icon",
-      key: "icon",
-      label: "菜单ICON",
-      edit: true,
-      show: true,
-      width: 120,
-    },
-    {
       type: "input",
       key: "name",
-      label: "菜单ICON",
+      label: "角色名",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "input",
-      key: "value",
-      label: "权限KEY",
-      edit: true,
+      key: "applicationName",
+      label: "所属应用",
       show: true,
       width: 200,
     },
     {
-      type: "select",
-      key: "type",
-      label: "权限类型",
-      edit: true,
-      show: true,
-      width: 120,
-      options: (dictList.PermissionType || []).map((item: any) => ({
-        ...item,
-        dictCode: Number(item.dictCode),
-      })),
-      optionsProps: {
-        label: "dictName",
-        value: "dictCode",
-      },
-      color: {
-        1: "blue",
-        2: "red",
-      },
-    },
-    {
       type: "input",
-      key: "sortNum",
-      label: "排序",
-      edit: true,
-      show: true,
-      width: 100,
-    },
-    {
-      type: "input",
-      key: "remark",
-      label: "备注",
-      edit: true,
+      key: "associatedNum",
+      label: "关联用户数",
       show: true,
       width: 200,
     },
@@ -139,31 +117,54 @@ const PermissionEdit = (props: {
       },
       edit: true,
       show: true,
-      width: 100,
+      width: 200,
+    },
+    {
+      type: "textarea",
+      key: "remark",
+      label: "备注",
+      edit: true,
+      show: true,
+      width: 200,
+      columns: 1,
+      labelCol: {
+        span: 3,
+      },
+      wrapperCol: {
+        span: 21,
+      },
+    },
+    {
+      type: "date",
+      key: "createdTime",
+      label: "创建日期",
+      show: true,
+      width: 200,
+    },
+    {
+      type: "date",
+      key: "updatedTime",
+      label: "更新时间",
+      show: true,
+      width: 200,
     },
   ];
 
-  const handleCreate = async (params: PermissionProps) => {
-    const result = await createPermission({
-      ...params,
-      applicationId: props.applicationId,
-    });
+  const handleCreate = async (params: RoleProps) => {
+    const result = await createRole(params);
     if (result.code === "0") {
       message.success("创建成功");
-      fetchGetPermission();
+      fetchgetRolePage(pageNum, 10);
     } else {
       message.error(result.msg || "创建失败");
     }
   };
 
-  const handleUpdate = async (params: PermissionProps) => {
-    const result = await updatePermission({
-      ...params,
-      applicationId: props.applicationId,
-    });
+  const handleUpdate = async (params: RoleProps) => {
+    const result = await updateRole(params);
     if (result.code === "0") {
       message.success("更新成功");
-      fetchGetPermission();
+      fetchgetRolePage(pageNum, 10);
     } else {
       message.error(result.msg || "更新失败");
     }
@@ -175,10 +176,10 @@ const PermissionEdit = (props: {
       icon: <ExclamationCircleFilled />,
       onOk() {
         return new Promise((resolve, reject) => {
-          deletedPermission(id).then((result) => {
+          deletedRole(id).then((result) => {
             if (result.code === "0") {
               message.success("删除成功");
-              fetchGetPermission();
+              fetchgetRolePage(pageNum, 10);
               resolve(true);
             } else {
               message.error(result.msg || "删除失败");
@@ -192,9 +193,16 @@ const PermissionEdit = (props: {
   };
 
   return (
-    <>
+    <JPage title={LoaderData.title} desc={LoaderData.desc}>
       <JPageCtrl
-        options={[]}
+        options={[
+          {
+            type: "input",
+            key: "name",
+            label: "应用名",
+            edit: true,
+          },
+        ]}
         additionButton={
           <>
             <JEdit
@@ -210,19 +218,15 @@ const PermissionEdit = (props: {
             </JEdit>
           </>
         }
-        onSubmit={() => {
-          fetchGetPermission();
+        onSubmit={(params) => {
+          fetchgetRolePage(pageNum, pageSize, params);
         }}
         onReload={() => {
-          fetchGetPermission();
+          fetchgetRolePage(pageNum, pageSize);
         }}
       ></JPageCtrl>
       <JTable
         data={list}
-        columns={columns}
-        showPage={false}
-        scrollY={480}
-        operationWidth={380}
         operation={(text, record) => {
           return (
             <>
@@ -230,7 +234,7 @@ const PermissionEdit = (props: {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getPermissionById}
+                loadDataApi={getRoleById}
               >
                 <Button type="link" icon={<EyeOutlined />}>
                   查看
@@ -240,7 +244,7 @@ const PermissionEdit = (props: {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getPermissionById}
+                loadDataApi={getRoleById}
                 onSubmit={(data) => {
                   handleUpdate(data);
                 }}
@@ -258,28 +262,19 @@ const PermissionEdit = (props: {
               >
                 删除
               </Button>
-              <JEdit
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getPermissionById}
-                onSubmit={(data) => {
-                  handleCreate({
-                    ...data,
-                    parentId: record.id,
-                  });
-                }}
-              >
-                <Button type="link" icon={<PlusOutlined />}>
-                  新增
-                </Button>
-              </JEdit>
             </>
           );
         }}
+        columns={columns}
+        pageNum={pageNum}
+        pageTotal={total}
+        pageSize={pageSize}
+        onPageChange={(pageNum, pageSize) => {
+          fetchgetRolePage(pageNum, pageSize);
+        }}
       ></JTable>
-    </>
+    </JPage>
   );
 };
 
-export default PermissionEdit;
+export default RolePage;

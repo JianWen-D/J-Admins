@@ -9,6 +9,8 @@ export interface PermissionProps extends BaseApiProps {
   activeRule: string; // 匹配路由
   container: string; // 映射容器ID
   remark: string; // 备注
+  applicationId: string;
+  parentId: string;
 }
 
 /**

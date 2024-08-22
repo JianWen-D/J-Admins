@@ -2,6 +2,7 @@ import { Badge, Image, Tag } from "antd";
 import dayjs from "dayjs";
 import { isNil } from "lodash";
 import { useMemo } from "react";
+import JIcon from "../Icon";
 
 interface JReviewProps {
   type:
@@ -36,6 +37,10 @@ const JReview = (props: JReviewProps) => {
     // 空值的时候直接返回
     if (isNil(props.data)) {
       return props.data || "-";
+    }
+    // 图标
+    if (["icon"].includes(props.type)) {
+      return <JIcon name={props.data} />;
     }
     // 图片
     if (["image"].includes(props.type)) {

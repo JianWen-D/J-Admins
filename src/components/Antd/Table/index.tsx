@@ -18,6 +18,7 @@ interface JTableProps {
   operationWidth?: number;
   operation?: (text: any, record: any) => React.ReactNode;
   rowSelection?: TableRowSelection<any>;
+  scrollY?: number;
 }
 const JTable = (props: JTableProps) => {
   const loading = useSelector((state: any) => state.CommonReducer.loading);
@@ -69,13 +70,14 @@ const JTable = (props: JTableProps) => {
         columns={tableColumns}
         loading={loading}
         pagination={false}
-        scroll={{
-          x: "100%",
-        }}
         rowKey={"id"}
         rowSelection={props.rowSelection || undefined}
+        scroll={{
+          x: 1000,
+          y: props.scrollY || 640,
+        }}
       />
-      {(props.showPage || true) && (
+      {(props.showPage ?? true) && (
         <div className={Style.JTablePagination}>
           <Pagination
             total={props.pageTotal || 0}

@@ -75,6 +75,15 @@ const router = (miniProgram: boolean | undefined) => [
         element: lazyComponent("Account"),
       },
       {
+        path: "/system/role",
+        id: "role",
+        loader: () => ({
+          title: "角色管理",
+          desc: "管理中台的所有角色信息",
+        }),
+        element: lazyComponent("Role"),
+      },
+      {
         path: "/draw",
         id: "draw",
         loader: () => ({ title: "图片模版设置" }),
