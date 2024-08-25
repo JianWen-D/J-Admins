@@ -4,6 +4,7 @@ import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
 import { Button, message, Modal, Tag } from "antd";
 import {
+  AppstoreOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
@@ -24,6 +25,8 @@ import {
 } from "../../api/types/role";
 import { useMount } from "ahooks";
 import { getDictList } from "../../api/types/dict";
+import PermissionCheck from "./permission";
+import MenuEdit from "../Application/menuEdit";
 
 const { confirm } = Modal;
 
@@ -38,6 +41,9 @@ const RolePage = () => {
   });
   //
   const [list, setList] = useState<RoleProps[]>([]);
+  const [permissionCheckVisible, setPermissionCheckVisible] =
+    useState<boolean>(false);
+  const [roleId, setRoleId] = useState<string>("");
 
   useMount(() => {
     fetchgetRolePage(1, 10);
@@ -193,87 +199,122 @@ const RolePage = () => {
   };
 
   return (
-    <JPage title={LoaderData.title} desc={LoaderData.desc}>
-      <JPageCtrl
-        options={[
-          {
-            type: "input",
-            key: "name",
-            label: "应用名",
-            edit: true,
-          },
-        ]}
-        additionButton={
-          <>
-            <JEdit
-              titleKey="name"
-              options={columns}
-              onSubmit={(data) => {
-                handleCreate(data);
-              }}
-            >
-              <Button type="primary" icon={<PlusOutlined />}>
-                新增
-              </Button>
-            </JEdit>
-          </>
-        }
-        onSubmit={(params) => {
-          fetchgetRolePage(pageNum, pageSize, params);
-        }}
-        onReload={() => {
-          fetchgetRolePage(pageNum, pageSize);
-        }}
-      ></JPageCtrl>
-      <JTable
-        data={list}
-        operation={(text, record) => {
-          return (
+    <>
+      <JPage title={LoaderData.title} desc={LoaderData.desc}>
+        <JPageCtrl
+          options={[
+            {
+              type: "input",
+              key: "name",
+              label: "应用名",
+              edit: true,
+            },
+          ]}
+          additionButton={
             <>
-              <JCheck
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getRoleById}
-              >
-                <Button type="link" icon={<EyeOutlined />}>
-                  查看
-                </Button>
-              </JCheck>
               <JEdit
                 titleKey="name"
                 options={columns}
-                id={record.id}
-                loadDataApi={getRoleById}
                 onSubmit={(data) => {
-                  handleUpdate(data);
+                  handleCreate(data);
                 }}
               >
-                <Button type="link" icon={<EditOutlined />}>
-                  编辑
+                <Button type="primary" icon={<PlusOutlined />}>
+                  新增
                 </Button>
               </JEdit>
-              <Button
-                type="link"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  handleDeleted(record.id);
-                }}
-              >
-                删除
-              </Button>
             </>
-          );
+          }
+          onSubmit={(params) => {
+            fetchgetRolePage(pageNum, pageSize, params);
+          }}
+          onReload={() => {
+            fetchgetRolePage(pageNum, pageSize);
+          }}
+        ></JPageCtrl>
+        <JTable
+          data={list}
+          operationWidth={420}
+          operation={(text, record) => {
+            return (
+              <>
+                <JCheck
+                  titleKey="name"
+                  options={columns}
+                  id={record.id}
+                  loadDataApi={getRoleById}
+                >
+                  <Button type="link" icon={<EyeOutlined />}>
+                    查看
+                  </Button>
+                </JCheck>
+                <JEdit
+                  titleKey="name"
+                  options={columns}
+                  id={record.id}
+                  loadDataApi={getRoleById}
+                  onSubmit={(data) => {
+                    handleUpdate(data);
+                  }}
+                >
+                  <Button type="link" icon={<EditOutlined />}>
+                    编辑
+                  </Button>
+                </JEdit>
+                <Button
+                  type="link"
+                  icon={<DeleteOutlined />}
+                  onClick={() => {
+                    handleDeleted(record.id);
+                  }}
+                >
+                  删除
+                </Button>
+                <Button
+                  type="link"
+                  icon={<AppstoreOutlined />}
+                  onClick={() => {
+                    setPermissionCheckVisible(true);
+                    setRoleId(record.id);
+                  }}
+                >
+                  菜单管理
+                </Button>
+              </>
+            );
+          }}
+          columns={columns}
+          pageNum={pageNum}
+          pageTotal={total}
+          pageSize={pageSize}
+          onPageChange={(pageNum, pageSize) => {
+            fetchgetRolePage(pageNum, pageSize);
+          }}
+        ></JTable>
+      </JPage>
+      <Modal
+        title="权限列表"
+        width={1400}
+        open={permissionCheckVisible}
+        destroyOnClose
+        styles={{
+          body: {
+            padding: "24px 0",
+          },
         }}
-        columns={columns}
-        pageNum={pageNum}
-        pageTotal={total}
-        pageSize={pageSize}
-        onPageChange={(pageNum, pageSize) => {
-          fetchgetRolePage(pageNum, pageSize);
+        onCancel={() => {
+          setPermissionCheckVisible(false);
+          setRoleId("");
         }}
-      ></JTable>
-    </JPage>
+        okText="提交"
+      >
+        <MenuEdit
+          onSubmit={() => {
+            // setSelectUserId(id);
+          }}
+        ></MenuEdit>
+      </Modal>
+    </>
   );
 };
 

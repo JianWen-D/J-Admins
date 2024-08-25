@@ -25,6 +25,18 @@ export const getApplicationPage = (params: any) => {
 };
 
 /**
+ * 列表查询
+ * @param params
+ * @returns
+ */
+export const getApplicationList = (params: { name?: string }) => {
+  return request.get<Array<ApplicationProps>>({
+    url: `/base-service/application/list`,
+    params: params,
+  });
+};
+
+/**
  * 根据ID获取信息
  * @param id
  * @returns

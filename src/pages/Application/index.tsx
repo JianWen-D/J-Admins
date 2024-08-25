@@ -299,7 +299,7 @@ const ApplicationPage = () => {
                     setPermissionEditVisible(true);
                   }}
                 >
-                  权限列表
+                  菜单资源
                 </Button>
               </>
             );

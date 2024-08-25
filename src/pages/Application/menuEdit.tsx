@@ -26,10 +26,7 @@ import { useCommon } from "../../utils/hooks";
 
 const { confirm } = Modal;
 
-const PermissionEdit = (props: {
-  applicationId: string;
-  onSelect: (id: React.Key) => void;
-}) => {
+const MenuEdit = (props: { onSubmit: (id: React.Key) => void }) => {
   //
   const { dictList } = useCommon();
   const [list, setList] = useState<PermissionProps[]>([]);
@@ -37,30 +34,21 @@ const PermissionEdit = (props: {
   //   PermissionType: "",
   // });
 
-  useMount(() => {
-    fetchGetPermission();
-  });
-
-  const fetchGetPermission = async () => {
-    const result = await getTreeListByApplicationId(props.applicationId);
-    if (result.code === "0") {
-      setList(result.data);
-    }
-  };
+  useMount(() => {});
 
   const columns: JFormItemProps[] = [
     {
-      type: "input",
-      key: "name",
-      label: "权限名称",
+      type: "icon",
+      key: "icon",
+      label: "菜单ICON",
       edit: true,
       show: true,
-      width: 200,
+      width: 120,
     },
     {
       type: "input",
-      key: "value",
-      label: "权限KEY",
+      key: "name",
+      label: "菜单名称",
       edit: true,
       show: true,
       width: 200,
@@ -68,7 +56,7 @@ const PermissionEdit = (props: {
     {
       type: "select",
       key: "type",
-      label: "权限类型",
+      label: "指向页面",
       edit: true,
       show: true,
       width: 120,
@@ -86,12 +74,24 @@ const PermissionEdit = (props: {
       },
     },
     {
-      type: "icon",
-      key: "icon",
-      label: "菜单ICON",
+      type: "select",
+      key: "type",
+      label: "权限选择",
       edit: true,
       show: true,
       width: 120,
+      options: (dictList.PermissionType || []).map((item: any) => ({
+        ...item,
+        dictCode: Number(item.dictCode),
+      })),
+      optionsProps: {
+        label: "dictName",
+        value: "dictCode",
+      },
+      color: {
+        1: "blue",
+        2: "red",
+      },
     },
     {
       type: "input",
@@ -137,54 +137,6 @@ const PermissionEdit = (props: {
     },
   ];
 
-  const handleCreate = async (params: PermissionProps) => {
-    const result = await createPermission({
-      ...params,
-      applicationId: props.applicationId,
-    });
-    if (result.code === "0") {
-      message.success("创建成功");
-      fetchGetPermission();
-    } else {
-      message.error(result.msg || "创建失败");
-    }
-  };
-
-  const handleUpdate = async (params: PermissionProps) => {
-    const result = await updatePermission({
-      ...params,
-      applicationId: props.applicationId,
-    });
-    if (result.code === "0") {
-      message.success("更新成功");
-      fetchGetPermission();
-    } else {
-      message.error(result.msg || "更新失败");
-    }
-  };
-
-  const handleDeleted = async (id: string) => {
-    confirm({
-      title: "确定删除该条信息?",
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          deletedPermission(id).then((result) => {
-            if (result.code === "0") {
-              message.success("删除成功");
-              fetchGetPermission();
-              resolve(true);
-            } else {
-              message.error(result.msg || "删除失败");
-              reject();
-            }
-          });
-        }).catch(() => console.log("Oops errors!"));
-      },
-      onCancel() {},
-    });
-  };
-
   return (
     <>
       <JPageCtrl
@@ -195,7 +147,7 @@ const PermissionEdit = (props: {
               titleKey="name"
               options={columns}
               onSubmit={(data) => {
-                handleCreate(data);
+                // handleCreate(data);
               }}
             >
               <Button type="primary" icon={<PlusOutlined />}>
@@ -205,10 +157,10 @@ const PermissionEdit = (props: {
           </>
         }
         onSubmit={() => {
-          fetchGetPermission();
+          // fetchGetPermission();
         }}
         onReload={() => {
-          fetchGetPermission();
+          // fetchGetPermission();
         }}
       ></JPageCtrl>
       <JTable
@@ -235,32 +187,19 @@ const PermissionEdit = (props: {
                 options={columns}
                 id={record.id}
                 loadDataApi={getPermissionById}
-                onSubmit={(data) => {
-                  handleUpdate(data);
-                }}
+                onSubmit={(data) => {}}
               >
                 <Button type="link" icon={<EditOutlined />}>
                   编辑
                 </Button>
               </JEdit>
-              <Button
-                type="link"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  handleDeleted(record.id);
-                }}
-              >
+              <Button type="link" icon={<DeleteOutlined />} onClick={() => {}}>
                 删除
               </Button>
               <JEdit
                 title="新增自权限"
                 options={columns}
-                onSubmit={(data) => {
-                  handleCreate({
-                    ...data,
-                    parentId: record.id,
-                  });
-                }}
+                onSubmit={(data) => {}}
               >
                 <Button type="link" icon={<PlusOutlined />}>
                   新增
@@ -274,4 +213,4 @@ const PermissionEdit = (props: {
   );
 };
 
-export default PermissionEdit;
+export default MenuEdit;

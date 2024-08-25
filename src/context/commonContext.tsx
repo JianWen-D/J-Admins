@@ -1,5 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import config from "../config";
+import { DictProps, getDictList } from "../api/types/dict";
+import { useMount } from "ahooks";
 
 // 用户信息
 
@@ -15,6 +17,9 @@ export const CommonContext = React.createContext<
       setLoading: (data: boolean) => void;
       auth: AuthProps;
       setAuth: (type: "page" | "element" | "api", data: string[]) => void;
+      dictList: {
+        [key: string]: DictProps[];
+      };
     }
   | undefined
 >(undefined);
@@ -29,6 +34,9 @@ export const CommonProvider = ({
   auth?: AuthProps;
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [dictList, setDictList] = useState<{
+    [key: string]: DictProps[];
+  }>({});
   const [authData, setAuthData] = useState<AuthProps>(
     auth || {
       page: config.AUTH_WHITE.page || [],
@@ -36,6 +44,18 @@ export const CommonProvider = ({
       api: config.AUTH_WHITE.api || [],
     }
   );
+
+  useMount(() => {
+    fetchDictData();
+  });
+
+  // 获取系统预设字典
+  const fetchDictData = async () => {
+    const result = await getDictList(["PermissionType", "Gender"]);
+    if (result.code === "0") {
+      setDictList(result.data);
+    }
+  };
 
   // 设置loading
   const handleSetLoading = (value: boolean) => {
@@ -57,6 +77,7 @@ export const CommonProvider = ({
         setLoading: handleSetLoading,
         auth: authData,
         setAuth: handleSetAuth,
+        dictList,
       }}
     >
       {children}

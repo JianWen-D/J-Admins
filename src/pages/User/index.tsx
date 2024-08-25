@@ -24,32 +24,23 @@ import {
 } from "../../api/types/user";
 import { useMount } from "ahooks";
 import { getDictList } from "../../api/types/dict";
+import { useCommon } from "../../utils/hooks";
 
 const { confirm } = Modal;
 
 const UserPage = () => {
+  const { dictList } = useCommon();
   const LoaderData: any = useLoaderData();
   // 基础变量
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
-  const [dictList, setDictList] = useState<any>({
-    Gender: "",
-  });
   //
   const [list, setList] = useState<UserProps[]>([]);
 
   useMount(() => {
     fetchgetUserPage(1, 10);
-    fetchgetDictList();
   });
-
-  const fetchgetDictList = async () => {
-    const result = await getDictList(["Gender"]);
-    if (result.code === "0") {
-      setDictList(result.data);
-    }
-  };
 
   const fetchgetUserPage = async (
     pageNum?: number,

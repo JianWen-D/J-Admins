@@ -85,3 +85,17 @@ export const getTreeListByApplicationId = (id: string) => {
     params: {},
   });
 };
+/**
+ * 获取某个角色的某个app权限
+ * @param params
+ * @returns
+ */
+export const getPermissionListByRoleIdAndAppId = (params: {
+  roleId: string;
+  applicationId: string;
+}) => {
+  return request.get<string[]>({
+    url: `/base-service/permission/getIdListByRoleIdAndApplicationId`,
+    params: params,
+  });
+};
