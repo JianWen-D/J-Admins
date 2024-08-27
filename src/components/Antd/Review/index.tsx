@@ -39,7 +39,7 @@ const JReview = (props: JReviewProps) => {
       return props.data || "-";
     }
     // 图标
-    if (["icon"].includes(props.type)) {
+    if (["icon"].includes(props.type) && props.data) {
       return <JIcon name={props.data} />;
     }
     // 图片

@@ -99,3 +99,14 @@ export const getPermissionListByRoleIdAndAppId = (params: {
     params: params,
   });
 };
+/**
+ * 获取下啦权限列表
+ * @param params
+ * @returns
+ */
+export const getPermissionWithAppNameList = () => {
+  return request.get<string[]>({
+    url: `/base-service/permission/getPermissionWithAppNameList`,
+    params: {},
+  });
+};

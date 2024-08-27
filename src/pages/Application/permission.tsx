@@ -52,7 +52,7 @@ const PermissionEdit = (props: {
     {
       type: "input",
       key: "name",
-      label: "权限名称",
+      label: "资源名称",
       edit: true,
       show: true,
       width: 200,
@@ -60,7 +60,7 @@ const PermissionEdit = (props: {
     {
       type: "input",
       key: "value",
-      label: "权限KEY",
+      label: "资源KEY",
       edit: true,
       show: true,
       width: 200,
@@ -68,7 +68,7 @@ const PermissionEdit = (props: {
     {
       type: "select",
       key: "type",
-      label: "权限类型",
+      label: "资源类型",
       edit: true,
       show: true,
       width: 120,
@@ -88,18 +88,10 @@ const PermissionEdit = (props: {
     {
       type: "icon",
       key: "icon",
-      label: "菜单ICON",
+      label: "ICON",
       edit: true,
       show: true,
       width: 120,
-    },
-    {
-      type: "input",
-      key: "sortNum",
-      label: "排序",
-      edit: true,
-      show: true,
-      width: 100,
     },
     {
       type: "input",
@@ -252,20 +244,22 @@ const PermissionEdit = (props: {
               >
                 删除
               </Button>
-              <JEdit
-                title="新增自权限"
-                options={columns}
-                onSubmit={(data) => {
-                  handleCreate({
-                    ...data,
-                    parentId: record.id,
-                  });
-                }}
-              >
-                <Button type="link" icon={<PlusOutlined />}>
-                  新增
-                </Button>
-              </JEdit>
+              {!record.parentId && (
+                <JEdit
+                  title="新增子资源"
+                  options={columns}
+                  onSubmit={(data) => {
+                    handleCreate({
+                      ...data,
+                      parentId: record.id,
+                    });
+                  }}
+                >
+                  <Button type="link" icon={<PlusOutlined />}>
+                    新增
+                  </Button>
+                </JEdit>
+              )}
             </>
           );
         }}

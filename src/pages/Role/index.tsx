@@ -27,6 +27,7 @@ import { useMount } from "ahooks";
 import { getDictList } from "../../api/types/dict";
 import PermissionCheck from "./permission";
 import MenuEdit from "../Application/menuEdit";
+import { getPermissionWithAppNameList } from "../../api/types/permission";
 
 const { confirm } = Modal;
 
@@ -48,6 +49,7 @@ const RolePage = () => {
   useMount(() => {
     fetchgetRolePage(1, 10);
     fetchgetDictList();
+    fetchgetPermissionWithAppNameList();
   });
 
   const fetchgetDictList = async () => {
@@ -74,6 +76,10 @@ const RolePage = () => {
       setPageSize(result.data.size);
       setList(result.data.records);
     }
+  };
+
+  const fetchgetPermissionWithAppNameList = async () => {
+    const result = await getPermissionWithAppNameList();
   };
 
   const columns: JFormItemProps[] = [
