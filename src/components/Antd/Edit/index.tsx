@@ -34,6 +34,7 @@ const JEdit = (props: JEditProps) => {
 
   const handleSubmit = () => {
     FormRef.validateFields().then((res) => {
+      console.log(res, data);
       props.onSubmit({
         ...data,
         ...res,

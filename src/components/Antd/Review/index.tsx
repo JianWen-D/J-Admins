@@ -18,6 +18,7 @@ interface JReviewProps {
     | "time" // 时间选择
     | "image" // 图片
     | "cascader" // 层级选择
+    | "icon" // 图标
     | "slot"; // 自定义
   data: any;
   format?: string;
@@ -70,11 +71,6 @@ const JReview = (props: JReviewProps) => {
     ) {
       const findData = props.options.find(
         (item) => item[props.props?.value as string] === props.data
-      );
-      console.log(
-        props.options,
-        props.props,
-        findData[props.props?.label as string]
       );
       if (findData) {
         return (

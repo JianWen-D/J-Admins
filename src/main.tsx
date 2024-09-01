@@ -11,6 +11,7 @@ import renderWithQiankun, {
 import "./public-path.js";
 import router from "./router/index.tsx";
 import request from "./api/index.ts";
+import App from "./App.tsx";
 
 let root: any = null;
 const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
@@ -34,6 +35,8 @@ const render = (props: any) => {
     <Provider store={store}>
       <AppProviders auth={props.auth} userInfo={props.userInfo}>
         <RouterProvider router={_router}></RouterProvider>
+        {/* {!miniProgram && <RouterProvider router={_router}></RouterProvider>}
+        {miniProgram && <App miniProgram={miniProgram} />} */}
       </AppProviders>
     </Provider>
   );

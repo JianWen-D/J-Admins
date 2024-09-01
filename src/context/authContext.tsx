@@ -8,12 +8,14 @@ import request from "../api";
 import config from "../config";
 import { registerMicroApps, start } from "qiankun";
 import { formatMenuListToTree } from "../utils";
+import { getMenuListByApplicationId } from "../api/types/role";
 
 export const AuthContext = React.createContext<
   | {
       user: any;
       appList: any;
       appInfo: any;
+      menuList: any[];
       isLogin: boolean;
       onLogin: () => void;
       logout: () => void;
@@ -33,6 +35,7 @@ export const AuthProvider = ({
 }) => {
   const [user, setUser] = useState<any>(userInfo || {});
   const [appList, setAppList] = useState<any[]>([]);
+  const [menuList, setMenuList] = useState<any[]>([]);
   const [appInfo, setAppInfo] = useState<any>({
     permissionList: [],
   });
@@ -56,6 +59,7 @@ export const AuthProvider = ({
       setUser(result.data);
       fetchGetAppListByUser();
       fetchGetApplicationInfo();
+      fetchGetMenuListByApplicationId();
       setIsLogin(true);
     }
   };
@@ -68,6 +72,13 @@ export const AuthProvider = ({
       initMicroApp(
         result.data.filter((item: { id: string }) => item.id !== config.APP_ID)
       );
+    }
+  };
+
+  const fetchGetMenuListByApplicationId = async () => {
+    const result = await getMenuListByApplicationId(config.APP_ID);
+    if (result.code === "0") {
+      setMenuList(result.data);
     }
   };
 
@@ -136,6 +147,7 @@ export const AuthProvider = ({
         onLogin: handleLogin,
         logout: handleLogout,
         changeActiveApp,
+        menuList,
       }}
     >
       {children}

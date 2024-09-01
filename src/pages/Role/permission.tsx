@@ -2,40 +2,29 @@ import { Key, useState } from "react";
 import { JFormItemProps } from "../../components/Antd/Form/types";
 import { useMount } from "ahooks";
 import JTable from "../../components/Antd/Table";
-import { getDictList } from "../../api/types/dict";
 import {
   getPermissionListByRoleIdAndAppId,
+  getPermissionWithAppNameList,
   getTreeListByApplicationId,
   PermissionProps,
 } from "../../api/types/permission";
 import { Button, message, Modal, Tabs, TabsProps } from "antd";
 import { getApplicationList } from "../../api/types/application";
-
-const { confirm } = Modal;
+import { useCommon } from "../../utils/hooks";
 
 const PermissionCheck = (props: {
   onSelect: (id: React.Key) => void;
   roleId: string;
 }) => {
+  const { dictList } = useCommon();
   //
   const [selectKeys, setSelectKeys] = useState<Key[]>([]);
   const [list, setList] = useState<PermissionProps[]>([]);
   const [appList, setAppList] = useState<TabsProps["items"]>([]);
-  const [dictList, setDictList] = useState<any>({
-    PermissionType: "",
-  });
 
   useMount(() => {
     fetchGetApplicationList();
-    fetchgetDictList();
   });
-
-  const fetchgetDictList = async () => {
-    const result = await getDictList(["PermissionType"]);
-    if (result.code === "0") {
-      setDictList(result.data);
-    }
-  };
 
   const fetchGetApplicationList = async () => {
     const result = await getApplicationList({});

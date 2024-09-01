@@ -79,4 +79,5 @@ export interface JFormItemProps {
   groupId?: string;
   accept?: string[];
   render?: (text: string, record: any, index: number) => React.ReactElement;
+  optionRender?: any;
 }

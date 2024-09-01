@@ -110,3 +110,14 @@ export const getPermissionWithAppNameList = () => {
     params: {},
   });
 };
+/**
+ * 获取当前菜单的按钮权限
+ * @param params
+ * @returns
+ */
+export const getPermissionListByParentId = (parentId: string) => {
+  return request.get<string[]>({
+    url: `/base-service/permission/getPermissionListByParentId/${parentId}`,
+    params: {},
+  });
+};

@@ -18,7 +18,7 @@ interface AppProps {
 }
 const App = (props: AppProps) => {
   const { isLogin, onLogin } = useAuth();
-  const { loading, setLoading } = useCommon();
+  const { loading, setLoading, setAuth } = useCommon();
   const location = useLocation();
 
   const fetchGetPasswordKey = async (
@@ -69,6 +69,10 @@ const App = (props: AppProps) => {
     }
   };
 
+  if (props.miniProgram) {
+    setAuth("page", config.AUTH_WHITE.page);
+  }
+
   return (
     <ConfigProvider
       locale={locale}
@@ -84,6 +88,7 @@ const App = (props: AppProps) => {
         <div id="container">
           <Suspense fallback={<LoadingSuspense />}>
             <JAuth type="page" authKey={location.pathname}>
+              {/* <div>{location.pathname}</div> */}
               <Outlet></Outlet>
             </JAuth>
           </Suspense>
@@ -94,9 +99,11 @@ const App = (props: AppProps) => {
           {isLogin ? (
             <JLayout logoSrc="https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png">
               <Suspense fallback={<LoadingSuspense />}>
-                <JAuth type="page" authKey={location.pathname}>
-                  <Outlet></Outlet>
-                </JAuth>
+                <div id="container">
+                  <JAuth type="page" authKey={location.pathname}>
+                    <Outlet></Outlet>
+                  </JAuth>
+                </div>
               </Suspense>
             </JLayout>
           ) : (

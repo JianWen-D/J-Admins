@@ -10,6 +10,8 @@ import { useAuth } from "../../utils/hooks";
 import { formatMenuListToTree, PermissionTypes } from "../../utils";
 import { MenuProps } from "antd/lib";
 import * as Icons from "@ant-design/icons";
+import { RoleMenuProps } from "../../api/types/role";
+import config from "../../config";
 const { Sider, Header, Content, Footer } = Layout;
 
 export type MenuItem = Required<MenuProps>["items"][number];
@@ -44,19 +46,25 @@ interface JLayoutProps {
 }
 
 const JLayout = (props: JLayoutProps) => {
-  const { appList, user, appInfo, changeActiveApp } = useAuth();
+  const { appList, user, appInfo, changeActiveApp, menuList } = useAuth();
   const [appsVisable, setAppsVisable] = useState<boolean>(false);
 
-  const formatMenuTreeData = (menuTreeList: PermissionTypes[]): MenuItem[] => {
-    return menuTreeList.reduce((prev: MenuItem[], next: PermissionTypes) => {
+  const formatMenuTreeData = (menuTreeList: RoleMenuProps[]): MenuItem[] => {
+    return menuTreeList.reduce((prev: MenuItem[], next: RoleMenuProps) => {
       return [
         ...prev,
         getItem(
           next.name,
-          next.value,
+          next.id as string,
           next.icon || null,
           next.children.map((item) =>
-            getItem(item.name, item.value, item.icon || null)
+            getItem(
+              item.name,
+              `${
+                item.applicationId === config.APP_ID ? "" : item.applicationPath
+              }${item.path}`,
+              item.icon || null
+            )
           )
         ),
       ];
@@ -64,8 +72,8 @@ const JLayout = (props: JLayoutProps) => {
   };
 
   const formatMenuList = useMemo(() => {
-    return formatMenuTreeData(formatMenuListToTree(appInfo.permissionList));
-  }, [appInfo]);
+    return formatMenuTreeData(menuList);
+  }, [menuList]);
 
   return (
     <>

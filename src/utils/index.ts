@@ -1,3 +1,5 @@
+import { isNil } from "lodash";
+
 export interface PermissionTypes {
   id: string;
   name?: string;
@@ -54,7 +56,7 @@ export const getAllRouterList = (list: any[]) => {
  */
 export const filterInvalidData = (data: any) => {
   return Object.keys(data).reduce((prev: object, next: string) => {
-    if (data[next] === undefined || data[next] === null || data[next] === "") {
+    if (isNil(data[next])) {
       return prev;
     }
     return {
@@ -62,4 +64,24 @@ export const filterInvalidData = (data: any) => {
       [next]: data[next],
     };
   }, {});
+};
+
+export const flattenTreeArray = <T>(tree: T[]) => {
+  const result: T[] = [];
+
+  function flatten(node: any) {
+    const { children, ...rest } = node;
+    result.push(rest);
+    if (children && children.length > 0) {
+      for (let i = 0; i < children.length; i++) {
+        flatten(children[i]);
+      }
+    }
+  }
+
+  for (let i = 0; i < tree.length; i++) {
+    flatten(tree[i]);
+  }
+
+  return result;
 };

@@ -1,7 +1,10 @@
-import { useMount } from "ahooks";
+import { useUpdateEffect } from "ahooks";
 import { Menu } from "antd";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useAuth } from "../../utils/hooks";
+import { flattenTreeArray } from "../../utils";
+import { RoleMenuProps } from "../../api/types/role";
 
 interface JMenuProps {
   menu: any[];
@@ -10,25 +13,26 @@ interface JMenuProps {
 const JMenu = (props: JMenuProps) => {
   const navigate = useNavigate();
   const Location = useLocation();
+  const { menuList } = useAuth();
   const [SelectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [OpenKeys, setOpenKeys] = useState<string[]>([]);
-  const onClick = (key: string, keyPath: string[]) => {
-    navigate(keyPath.reverse().join(""));
+  const onClick = (key: string) => {
+    navigate(key);
     setSelectedKeys([key]);
   };
 
-  useMount(() => {
-    const path = Location.pathname
-      .split("/")
-      .filter((item) => item)
-      .map((item) => `/${item}`);
-    setOpenKeys([path[0]]);
-    setSelectedKeys([path[1]]);
-  });
+  useUpdateEffect(() => {
+    const flattenData = flattenTreeArray<RoleMenuProps>(menuList);
+    setOpenKeys([
+      flattenData.find((item) => item.path === Location.pathname)
+        ?.parentId as string,
+    ]);
+    setSelectedKeys([Location.pathname]);
+  }, [props]);
 
   return (
     <Menu
-      onClick={({ key, keyPath }) => onClick(key, keyPath)}
+      onClick={({ key }) => onClick(key)}
       style={{ width: 256, overflowX: "hidden" }}
       selectedKeys={SelectedKeys}
       openKeys={OpenKeys}

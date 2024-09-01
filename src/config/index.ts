@@ -35,6 +35,7 @@ const config: ConfigProps = {
       "/system/user",
       "/system/account",
       "/system/role",
+      "/grade/system/role",
     ],
     element: [],
     api: [],

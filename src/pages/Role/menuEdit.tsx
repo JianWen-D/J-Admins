@@ -8,12 +8,14 @@ import {
   createPermission,
   deletedPermission,
   getPermissionById,
+  getPermissionListByParentId,
+  getPermissionWithAppNameList,
   getTreeListByApplicationId,
   PermissionProps,
   updatePermission,
 } from "../../api/types/permission";
 import JCheck from "../../components/Antd/Check";
-import { Button, message, Modal } from "antd";
+import { Button, message, Modal, Space, Tag } from "antd";
 import JEdit from "../../components/Antd/Edit";
 import {
   DeleteOutlined,
@@ -23,67 +25,129 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useCommon } from "../../utils/hooks";
+import {
+  createRoleMenu,
+  deletedRoleMenu,
+  getRoleMenuById,
+  getRoleMenuListById,
+  RoleMenuProps,
+  updateRoleMenu,
+} from "../../api/types/role";
 
 const { confirm } = Modal;
 
-const PermissionEdit = (props: {
-  applicationId: string;
-  onSelect: (id: React.Key) => void;
+const MenuEdit = (props: {
+  roleId: string;
+  onSubmit: (id: React.Key) => void;
 }) => {
   //
   const { dictList } = useCommon();
-  const [list, setList] = useState<PermissionProps[]>([]);
+  const [list, setList] = useState<RoleMenuProps[]>([]);
+  const [permissionList, setPermissionList] = useState<any>([]);
+  const [permissionChildList, setPermissionChildList] = useState<any>([]);
+  const [applicationId, setApplicationId] = useState<string>("");
   // const [dictList, setDictList] = useState<any>({
   //   PermissionType: "",
   // });
 
   useMount(() => {
-    fetchGetPermission();
+    fetchGetPermissionWithAppNameList();
+    fetchGetRoleMenuById();
   });
 
-  const fetchGetPermission = async () => {
-    const result = await getTreeListByApplicationId(props.applicationId);
+  const fetchGetPermissionWithAppNameList = async () => {
+    const result = await getPermissionWithAppNameList();
+    if (result.code === "0") {
+      setPermissionList(result.data);
+    }
+  };
+
+  const fetchGetPermissionListByParentId = async (parentId: string) => {
+    const result = await getPermissionListByParentId(parentId);
+    if (result.code === "0") {
+      setPermissionChildList(result.data);
+    }
+  };
+  const fetchGetRoleMenuById = async () => {
+    const result = await getRoleMenuListById(props.roleId);
     if (result.code === "0") {
       setList(result.data);
+      // setPermissionChildList(result.data);
     }
   };
 
   const columns: JFormItemProps[] = [
     {
-      type: "input",
-      key: "name",
-      label: "资源名称",
+      type: "icon",
+      key: "icon",
+      label: "菜单ICON",
       edit: true,
       show: true,
-      width: 200,
+      width: 120,
     },
     {
       type: "input",
-      key: "value",
-      label: "资源KEY",
+      key: "name",
+      label: "菜单名称",
       edit: true,
       show: true,
       width: 200,
     },
     {
       type: "select",
-      key: "type",
-      label: "资源类型",
+      key: "permissionId",
+      label: "指向页面",
       edit: true,
       show: true,
       width: 120,
-      options: (dictList.PermissionType || []).map((item: any) => ({
-        ...item,
-        dictCode: Number(item.dictCode),
-      })),
+      options: permissionList || [],
       optionsProps: {
-        label: "dictName",
-        value: "dictCode",
+        label: "name",
+        value: "id",
+      },
+      optionRender: (option: any) => (
+        <Space>
+          <Tag color="processing">{option.data.applicationName || "-"}</Tag>
+          {option.label || "-"}
+        </Space>
+      ),
+      onChange: (val) => {
+        if (!val) {
+          setApplicationId("");
+          return;
+        }
+        fetchGetPermissionListByParentId(val as string);
+        setApplicationId(
+          permissionList.find((item: { id: string }) => item.id === val)
+            .applicationId
+        );
+      },
+    },
+    {
+      type: "select",
+      key: "permissionIds",
+      label: "权限选择",
+      edit: true,
+      show: true,
+      width: 120,
+      mode: "multiple",
+      options: permissionChildList || [],
+      optionsProps: {
+        label: "name",
+        value: "id",
       },
       color: {
         1: "blue",
         2: "red",
       },
+    },
+    {
+      type: "number",
+      key: "sortNum",
+      label: "排序",
+      edit: true,
+      show: true,
+      width: 100,
     },
     {
       type: "input",
@@ -120,28 +184,21 @@ const PermissionEdit = (props: {
       width: 100,
     },
   ];
-
-  const handleCreate = async (params: PermissionProps) => {
-    const result = await createPermission({
-      ...params,
-      applicationId: props.applicationId,
-    });
+  const handleCreate = async (params: RoleMenuProps) => {
+    const result = await createRoleMenu(params);
     if (result.code === "0") {
       message.success("创建成功");
-      fetchGetPermission();
+      fetchGetRoleMenuById();
     } else {
       message.error(result.msg || "创建失败");
     }
   };
 
-  const handleUpdate = async (params: PermissionProps) => {
-    const result = await updatePermission({
-      ...params,
-      applicationId: props.applicationId,
-    });
+  const handleUpdate = async (params: RoleMenuProps) => {
+    const result = await updateRoleMenu(params);
     if (result.code === "0") {
       message.success("更新成功");
-      fetchGetPermission();
+      fetchGetRoleMenuById();
     } else {
       message.error(result.msg || "更新失败");
     }
@@ -153,10 +210,10 @@ const PermissionEdit = (props: {
       icon: <ExclamationCircleFilled />,
       onOk() {
         return new Promise((resolve, reject) => {
-          deletedPermission(id).then((result) => {
+          deletedRoleMenu(id).then((result) => {
             if (result.code === "0") {
               message.success("删除成功");
-              fetchGetPermission();
+              fetchGetRoleMenuById();
               resolve(true);
             } else {
               message.error(result.msg || "删除失败");
@@ -179,7 +236,12 @@ const PermissionEdit = (props: {
               titleKey="name"
               options={columns}
               onSubmit={(data) => {
-                handleCreate(data);
+                handleCreate({
+                  ...data,
+                  auths: data.authList?.join(",") || "",
+                  roleId: props.roleId,
+                  applicationId,
+                });
               }}
             >
               <Button type="primary" icon={<PlusOutlined />}>
@@ -189,10 +251,10 @@ const PermissionEdit = (props: {
           </>
         }
         onSubmit={() => {
-          fetchGetPermission();
+          fetchGetRoleMenuById();
         }}
         onReload={() => {
-          fetchGetPermission();
+          fetchGetRoleMenuById();
         }}
       ></JPageCtrl>
       <JTable
@@ -208,7 +270,7 @@ const PermissionEdit = (props: {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getPermissionById}
+                loadDataApi={getRoleMenuById}
               >
                 <Button type="link" icon={<EyeOutlined />}>
                   查看
@@ -218,9 +280,13 @@ const PermissionEdit = (props: {
                 titleKey="name"
                 options={columns}
                 id={record.id}
-                loadDataApi={getPermissionById}
+                loadDataApi={getRoleMenuById}
                 onSubmit={(data) => {
-                  handleUpdate(data);
+                  handleUpdate({
+                    ...data,
+                    applicationId,
+                    auths: data.authList?.join(",") || "",
+                  });
                 }}
               >
                 <Button type="link" icon={<EditOutlined />}>
@@ -236,22 +302,23 @@ const PermissionEdit = (props: {
               >
                 删除
               </Button>
-              {!record.parentId && (
-                <JEdit
-                  title="新增子资源"
-                  options={columns}
-                  onSubmit={(data) => {
-                    handleCreate({
-                      ...data,
-                      parentId: record.id,
-                    });
-                  }}
-                >
-                  <Button type="link" icon={<PlusOutlined />}>
-                    新增
-                  </Button>
-                </JEdit>
-              )}
+              <JEdit
+                title="新增自权限"
+                options={columns}
+                onSubmit={(data) => {
+                  handleCreate({
+                    ...data,
+                    parentId: record.id,
+                    auths: data.authList?.join(",") || "",
+                    roleId: props.roleId,
+                    applicationId,
+                  });
+                }}
+              >
+                <Button type="link" icon={<PlusOutlined />}>
+                  新增
+                </Button>
+              </JEdit>
             </>
           );
         }}
@@ -260,4 +327,4 @@ const PermissionEdit = (props: {
   );
 };
 
-export default PermissionEdit;
+export default MenuEdit;

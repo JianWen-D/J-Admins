@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLoaderData } from "react-router";
 import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
-import { Button, message, Modal, Tag } from "antd";
+import { Button, message, Modal } from "antd";
 import {
   AppstoreOutlined,
   DeleteOutlined,
@@ -24,10 +24,11 @@ import {
   updateRole,
 } from "../../api/types/role";
 import { useMount } from "ahooks";
-import { getDictList } from "../../api/types/dict";
-import PermissionCheck from "./permission";
-import MenuEdit from "../Application/menuEdit";
-import { getPermissionWithAppNameList } from "../../api/types/permission";
+import MenuEdit from "./menuEdit";
+import {
+  ApplicationProps,
+  getApplicationList,
+} from "../../api/types/application";
 
 const { confirm } = Modal;
 
@@ -37,27 +38,17 @@ const RolePage = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
-  const [dictList, setDictList] = useState<any>({
-    Gender: "",
-  });
   //
   const [list, setList] = useState<RoleProps[]>([]);
+  const [appList, setAppList] = useState<ApplicationProps[]>([]);
   const [permissionCheckVisible, setPermissionCheckVisible] =
     useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>("");
 
   useMount(() => {
     fetchgetRolePage(1, 10);
-    fetchgetDictList();
-    fetchgetPermissionWithAppNameList();
+    fetchGetApplicationList();
   });
-
-  const fetchgetDictList = async () => {
-    const result = await getDictList(["Gender"]);
-    if (result.code === "0") {
-      setDictList(result.data);
-    }
-  };
 
   const fetchgetRolePage = async (
     pageNum?: number,
@@ -78,8 +69,11 @@ const RolePage = () => {
     }
   };
 
-  const fetchgetPermissionWithAppNameList = async () => {
-    const result = await getPermissionWithAppNameList();
+  const fetchGetApplicationList = async () => {
+    const result = await getApplicationList({});
+    if (result.code === "0") {
+      setAppList(result.data);
+    }
   };
 
   const columns: JFormItemProps[] = [
@@ -92,19 +86,25 @@ const RolePage = () => {
       width: 200,
     },
     {
-      type: "input",
-      key: "applicationName",
+      type: "select",
+      key: "applicationId",
       label: "所属应用",
       show: true,
+      edit: true,
       width: 200,
+      options: appList || [],
+      optionsProps: {
+        label: "name",
+        value: "id",
+      },
     },
-    {
-      type: "input",
-      key: "associatedNum",
-      label: "关联用户数",
-      show: true,
-      width: 200,
-    },
+    // {
+    //   type: "input",
+    //   key: "associatedNum",
+    //   label: "关联用户数",
+    //   show: true,
+    //   width: 200,
+    // },
     {
       type: "radio",
       key: "status",
@@ -315,6 +315,7 @@ const RolePage = () => {
         okText="提交"
       >
         <MenuEdit
+          roleId={roleId}
           onSubmit={() => {
             // setSelectUserId(id);
           }}

@@ -150,7 +150,13 @@ const initForm = (
                           placeholder={
                             item.placeholder || `请选择${item.label}.`
                           }
-                          onChange={item?.onChange}
+                          onChange={(value) => {
+                            form.setFieldValue(
+                              item.key,
+                              value || (item.mode === "multiple" ? [] : "")
+                            );
+                            item?.onChange && item.onChange(value);
+                          }}
                           filterOption={(input, option: any) =>
                             option.children
                               .toLowerCase()
@@ -158,26 +164,11 @@ const initForm = (
                           }
                           showSearch
                           allowClear
-                        >
-                          {item.options?.map((optionsItem, optionsIndex) => {
-                            return (
-                              <Select.Option
-                                key={optionsIndex}
-                                value={
-                                  optionsItem[
-                                    item.optionsProps?.value || "value"
-                                  ]
-                                }
-                              >
-                                {
-                                  optionsItem[
-                                    item.optionsProps?.label || "label"
-                                  ]
-                                }
-                              </Select.Option>
-                            );
-                          })}
-                        </Select>
+                          optionRender={item.optionRender}
+                          options={item.options}
+                          fieldNames={item.optionsProps}
+                          mode={item.mode}
+                        ></Select>
                       </Form.Item>
                     </Col>
                   );
