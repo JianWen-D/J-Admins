@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useLoaderData, useMatches, useRouteLoaderData } from "react-router";
+import { useState } from "react";
+import { useLoaderData } from "react-router";
 import JPage from "../../components/Antd/Page";
 import JPageCtrl from "../../components/Antd/PageCtrl";
 import { Button, message, Modal } from "antd";
@@ -220,7 +220,7 @@ const ApplicationPage = () => {
 
   return (
     <>
-      <JPage title={LoaderData.title} desc={LoaderData.desc}>
+      <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
         <JPageCtrl
           options={[
             {
@@ -256,7 +256,7 @@ const ApplicationPage = () => {
         <JTable
           data={list}
           operationWidth={300}
-          operation={(text, record) => {
+          operation={(_text, record) => {
             return (
               <>
                 <JCheck
@@ -331,7 +331,7 @@ const ApplicationPage = () => {
       >
         <PermissionEdit
           applicationId={applicationId}
-          onSelect={(id) => {
+          onSelect={() => {
             // setSelectUserId(id);
           }}
         ></PermissionEdit>

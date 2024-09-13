@@ -386,7 +386,7 @@ const AccountPage = () => {
 
   return (
     <>
-      <JPage title={LoaderData.title} desc={LoaderData.desc}>
+      <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
         <JPageCtrl
           options={[
             {
@@ -428,7 +428,7 @@ const AccountPage = () => {
         <JTable
           data={list}
           operationWidth={400}
-          operation={(text, record) => {
+          operation={(_text, record) => {
             return (
               <>
                 <JCheck

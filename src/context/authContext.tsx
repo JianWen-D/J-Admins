@@ -7,8 +7,8 @@ import {
 import request from "../api";
 import config from "../config";
 import { registerMicroApps, start } from "qiankun";
-import { formatMenuListToTree } from "../utils";
 import { getMenuListByApplicationId } from "../api/types/role";
+import { useCommon } from "../utils/hooks";
 
 export const AuthContext = React.createContext<
   | {
@@ -33,6 +33,7 @@ export const AuthProvider = ({
   children: ReactNode;
   userInfo?: any;
 }) => {
+  const { setAuth } = useCommon();
   const [user, setUser] = useState<any>(userInfo || {});
   const [appList, setAppList] = useState<any[]>([]);
   const [menuList, setMenuList] = useState<any[]>([]);
@@ -65,18 +66,25 @@ export const AuthProvider = ({
   };
 
   // 获取当前用户可用的应用列表
-  const fetchGetAppListByUser = async () => {
+  const fetchGetAppListByUser = async (id?: string) => {
+    console.log(activeAppId);
     const result = await getApplicationListByUser();
     if (result.code === "0") {
       setAppList(result.data);
+      const activeApp = result.data.find(
+        (item: { id: string }) => item.id === (id || activeAppId)
+      );
+      setAuth("page", activeApp.permissions.page);
       initMicroApp(
-        result.data.filter((item: { id: string }) => item.id !== config.APP_ID)
+        result.data.filter(
+          (item: { id: string }) => item.id !== (id || activeAppId)
+        )
       );
     }
   };
 
-  const fetchGetMenuListByApplicationId = async () => {
-    const result = await getMenuListByApplicationId(config.APP_ID);
+  const fetchGetMenuListByApplicationId = async (id?: string) => {
+    const result = await getMenuListByApplicationId(id || activeAppId);
     if (result.code === "0") {
       setMenuList(result.data);
     }
@@ -92,14 +100,6 @@ export const AuthProvider = ({
         id || activeAppId
       );
       setAppInfo(result.data);
-
-      console.log(
-        formatMenuListToTree(
-          result.data.permissionList.filter(
-            (item: { type: number }) => item.type === 1
-          )
-        )
-      );
     }
   };
 
@@ -115,7 +115,7 @@ export const AuthProvider = ({
           props: {
             token: request.getToken(),
             auth: {
-              page: [],
+              page: item.permissions.page,
               element: [],
               api: [],
             },
@@ -128,6 +128,8 @@ export const AuthProvider = ({
 
   const changeActiveApp = (id?: string) => {
     fetchGetApplicationInfo(id);
+    fetchGetMenuListByApplicationId(id);
+    fetchGetAppListByUser(id);
   };
 
   const handleLogin = async () => {

@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from "react";
-import config from "../config";
 import { DictProps, getDictList } from "../api/types/dict";
 import { useMount } from "ahooks";
+import request from "../api";
 
 // 用户信息
 
@@ -39,14 +39,16 @@ export const CommonProvider = ({
   }>({});
   const [authData, setAuthData] = useState<AuthProps>(
     auth || {
-      page: config.AUTH_WHITE.page || [],
-      element: config.AUTH_WHITE.element || [],
-      api: config.AUTH_WHITE.api || [],
+      page: [],
+      element: [],
+      api: [],
     }
   );
 
   useMount(() => {
-    fetchDictData();
+    if (request.getToken()) {
+      fetchDictData();
+    }
   });
 
   // 获取系统预设字典
@@ -66,7 +68,7 @@ export const CommonProvider = ({
   const handleSetAuth = (type: "page" | "element" | "api", value: string[]) => {
     setAuthData({
       ...authData,
-      [type]: [...config.AUTH_WHITE[type], ...value],
+      [type]: value,
     });
   };
 

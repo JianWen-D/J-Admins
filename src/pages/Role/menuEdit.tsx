@@ -3,16 +3,9 @@ import JPageCtrl from "../../components/Antd/PageCtrl";
 import { JFormItemProps } from "../../components/Antd/Form/types";
 import { useMount } from "ahooks";
 import JTable from "../../components/Antd/Table";
-import { getDictList } from "../../api/types/dict";
 import {
-  createPermission,
-  deletedPermission,
-  getPermissionById,
   getPermissionListByParentId,
   getPermissionWithAppNameList,
-  getTreeListByApplicationId,
-  PermissionProps,
-  updatePermission,
 } from "../../api/types/permission";
 import JCheck from "../../components/Antd/Check";
 import { Button, message, Modal, Space, Tag } from "antd";
@@ -24,7 +17,6 @@ import {
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { useCommon } from "../../utils/hooks";
 import {
   createRoleMenu,
   deletedRoleMenu,
@@ -40,15 +32,10 @@ const MenuEdit = (props: {
   roleId: string;
   onSubmit: (id: React.Key) => void;
 }) => {
-  //
-  const { dictList } = useCommon();
   const [list, setList] = useState<RoleMenuProps[]>([]);
   const [permissionList, setPermissionList] = useState<any>([]);
   const [permissionChildList, setPermissionChildList] = useState<any>([]);
   const [applicationId, setApplicationId] = useState<string>("");
-  // const [dictList, setDictList] = useState<any>({
-  //   PermissionType: "",
-  // });
 
   useMount(() => {
     fetchGetPermissionWithAppNameList();
@@ -63,6 +50,9 @@ const MenuEdit = (props: {
   };
 
   const fetchGetPermissionListByParentId = async (parentId: string) => {
+    if (!parentId) {
+      return;
+    }
     const result = await getPermissionListByParentId(parentId);
     if (result.code === "0") {
       setPermissionChildList(result.data);
@@ -72,7 +62,6 @@ const MenuEdit = (props: {
     const result = await getRoleMenuListById(props.roleId);
     if (result.code === "0") {
       setList(result.data);
-      // setPermissionChildList(result.data);
     }
   };
 
@@ -125,7 +114,7 @@ const MenuEdit = (props: {
     },
     {
       type: "select",
-      key: "permissionIds",
+      key: "authList",
       label: "权限选择",
       edit: true,
       show: true,
@@ -134,7 +123,7 @@ const MenuEdit = (props: {
       options: permissionChildList || [],
       optionsProps: {
         label: "name",
-        value: "id",
+        value: "value",
       },
       color: {
         1: "blue",
@@ -263,7 +252,7 @@ const MenuEdit = (props: {
         showPage={false}
         scrollY={480}
         operationWidth={380}
-        operation={(text, record) => {
+        operation={(_text, record) => {
           return (
             <>
               <JCheck
@@ -281,6 +270,9 @@ const MenuEdit = (props: {
                 options={columns}
                 id={record.id}
                 loadDataApi={getRoleMenuById}
+                onBtnClick={() => {
+                  fetchGetPermissionListByParentId(record.permissionId);
+                }}
                 onSubmit={(data) => {
                   handleUpdate({
                     ...data,

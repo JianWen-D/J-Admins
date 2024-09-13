@@ -12,6 +12,7 @@ import config from "./config";
 import { fetchLogin, getPasswordKey } from "./api/types/auth";
 import JSEncrypt from "jsencrypt";
 import request from "./api";
+import { useKeepOutlet } from "./components/Keepalive";
 
 interface AppProps {
   miniProgram: boolean | undefined;
@@ -20,6 +21,7 @@ const App = (props: AppProps) => {
   const { isLogin, onLogin } = useAuth();
   const { loading, setLoading, setAuth } = useCommon();
   const location = useLocation();
+  const element = useKeepOutlet();
 
   const fetchGetPasswordKey = async (
     password: string,
@@ -101,7 +103,8 @@ const App = (props: AppProps) => {
               <Suspense fallback={<LoadingSuspense />}>
                 <div id="container">
                   <JAuth type="page" authKey={location.pathname}>
-                    <Outlet></Outlet>
+                    {/* <Outlet></Outlet> */}
+                    {element}
                   </JAuth>
                 </div>
               </Suspense>

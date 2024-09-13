@@ -1,4 +1,3 @@
-import React from "react";
 import * as Icons from "@ant-design/icons";
 import { Select } from "antd";
 import JIcon from "../Icon";

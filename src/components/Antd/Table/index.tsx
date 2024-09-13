@@ -52,7 +52,7 @@ const JTable = (props: JTableProps) => {
           dataIndex: "operation",
           key: "operation",
           fixed: "right",
-          width: props.operationWidth || 300,
+          width: props.operationWidth || 240,
           align: "center",
           render: (text: any, record: any) => {
             return props.operation && props.operation(text, record);

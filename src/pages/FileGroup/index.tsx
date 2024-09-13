@@ -206,7 +206,7 @@ const FileGroupPage = () => {
   };
 
   return (
-    <JPage title={LoaderData.title} desc={LoaderData.desc}>
+    <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
       <JPageCtrl
         options={[
           {
@@ -241,7 +241,8 @@ const FileGroupPage = () => {
       ></JPageCtrl>
       <JTable
         data={list}
-        operation={(text, record) => {
+        operationWidth={240}
+        operation={(_text, record) => {
           return (
             <>
               <JCheck
@@ -250,7 +251,7 @@ const FileGroupPage = () => {
                 id={record.id}
                 loadDataApi={getFileGroupById}
               >
-                <Button type="link" icon={<EyeOutlined />}>
+                <Button size="small" type="link" icon={<EyeOutlined />}>
                   查看
                 </Button>
               </JCheck>
@@ -263,11 +264,12 @@ const FileGroupPage = () => {
                   handleUpdate(data);
                 }}
               >
-                <Button type="link" icon={<EditOutlined />}>
+                <Button size="small" type="link" icon={<EditOutlined />}>
                   编辑
                 </Button>
               </JEdit>
               <Button
+                size="small"
                 type="link"
                 icon={<DeleteOutlined />}
                 onClick={() => {

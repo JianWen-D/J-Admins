@@ -4,11 +4,10 @@ import { useMount } from "ahooks";
 import JTable from "../../components/Antd/Table";
 import {
   getPermissionListByRoleIdAndAppId,
-  getPermissionWithAppNameList,
   getTreeListByApplicationId,
   PermissionProps,
 } from "../../api/types/permission";
-import { Button, message, Modal, Tabs, TabsProps } from "antd";
+import { Tabs, TabsProps } from "antd";
 import { getApplicationList } from "../../api/types/application";
 import { useCommon } from "../../utils/hooks";
 

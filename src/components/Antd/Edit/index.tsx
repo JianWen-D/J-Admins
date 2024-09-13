@@ -11,7 +11,9 @@ interface JEditProps {
   id?: string;
   children?: React.ReactElement;
   onSubmit: (data: any) => void;
+  onBtnClick?: () => void;
   loadDataApi?: any;
+  defaultData?: any;
 }
 
 const JEdit = (props: JEditProps) => {
@@ -29,12 +31,14 @@ const JEdit = (props: JEditProps) => {
   });
 
   useEffect(() => {
-    FormRef.setFieldsValue(data);
-  }, [visible]);
+    FormRef.setFieldsValue({
+      ...(props.defaultData || {}),
+      ...data,
+    });
+  }, [FormRef, data, props.defaultData, visible]);
 
   const handleSubmit = () => {
     FormRef.validateFields().then((res) => {
-      console.log(res, data);
       props.onSubmit({
         ...data,
         ...res,
@@ -62,6 +66,7 @@ const JEdit = (props: JEditProps) => {
       <div
         style={{ display: "inline-block" }}
         onClick={() => {
+          props.onBtnClick && props.onBtnClick();
           handleClick(() => {
             setVisible(true);
           });

@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, message, Modal, Upload } from "antd";
+import { Image, message, Upload } from "antd";
 import type { RcFile } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 import { uploadFile } from "../../../api/types/common";

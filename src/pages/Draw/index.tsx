@@ -106,7 +106,7 @@ const DrawPage = () => {
   ];
 
   return (
-    <JPage title={LoaderData.title} desc={LoaderData.desc}>
+    <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
       <JPageCtrl
         options={[
           {
@@ -133,7 +133,6 @@ const DrawPage = () => {
             <JEdit
               title="123"
               options={columns}
-              data={{}}
               onSubmit={(data) => {
                 console.log(data);
               }}
@@ -158,18 +157,17 @@ const DrawPage = () => {
           },
         ]}
         operationWidth={400}
-        operation={(text, record) => {
+        operation={() => {
           return (
             <>
-              <JCheck title="123" options={columns} data={record}>
+              <JCheck titleKey="name" options={columns}>
                 <Button type="link" icon={<EyeOutlined />}>
                   查看
                 </Button>
               </JCheck>
               <JEdit
-                title="123"
+                titleKey="name"
                 options={columns}
-                data={record}
                 onSubmit={(data) => {
                   console.log(data);
                 }}

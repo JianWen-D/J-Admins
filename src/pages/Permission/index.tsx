@@ -236,7 +236,7 @@ const UserPage = () => {
   };
 
   return (
-    <JPage title={LoaderData.title} desc={LoaderData.desc}>
+    <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
       <JPageCtrl
         options={[
           {
@@ -270,7 +270,7 @@ const UserPage = () => {
       ></JPageCtrl>
       <JTable
         data={list}
-        operation={(text, record) => {
+        operation={(_text, record) => {
           return (
             <>
               <JCheck

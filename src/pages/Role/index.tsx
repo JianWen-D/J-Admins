@@ -206,7 +206,7 @@ const RolePage = () => {
 
   return (
     <>
-      <JPage title={LoaderData.title} desc={LoaderData.desc}>
+      <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
         <JPageCtrl
           options={[
             {
@@ -241,7 +241,7 @@ const RolePage = () => {
         <JTable
           data={list}
           operationWidth={420}
-          operation={(text, record) => {
+          operation={(_text, record) => {
             return (
               <>
                 <JCheck

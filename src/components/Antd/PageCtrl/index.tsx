@@ -4,7 +4,7 @@ import {
   SearchOutlined,
   UpOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Row, Tooltip } from "antd";
+import { Button, Tooltip } from "antd";
 import { useState } from "react";
 import "./index.less";
 import { JFormItemProps } from "../Form/types";
@@ -93,7 +93,7 @@ const JPageCtrl = (props: JPageCtrlProps) => {
               type="text"
               icon={<ReloadOutlined />}
               onClick={() => {
-                props?.onReload();
+                props.onReload && props.onReload();
               }}
             ></Button>
           </Tooltip>

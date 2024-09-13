@@ -86,7 +86,7 @@ class InterfaceInstance {
    * 设置请求拦截
    */
   interceptorsRequest(
-    callback = (config: AxiosRequestConfig): AxiosRequestConfig => config
+    callback: (config: AxiosRequestConfig) => AxiosRequestConfig
   ) {
     this.axiosInstance.interceptors.request.use(
       (config: any) => {
@@ -105,8 +105,8 @@ class InterfaceInstance {
    * 设置响应拦截
    */
   interceptorsResponse(
-    callback = (response: AxiosResponse): AxiosResponse => response,
-    errorCatch = (error: AxiosError) => {}
+    callback: (response: AxiosResponse) => AxiosResponse,
+    errorCatch: (_error?: AxiosError) => void
   ) {
     this.axiosInstance.interceptors.response.use(
       (response: any) => {
@@ -127,8 +127,10 @@ class JAxios {
   interface: any; // axios实例
   loadingMap: Map<any, any>; // loading map数组
   pendingMap: Map<any, any>; // loading map数组
-  reloadRequest: Function[]; // 等待请求队列
-  refreshRequet: (callback: (token?: string) => AxiosResponse<string>) => void; // 等待请求队列
+  reloadRequest: any[]; // 等待请求队列
+  refreshRequet:
+    | undefined
+    | ((callback: (token?: string) => AxiosResponse<string>) => void); // 等待请求队列
   isBlocking: boolean; // 等待请求队列
   tokenKey: string;
   constructor(config: RequestCustomConfigType = {}) {
@@ -169,7 +171,7 @@ class JAxios {
       // 返回自定义请求拦截的对象实例
       return (
         (this.defaultConfig.handleBeforeRequest &&
-          (this.defaultConfig.handleBeforeRequest as Function)(_config)) ||
+          this.defaultConfig.handleBeforeRequest(_config)) ||
         _config
       );
     });
@@ -182,7 +184,7 @@ class JAxios {
         // 返回自定义响应拦截的对象实例
         return (
           (this.defaultConfig.handleAfterResponse &&
-            (this.defaultConfig.handleAfterResponse as Function)(response)) ||
+            this.defaultConfig.handleAfterResponse(response)) ||
           response
         );
       },
@@ -205,14 +207,21 @@ class JAxios {
             console?.warn(JSON.stringify(error.response?.data) || "操作失败");
           }
           // 回调报错信息提示
-          config.showMessage(error.response?.data || error.message);
+          config.showMessage &&
+            config.showMessage(error.response?.data || error.message);
         }
         // 撤销loading状态
-        config?.loading && this.handleLoading("remove", config.requestKey);
+        config.requestKey &&
+          config?.loading &&
+          this.handleLoading("remove", config.requestKey);
         // 重连
         return error.code === "ECONNABORTED"
           ? this.retry(error)
-          : Promise.reject(error);
+          : (this.defaultConfig.handleAfterResponse &&
+              this.defaultConfig.handleAfterResponse(
+                error.response as AxiosResponse
+              )) ||
+              error.response;
       }
     );
   }
@@ -270,7 +279,7 @@ class JAxios {
     console?.warn("温馨提示：Token过期");
     // 判断当前的等待状态
     if (this.isBlocking) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.reloadRequest.push(() => {
           resolve(this.interface.axiosInstance.request(_config));
         });
@@ -278,14 +287,15 @@ class JAxios {
     } else {
       // 设置等待状态
       this.isBlocking = true;
-      _config.refreshRequet(() => {
-        // 取消等待状态
-        this.isBlocking = false;
-        // 遍历等待列表中的接口
-        this.reloadRequest.forEach((item) => item());
-        this.reloadRequest = [];
-        return this.interface.axiosInstance.request(_config);
-      });
+      _config.refreshRequet &&
+        _config.refreshRequet(() => {
+          // 取消等待状态
+          this.isBlocking = false;
+          // 遍历等待列表中的接口
+          this.reloadRequest.forEach((item) => item());
+          this.reloadRequest = [];
+          return this.interface.axiosInstance.request(_config);
+        });
     }
   }
 

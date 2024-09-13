@@ -7,7 +7,6 @@ import { AppstoreOutlined } from "@ant-design/icons";
 import JLayoutHeader from "./header";
 import JHeaderBreadcrumb from "./breadcrumb";
 import { useAuth } from "../../utils/hooks";
-import { formatMenuListToTree, PermissionTypes } from "../../utils";
 import { MenuProps } from "antd/lib";
 import * as Icons from "@ant-design/icons";
 import { RoleMenuProps } from "../../api/types/role";

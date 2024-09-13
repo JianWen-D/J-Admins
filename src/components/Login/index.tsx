@@ -33,30 +33,6 @@ const JLogin = (props: JLoginProps) => {
       : false
   );
 
-  useEffect(() => {
-    if (remember) {
-      const account = JSON.parse(
-        localStorage.getItem(
-          `${applicationName}_account`.toLocaleUpperCase()
-        ) as string
-      );
-      formRef.setFieldsValue({
-        username: account.username,
-        password: account.password,
-      });
-    }
-  }, []);
-
-  // 登录
-  const handleLogin = () => {
-    formRef.validateFields().then((values: FormDataProps) => {
-      onSubmit({
-        ...values,
-        remember,
-      });
-    });
-  };
-
   const [formRef, form] = JForm({
     labelCol: {
       span: 0,
@@ -132,6 +108,30 @@ const JLogin = (props: JLoginProps) => {
       },
     ],
   });
+
+  useEffect(() => {
+    if (remember) {
+      const account = JSON.parse(
+        localStorage.getItem(
+          `${applicationName}_account`.toLocaleUpperCase()
+        ) as string
+      );
+      formRef.setFieldsValue({
+        username: account.username,
+        password: account.password,
+      });
+    }
+  }, [applicationName, formRef, remember]);
+
+  // 登录
+  const handleLogin = () => {
+    formRef.validateFields().then((values: FormDataProps) => {
+      onSubmit({
+        ...values,
+        remember,
+      });
+    });
+  };
   return (
     <div className="login-page">
       <div className="login-container">

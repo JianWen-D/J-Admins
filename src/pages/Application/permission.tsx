@@ -3,7 +3,6 @@ import JPageCtrl from "../../components/Antd/PageCtrl";
 import { JFormItemProps } from "../../components/Antd/Form/types";
 import { useMount } from "ahooks";
 import JTable from "../../components/Antd/Table";
-import { getDictList } from "../../api/types/dict";
 import {
   createPermission,
   deletedPermission,
@@ -201,7 +200,7 @@ const PermissionEdit = (props: {
         showPage={false}
         scrollY={480}
         operationWidth={380}
-        operation={(text, record) => {
+        operation={(_text, record) => {
           return (
             <>
               <JCheck

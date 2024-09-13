@@ -1,5 +1,4 @@
 import {
-  InfoOutlined,
   LayoutOutlined,
   SaveOutlined,
   SettingOutlined,
@@ -83,6 +82,7 @@ const DrawDetailPage = () => {
   ];
 
   const onLoadImg = (value: string) => {
+    console.log(scale);
     const img = new Image();
     img.src = value;
     img.onload = () => {
@@ -91,8 +91,8 @@ const DrawDetailPage = () => {
     };
   };
   const getScaleNum = (width: number, height: number) => {
-    const contentWidth = drawCanvasContentRef.current?.clientWidth || 0;
-    const contentHeight = drawCanvasContentRef.current?.clientHeight || 0;
+    const contentWidth = 0;
+    const contentHeight = 0;
     let scaleWidth = width / contentWidth;
     let scaleHeight = height / contentHeight;
     if (width > contentWidth) {
@@ -126,7 +126,7 @@ const DrawDetailPage = () => {
           {bgImg && (
             <Draggable
               bounds="parent"
-              onDrag={(e, ui) => {
+              onDrag={(_e, ui) => {
                 // const {x, y} = this.state.deltaPosition;
                 console.log(ui);
               }}

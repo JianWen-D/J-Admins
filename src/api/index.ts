@@ -19,19 +19,18 @@ const request = new JAxios({
   loadingCallback: (loading: boolean) => {
     store.dispatch(handleLoadingChange(loading));
   },
-  refreshRequet: (callback) => {
-    // request
-    //   .get<responseType<string>>({
-    //     url: "/refreshToken",
-    //   })
-    //   .then((res) => {
-    //     request.setToken(res.data);
-    //     callback();
-    //   });
-  },
+  // refreshRequet: () => {
+  // request
+  //   .get<responseType<string>>({
+  //     url: "/refreshToken",
+  //   })
+  //   .then((res) => {
+  //     request.setToken(res.data);
+  //     callback();
+  //   });
+  // },
   handleAfterResponse: (response) => {
-    if (response.data.code === "401") {
-      message.error("登录过期，请重新登录");
+    if (response.status === 401) {
       request.clearToken();
       window.location.reload();
     }
@@ -42,6 +41,10 @@ const request = new JAxios({
     count: 3,
   },
   tokenPrefix: config.APP_NAME,
+  showMessage: (msg) => {
+    message.destroy();
+    message.error(msg);
+  },
 });
 
 export default request;
