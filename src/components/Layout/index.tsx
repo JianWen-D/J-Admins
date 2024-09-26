@@ -40,7 +40,6 @@ const getItem = (
 };
 
 interface JLayoutProps {
-  logoSrc: string;
   children: React.ReactElement | null;
 }
 
@@ -91,7 +90,7 @@ const JLayout = (props: JLayoutProps) => {
           }}
         >
           <div className="j-sider-header">
-            <img className="j-sider-logo" src={props.logoSrc || ""}></img>
+            <img className="j-sider-logo" src={appInfo.icon || ""}></img>
             <div className="j-sider-text">{appInfo.name || "-"}</div>
             <Tooltip title="切换应用">
               <Button

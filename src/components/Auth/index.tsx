@@ -18,6 +18,13 @@ const JAuth = (props: JAuthProps) => {
   if (!authKey) {
     return <JNoFound />;
   }
+  if (type === "page") {
+    return auth[type].find((item: string) => authKey.includes(item)) ? (
+      children
+    ) : (
+      <JNoFound />
+    );
+  }
   return auth[type].find((item: string) => item === authKey) ? (
     children
   ) : (

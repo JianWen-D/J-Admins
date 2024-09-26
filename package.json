@@ -25,6 +25,7 @@
     "nprogress": "^0.2.0",
     "path": "^0.12.7",
     "qiankun": "^2.10.16",
+    "re-resizable": "^6.10.0",
     "react": "^18.3.1",
     "react-activation": "^0.12.4",
     "react-dom": "^18.3.1",

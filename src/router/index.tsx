@@ -84,13 +84,13 @@ const router = (miniProgram: boolean | undefined) => [
         element: lazyComponent("Role"),
       },
       {
-        path: "/draw",
+        path: "/certificate/setting",
         id: "draw",
         loader: () => ({ title: "图片模版设置" }),
         element: lazyComponent("Draw"),
       },
       {
-        path: "/drawDetail",
+        path: "/certificate/setting/:id",
         id: "drawDetail",
         loader: () => ({ title: "图片模版设置详情" }),
         element: lazyComponent("DrawDetail"),

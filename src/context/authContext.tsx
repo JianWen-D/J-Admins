@@ -1,6 +1,7 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import {
   getApplicationInfo,
+  getApplicationInfoWithoutLogin,
   getApplicationListByUser,
   getUserInfo,
 } from "../api/types/auth";
@@ -50,6 +51,8 @@ export const AuthProvider = ({
   useEffect(() => {
     if (request.getToken()) {
       fetchGetUserInfo();
+    } else {
+      fetchApplicationInfoWithoutLogin(activeAppId);
     }
   }, []);
 
@@ -58,8 +61,8 @@ export const AuthProvider = ({
     const result = await getUserInfo();
     if (result.code === "0") {
       setUser(result.data);
-      fetchGetAppListByUser();
       fetchGetApplicationInfo();
+      fetchGetAppListByUser();
       fetchGetMenuListByApplicationId();
       setIsLogin(true);
     }
@@ -90,6 +93,18 @@ export const AuthProvider = ({
     }
   };
 
+  // 获取当前应用信息\ - 非登陆
+  const fetchApplicationInfoWithoutLogin = async (id: string) => {
+    const result = await getApplicationInfoWithoutLogin(id);
+    if (result.code === "0") {
+      setActiveAppId(id || activeAppId);
+      window.sessionStorage.setItem(
+        `${config.APP_NAME}_ACTIVE_APP`.toLocaleUpperCase(),
+        id || activeAppId
+      );
+      setAppInfo(result.data);
+    }
+  };
   // 获取当前应用信息
   const fetchGetApplicationInfo = async (id?: string) => {
     const result = await getApplicationInfo(id || activeAppId);

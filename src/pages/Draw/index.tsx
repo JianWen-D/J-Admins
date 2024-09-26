@@ -149,6 +149,7 @@ const DrawPage = () => {
       <JTable
         data={[
           {
+            id: 1,
             name: "模版1",
             desc: "测试模版",
             createdTime: "2024-01-01 23:59:59",
@@ -157,7 +158,7 @@ const DrawPage = () => {
           },
         ]}
         operationWidth={400}
-        operation={() => {
+        operation={(_text, record) => {
           return (
             <>
               <JCheck titleKey="name" options={columns}>
@@ -180,7 +181,7 @@ const DrawPage = () => {
                 type="link"
                 icon={<SettingOutlined />}
                 onClick={() => {
-                  navigate("/drawDetail");
+                  navigate(`/certificate/setting/${record.id}`);
                 }}
               >
                 设置

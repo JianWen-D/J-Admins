@@ -7,9 +7,10 @@ import { Button, Input, Space, Tabs, TabsProps, Typography } from "antd";
 import "./index.less";
 import { JFormItemProps } from "../../components/Antd/Form/types";
 import JForm from "../../components/Antd/Form";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 const { Title } = Typography;
 import Draggable from "react-draggable";
+import SettingForm from "./SettingForm";
 
 // https://janvem.oss-cn-hangzhou.aliyuncs.com/chinaculture/card_bg_1.jpg
 
@@ -77,22 +78,20 @@ const DrawDetailPage = () => {
       key: "2",
       label: "布局设置",
       icon: <LayoutOutlined />,
-      children: "Content of Tab Pane 2",
+      children: <SettingForm />,
     },
   ];
 
   const onLoadImg = (value: string) => {
-    console.log(scale);
     const img = new Image();
     img.src = value;
     img.onload = () => {
-      console.log(img, img.width, img.height);
       getScaleNum(img.width, img.height);
     };
   };
   const getScaleNum = (width: number, height: number) => {
-    const contentWidth = 0;
-    const contentHeight = 0;
+    const contentWidth = drawCanvasContentRef?.current.clientWidth;
+    const contentHeight = drawCanvasContentRef?.current.clientHeight;
     let scaleWidth = width / contentWidth;
     let scaleHeight = height / contentHeight;
     if (width > contentWidth) {
@@ -104,10 +103,19 @@ const DrawDetailPage = () => {
     console.log(width, contentWidth, scaleWidth);
     console.log(height, contentHeight, scaleHeight);
     const scalNum = scaleHeight > scaleWidth ? scaleWidth : scaleHeight;
-    setScale(scaleHeight > scaleWidth ? scaleWidth : scaleHeight);
+    setScale(scalNum);
     setBgWidth(width * scalNum);
     setBgHeight(height * scalNum);
   };
+
+  useEffect(() => {
+    setBgImg(
+      "https://janvem.oss-cn-hangzhou.aliyuncs.com/chinaculture/card_bg_1.jpg"
+    );
+    onLoadImg(
+      "https://janvem.oss-cn-hangzhou.aliyuncs.com/chinaculture/card_bg_1.jpg"
+    );
+  }, []);
   return (
     <div className="draw-detail-page">
       <div className="draw-detail-content" ref={drawCanvasContentRef}>
@@ -116,9 +124,7 @@ const DrawDetailPage = () => {
           ref={drawCanvasRef}
           style={{
             position: "relative",
-            // transform: `scaleY(${scale})`,
             background: `url(${bgImg}) center center / 100% no-repeat `,
-            // backgroundSize: 100,
             width: bgWidth,
             height: bgHeight,
           }}
@@ -127,7 +133,6 @@ const DrawDetailPage = () => {
             <Draggable
               bounds="parent"
               onDrag={(_e, ui) => {
-                // const {x, y} = this.state.deltaPosition;
                 console.log(ui);
               }}
             >

@@ -77,3 +77,14 @@ export const getApplicationInfo = (id: string) => {
     params: {},
   });
 };
+/**
+ * 获取应用信息
+ * @param params
+ * @returns
+ */
+export const getApplicationInfoWithoutLogin = (id: string) => {
+  return request.get<any>({
+    url: `/base-service/application/getInfoByLogin/${id}`,
+    params: {},
+  });
+};

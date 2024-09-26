@@ -18,7 +18,7 @@ interface AppProps {
   miniProgram: boolean | undefined;
 }
 const App = (props: AppProps) => {
-  const { isLogin, onLogin } = useAuth();
+  const { isLogin, onLogin, appInfo } = useAuth();
   const { loading, setLoading, setAuth } = useCommon();
   const location = useLocation();
   const element = useKeepOutlet();
@@ -99,7 +99,7 @@ const App = (props: AppProps) => {
       {!props.miniProgram && (
         <div className="app">
           {isLogin ? (
-            <JLayout logoSrc="https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png">
+            <JLayout>
               <Suspense fallback={<LoadingSuspense />}>
                 <div id="container">
                   <JAuth type="page" authKey={location.pathname}>
@@ -111,10 +111,13 @@ const App = (props: AppProps) => {
             </JLayout>
           ) : (
             <JLogin
-              title="管理后台"
+              title={appInfo.name || "管理后台"}
               applicationName={config.APP_NAME}
               loading={loading}
-              logoSrc="https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png"
+              logoSrc={
+                appInfo.icon ||
+                "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png"
+              }
               onSubmit={(data) => handleLogin(data)}
             />
           )}
