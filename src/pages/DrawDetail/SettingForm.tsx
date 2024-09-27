@@ -1,34 +1,49 @@
 import { CloseOutlined } from "@ant-design/icons";
+import { useUpdateEffect } from "ahooks";
 import {
   Button,
   Card,
+  Col,
   Form,
   Input,
   InputNumber,
   Radio,
+  Row,
   Select,
-  Space,
 } from "antd";
+import { throttle } from "lodash";
 
 interface SettingFormProps {
-  options: [];
+  options: any[];
+  onChange: (options: any[]) => void;
 }
 
-const SettingForm = () => {
+const SettingForm = (props: SettingFormProps) => {
   const [form] = Form.useForm();
-  Form.useWatch("items", form);
+  const options = Form.useWatch("options", form);
+
+  useUpdateEffect(() => {
+    props.onChange(options);
+  }, [options]);
+
+  useUpdateEffect(() => {
+    throttle(() => {
+      form.setFieldsValue({
+        options: props.options,
+      });
+    }, 300);
+  }, [props.options]);
 
   return (
     <Form
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 18 }}
       form={form}
-      name="dynamic_form_complex"
       style={{ maxWidth: 600 }}
       autoComplete="off"
-      initialValues={{ items: [{}] }}
+      initialValues={{ options: props.options }}
     >
-      <Form.List name="items">
+      <Form.List name="options">
         {(fields, { add, remove }) => (
           <div style={{ display: "flex", rowGap: 16, flexDirection: "column" }}>
             {fields.map((field, index) => {
@@ -57,6 +72,23 @@ const SettingForm = () => {
                   >
                     <Input />
                   </Form.Item>
+                  <Form.Item label="类型值" name={[field.name, "keys"]}>
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label="坐标" style={{ marginBottom: 0 }}>
+                    <Row>
+                      <Col>
+                        <Form.Item name={[field.name, "x"]} initialValue={0}>
+                          <InputNumber min={0} placeholder="X轴" />
+                        </Form.Item>
+                      </Col>
+                      <Col offset={1}>
+                        <Form.Item name={[field.name, "y"]} initialValue={0}>
+                          <InputNumber min={0} placeholder="Y轴" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Form.Item>
                   <Form.Item
                     label="类型"
                     name={[field.name, "type"]}
@@ -80,18 +112,20 @@ const SettingForm = () => {
                       ]}
                     ></Select>
                   </Form.Item>
-                  <Form.Item label="类型值" name={[field.name, "name"]}>
-                    <Input />
-                  </Form.Item>
-                  {form.getFieldValue([`items`, index, "type"]) === "text" && (
+                  {form.getFieldValue([`options`, index, "type"]) ===
+                    "text" && (
                     <>
                       <Form.Item
                         label="字体大小"
-                        name={[field.name, "fontsize"]}
+                        name={[field.name, "fontSize"]}
                       >
-                        <InputNumber min={10} />
+                        <InputNumber min={12} max={100} />
                       </Form.Item>
-                      <Form.Item label="字体" name={[field.name, "fontType"]}>
+                      <Form.Item
+                        label="字体"
+                        name={[field.name, "fontType"]}
+                        initialValue={"songti"}
+                      >
                         <Select
                           options={[
                             {
@@ -101,11 +135,25 @@ const SettingForm = () => {
                           ]}
                         ></Select>
                       </Form.Item>
-                      <Form.Item label="对齐方式" name={[field.name, "align"]}>
-                        <Radio.Group defaultValue="left">
+                      <Form.Item
+                        label="对齐方式"
+                        name={[field.name, "align"]}
+                        initialValue={"left"}
+                      >
+                        <Radio.Group>
                           <Radio.Button value="left">左对齐</Radio.Button>
                           <Radio.Button value="center">居中</Radio.Button>
                           <Radio.Button value="right">右对齐</Radio.Button>
+                        </Radio.Group>
+                      </Form.Item>
+                      <Form.Item
+                        label="下划线"
+                        name={[field.name, "downline"]}
+                        initialValue={false}
+                      >
+                        <Radio.Group>
+                          <Radio.Button value={false}>无</Radio.Button>
+                          <Radio.Button value={true}>有</Radio.Button>
                         </Radio.Group>
                       </Form.Item>
                     </>
@@ -118,11 +166,13 @@ const SettingForm = () => {
               type="dashed"
               onClick={() => {
                 console.log(form.getFieldValue(`rules`));
-                add();
+                add({
+                  id: new Date().valueOf(),
+                });
               }}
               block
             >
-              + Add Item
+              + 新增
             </Button>
           </div>
         )}

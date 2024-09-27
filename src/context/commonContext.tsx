@@ -39,7 +39,7 @@ export const CommonProvider = ({
   }>({});
   const [authData, setAuthData] = useState<AuthProps>(
     auth || {
-      page: [],
+      page: ["/certificate/setting"],
       element: [],
       api: [],
     }
