@@ -72,10 +72,10 @@ const JTable = (props: JTableProps) => {
         pagination={false}
         rowKey={"id"}
         rowSelection={props.rowSelection || undefined}
-        scroll={{
-          x: 1000,
-          y: props.scrollY || 640,
-        }}
+        // scroll={{
+        //   x: 1000,
+        //   y: props.scrollY || 640,
+        // }}
       />
       {(props.showPage ?? true) && (
         <div className={Style.JTablePagination}>

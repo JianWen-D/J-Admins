@@ -5,7 +5,7 @@ import {
   useNavigate,
   useRouteLoaderData,
 } from "react-router";
-import JPage from "../../components/Antd/Page";
+import JPage from "../../components/Antd/JPage";
 import JPageCtrl from "../../components/Antd/PageCtrl";
 import { Button } from "antd";
 import {

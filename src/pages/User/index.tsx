@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router";
-import JPage from "../../components/Antd/Page";
+import JPage from "../../components/Antd/JPage";
 import JPageCtrl from "../../components/Antd/PageCtrl";
 import { Button, message, Modal, Tag } from "antd";
 import {

@@ -1,15 +1,15 @@
-import { useState } from "react";
+import JCheck from "../../components/Business/JCheck";
+import JEdit from "../../components/Business/JEdit";
 import JPageCtrl from "../../components/Antd/PageCtrl";
-import { JFormItemProps } from "../../components/Antd/Form/types";
+import JTable from "../../components/Base/Table";
+import { Button, message, Modal, Space, Tag } from "antd";
+import { JFormItemProps } from "../../components/Base/Form/types";
 import { useMount } from "ahooks";
-import JTable from "../../components/Antd/Table";
+import { useState } from "react";
 import {
   getPermissionListByParentId,
   getPermissionWithAppNameList,
 } from "../../api/types/permission";
-import JCheck from "../../components/Antd/Check";
-import { Button, message, Modal, Space, Tag } from "antd";
-import JEdit from "../../components/Antd/Edit";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -25,6 +25,8 @@ import {
   RoleMenuProps,
   updateRoleMenu,
 } from "../../api/types/role";
+import { JColumnsOptions } from "../../components/Business/types";
+import useColumn, { ColumnType } from "../../components/tools";
 
 const { confirm } = Modal;
 
@@ -65,36 +67,30 @@ const MenuEdit = (props: {
     }
   };
 
-  const columns: JFormItemProps[] = [
+  const columns: JColumnsOptions<RoleMenuProps>[] = [
     {
       type: "icon",
       key: "icon",
       label: "菜单ICON",
-      edit: true,
-      show: true,
       width: 120,
     },
     {
       type: "input",
       key: "name",
       label: "菜单名称",
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "select",
       key: "permissionId",
       label: "指向页面",
-      edit: true,
-      show: true,
       width: 120,
       options: permissionList || [],
       optionsProps: {
         label: "name",
         value: "id",
       },
-      optionRender: (option: any) => (
+      tableRender: (option: any) => (
         <Space>
           <Tag color="processing">{option.data.applicationName || "-"}</Tag>
           {option.label || "-"}
@@ -116,8 +112,6 @@ const MenuEdit = (props: {
       type: "select",
       key: "authList",
       label: "权限选择",
-      edit: true,
-      show: true,
       width: 120,
       mode: "multiple",
       options: permissionChildList || [],
@@ -134,17 +128,12 @@ const MenuEdit = (props: {
       type: "number",
       key: "sortNum",
       label: "排序",
-      edit: true,
-      show: true,
       width: 100,
     },
     {
       type: "input",
       key: "remark",
       label: "备注",
-      edit: true,
-      show: true,
-      width: 200,
     },
     {
       type: "radio",
@@ -168,11 +157,78 @@ const MenuEdit = (props: {
         label: "label",
         value: "value",
       },
-      edit: true,
-      show: true,
       width: 100,
     },
+    {
+      label: "操作",
+      key: "operation",
+      type: "input",
+      width: 380,
+      render: (_text, record) => {
+        return (
+          <>
+            <JCheck
+              options={columns}
+              id={record.id}
+              loadDataApi={getRoleMenuById}
+            >
+              <Button type="link" icon={<EyeOutlined />}>
+                查看
+              </Button>
+            </JCheck>
+            <JEdit
+              options={columns}
+              id={record.id}
+              loadDataApi={getRoleMenuById}
+              onBtnClick={() => {
+                fetchGetPermissionListByParentId(record.permissionId);
+              }}
+              onSubmit={(data) => {
+                handleUpdate({
+                  ...data,
+                  applicationId,
+                  auths: data.authList?.join(",") || "",
+                });
+              }}
+            >
+              <Button type="link" icon={<EditOutlined />}>
+                编辑
+              </Button>
+            </JEdit>
+            <Button
+              type="link"
+              icon={<DeleteOutlined />}
+              onClick={() => {
+                handleDeleted(record.id as string);
+              }}
+            >
+              删除
+            </Button>
+            <JEdit
+              title="新增子权限"
+              options={columns}
+              onSubmit={(data) => {
+                handleCreate({
+                  ...data,
+                  parentId: record.id,
+                  auths: data.authList?.join(",") || "",
+                  roleId: props.roleId,
+                  applicationId,
+                });
+              }}
+            >
+              <Button type="link" icon={<PlusOutlined />}>
+                新增
+              </Button>
+            </JEdit>
+          </>
+        );
+      },
+    },
   ];
+
+  const tableOperation = useColumn(columns, ColumnType.Table);
+
   const handleCreate = async (params: RoleMenuProps) => {
     const result = await createRoleMenu(params);
     if (result.code === "0") {
@@ -222,7 +278,7 @@ const MenuEdit = (props: {
         additionButton={
           <>
             <JEdit
-              titleKey="name"
+              title="新增"
               options={columns}
               onSubmit={(data) => {
                 handleCreate({
@@ -248,72 +304,9 @@ const MenuEdit = (props: {
       ></JPageCtrl>
       <JTable
         data={list}
-        columns={columns}
+        columns={tableOperation}
         showPage={false}
         scrollY={480}
-        operationWidth={380}
-        operation={(_text, record) => {
-          return (
-            <>
-              <JCheck
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getRoleMenuById}
-              >
-                <Button type="link" icon={<EyeOutlined />}>
-                  查看
-                </Button>
-              </JCheck>
-              <JEdit
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getRoleMenuById}
-                onBtnClick={() => {
-                  fetchGetPermissionListByParentId(record.permissionId);
-                }}
-                onSubmit={(data) => {
-                  handleUpdate({
-                    ...data,
-                    applicationId,
-                    auths: data.authList?.join(",") || "",
-                  });
-                }}
-              >
-                <Button type="link" icon={<EditOutlined />}>
-                  编辑
-                </Button>
-              </JEdit>
-              <Button
-                type="link"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  handleDeleted(record.id);
-                }}
-              >
-                删除
-              </Button>
-              <JEdit
-                title="新增自权限"
-                options={columns}
-                onSubmit={(data) => {
-                  handleCreate({
-                    ...data,
-                    parentId: record.id,
-                    auths: data.authList?.join(",") || "",
-                    roleId: props.roleId,
-                    applicationId,
-                  });
-                }}
-              >
-                <Button type="link" icon={<PlusOutlined />}>
-                  新增
-                </Button>
-              </JEdit>
-            </>
-          );
-        }}
       ></JTable>
     </>
   );
