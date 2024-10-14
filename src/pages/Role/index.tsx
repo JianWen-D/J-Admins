@@ -125,7 +125,7 @@ const RolePage = () => {
         type: "input",
         key: "options",
         label: "操作",
-        width: 480,
+        width: 440,
         hideInSearch: true,
         hideInForm: true,
         hideInCheck: true,
@@ -138,7 +138,7 @@ const RolePage = () => {
                 id={record.id}
                 loadDataApi={getRoleById}
               >
-                <Button type="link" icon={<EyeOutlined />}>
+                <Button type="link" size="small" icon={<EyeOutlined />}>
                   查看
                 </Button>
               </JCheck>
@@ -151,7 +151,7 @@ const RolePage = () => {
                 }}
                 saveRequest={updateRole}
               >
-                <Button type="link" icon={<EditOutlined />}>
+                <Button type="link" size="small" icon={<EditOutlined />}>
                   编辑
                 </Button>
               </JEdit>
@@ -162,12 +162,13 @@ const RolePage = () => {
                   refresh();
                 }}
               >
-                <Button type="link" icon={<DeleteOutlined />}>
+                <Button type="link" size="small" icon={<DeleteOutlined />}>
                   删除
                 </Button>
               </JDelete>
               <Button
                 type="link"
+                size="small"
                 icon={<AppstoreOutlined />}
                 onClick={() => {
                   setPermissionCheckVisible(true);
@@ -207,7 +208,7 @@ const RolePage = () => {
         ></JSearchTable>
       </JPage>
       <Modal
-        title="权限列表"
+        title="菜单配置"
         width={1400}
         maskClosable={false}
         open={permissionCheckVisible}

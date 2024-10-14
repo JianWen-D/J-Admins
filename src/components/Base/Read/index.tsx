@@ -83,6 +83,10 @@ const JRead = (props: JReadProps) => {
         const findData = props.options?.find(
           (item) => item[props.optionsProps?.value as string] === next
         );
+        // console.log(props.options, props.optionsProps, findData, next);
+        if (!(findData && findData[props.optionsProps?.label as string])) {
+          return prev;
+        }
         return [
           ...prev,
           <Tag color={props.color && props.color[next]}>

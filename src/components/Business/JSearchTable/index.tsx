@@ -51,6 +51,7 @@ const JSearchTable = <T extends AnyObject>(props: JSearchTableProps<T>) => {
       };
       const result = await props.request(params);
       if (result.code === "0") {
+        // console.log(result);
         setTotal(result.data.total);
         setPageNum(result.data.pages);
         setPageSize(result.data.size);

@@ -10,6 +10,7 @@ import { JFormItemProps } from "../../Base/Form/types";
 import JForm from "../../Base/Form";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd";
+import "./index.less";
 
 interface JSearchProps<T> {
   options: JFormItemProps[];

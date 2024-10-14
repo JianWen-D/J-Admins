@@ -1,102 +1,62 @@
-import { useState } from "react";
+import JCheck from "../../components/Business/JCheck";
+import JDelete from "../../components/Business/JDelete";
+import JEdit from "../../components/Business/JEdit";
+import JPage from "../../components/Business/JPage";
+import JSearchTable from "../../components/Business/JSearchTable";
+import useColumn, { ColumnType } from "../../components/tools";
+import { Button, Divider, Space, Tag } from "antd";
+import { JColumnsOptions } from "../../components/Business/types";
+import { useCommon } from "../../utils/hooks";
 import { useLoaderData } from "react-router";
-import JPage from "../../components/Antd/JPage";
-import JPageCtrl from "../../components/Antd/PageCtrl";
-import { Button, message, Modal, Tag } from "antd";
+import { UserProps } from "../../api/types/user";
 import {
   DeleteOutlined,
   EditOutlined,
-  ExclamationCircleFilled,
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import JTable from "../../components/Antd/Table";
-import { JFormItemProps } from "../../components/Antd/Form/types";
-import JCheck from "../../components/Antd/Check";
-import JEdit from "../../components/Antd/Edit";
 import {
-  UserProps,
   createUser,
   deletedUser,
   getUserById,
   getUserPage,
   updateUser,
 } from "../../api/types/user";
-import { useMount } from "ahooks";
-import { useCommon } from "../../utils/hooks";
-
-const { confirm } = Modal;
 
 const UserPage = () => {
   const { dictList } = useCommon();
   const LoaderData: any = useLoaderData();
-  // 基础变量
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [total, setTotal] = useState<number>(0);
-  //
-  const [list, setList] = useState<UserProps[]>([]);
 
-  useMount(() => {
-    fetchgetUserPage(1, 10);
-  });
-
-  const fetchgetUserPage = async (
-    pageNum?: number,
-    pageSize?: number,
-    searchParams?: any
-  ) => {
-    const params = {
-      pageNum: pageNum || 1,
-      pageSize: pageSize || 10,
-      ...searchParams,
-    };
-    const result = await getUserPage(params);
-    if (result.code === "0") {
-      setTotal(result.data.total);
-      setPageNum(result.data.pages);
-      setPageSize(result.data.size);
-      setList(result.data.records);
-    }
-  };
-
-  const columns: JFormItemProps[] = [
+  const columns: JColumnsOptions<UserProps>[] = [
     {
       type: "image",
       key: "avatar",
       label: "用户头像",
-      edit: true,
-      show: true,
       width: 100,
-      maxCount: 1,
-      columns: 1,
+      maxUploadCount: 1,
+      columnsNum: 24,
       labelCol: {
         span: 3,
       },
-      groupId: "7cd169f80fa6da7d7b97a1320bc029eb",
+      fileGroupId: "7cd169f80fa6da7d7b97a1320bc029eb",
+      hideInSearch: true,
     },
     {
       type: "input",
       key: "nickName",
       label: "昵称",
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "input",
       key: "name",
       label: "姓名",
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "select",
       key: "gender",
       label: "性别",
-      edit: true,
-      show: true,
       width: 200,
       options: (dictList.Gender || []).map((item: any) => ({
         ...item,
@@ -115,23 +75,21 @@ const UserPage = () => {
       type: "input",
       key: "idCard",
       label: "身份证",
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "input",
       key: "createdByApplicationName",
+      hideInForm: true,
       label: "用户来源",
-      show: true,
       width: 200,
     },
     {
       type: "input",
       key: "accountId",
       label: "账号",
-      show: true,
       width: 200,
+      hideInForm: true,
       render: (text) => {
         return text ? <Tag color="blue">已绑定</Tag> : <Tag>未绑定</Tag>;
       },
@@ -158,164 +116,115 @@ const UserPage = () => {
         label: "label",
         value: "value",
       },
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "textarea",
       key: "remark",
       label: "备注",
-      edit: true,
-      show: true,
       width: 200,
-      columns: 1,
+      columnsNum: 24,
       labelCol: {
         span: 3,
       },
       wrapperCol: {
         span: 21,
       },
+      hideInSearch: true,
     },
     {
       type: "date",
       key: "createdTime",
       label: "创建日期",
-      show: true,
       width: 200,
+      hideInSearch: true,
+      hideInForm: true,
     },
     {
       type: "date",
       key: "updatedTime",
       label: "更新时间",
-      show: true,
       width: 200,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+    {
+      type: "input",
+      key: "options",
+      label: "操作",
+      width: 360,
+      hideInSearch: true,
+      hideInForm: true,
+      hideInCheck: true,
+      fixed: "right",
+      tableRender: (record, refresh) => {
+        return (
+          <Space split={<Divider type="vertical" />}>
+            <JCheck
+              title="查看"
+              options={columns}
+              id={record.id}
+              loadDataApi={getUserById}
+            >
+              <Button type="link" size="small" icon={<EyeOutlined />}>
+                查看
+              </Button>
+            </JCheck>
+            <JEdit
+              title="编辑"
+              options={columns}
+              id={record.id}
+              loadDataApi={getUserById}
+              onSubmit={() => {
+                refresh();
+              }}
+              saveRequest={updateUser}
+            >
+              <Button type="link" size="small" icon={<EditOutlined />}>
+                编辑
+              </Button>
+            </JEdit>
+            <JDelete
+              id={record.id as string}
+              request={deletedUser}
+              onSuccess={() => {
+                refresh();
+              }}
+            >
+              <Button type="link" size="small" icon={<DeleteOutlined />}>
+                删除
+              </Button>
+            </JDelete>
+          </Space>
+        );
+      },
     },
   ];
 
-  const handleCreate = async (params: UserProps) => {
-    const result = await createUser(params);
-    if (result.code === "0") {
-      message.success("创建成功");
-      fetchgetUserPage(pageNum, 10);
-    } else {
-      message.error(result.msg || "创建失败");
-    }
-  };
-
-  const handleUpdate = async (params: UserProps) => {
-    const result = await updateUser(params);
-    if (result.code === "0") {
-      message.success("更新成功");
-      fetchgetUserPage(pageNum, 10);
-    } else {
-      message.error(result.msg || "更新失败");
-    }
-  };
-
-  const handleDeleted = async (id: string) => {
-    confirm({
-      title: "确定删除该条信息?",
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          deletedUser(id).then((result) => {
-            if (result.code === "0") {
-              message.success("删除成功");
-              fetchgetUserPage(pageNum, 10);
-              resolve(true);
-            } else {
-              message.error(result.msg || "删除失败");
-              reject();
-            }
-          });
-        }).catch(() => console.log("Oops errors!"));
-      },
-      onCancel() {},
-    });
-  };
+  const editFormOptions = useColumn(columns, ColumnType.Form);
 
   return (
     <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
-      <JPageCtrl
-        options={[
-          {
-            type: "input",
-            key: "name",
-            label: "应用名",
-            edit: true,
-          },
-        ]}
-        additionButton={
-          <>
+      <JSearchTable<UserProps>
+        options={columns}
+        request={getUserPage}
+        searchOperation={(_form, refresh) => {
+          return (
             <JEdit
-              titleKey="name"
-              options={columns}
-              onSubmit={(data) => {
-                handleCreate(data);
+              title="新增"
+              options={editFormOptions}
+              onSubmit={() => {
+                refresh();
               }}
+              saveRequest={createUser}
             >
               <Button type="primary" icon={<PlusOutlined />}>
                 新增
               </Button>
             </JEdit>
-          </>
-        }
-        onSubmit={(params) => {
-          fetchgetUserPage(pageNum, pageSize, params);
-        }}
-        onReload={() => {
-          fetchgetUserPage(pageNum, pageSize);
-        }}
-      ></JPageCtrl>
-      <JTable
-        data={list}
-        operation={(_text, record) => {
-          return (
-            <>
-              <JCheck
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getUserById}
-              >
-                <Button type="link" icon={<EyeOutlined />}>
-                  查看
-                </Button>
-              </JCheck>
-              <JEdit
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getUserById}
-                onSubmit={(data) => {
-                  handleUpdate(data);
-                }}
-              >
-                <Button type="link" icon={<EditOutlined />}>
-                  编辑
-                </Button>
-              </JEdit>
-              <Button
-                type="link"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  handleDeleted(record.id);
-                }}
-              >
-                删除
-              </Button>
-            </>
           );
         }}
-        columns={columns}
-        pageNum={pageNum}
-        pageTotal={total}
-        pageSize={pageSize}
-        onPageChange={(pageNum, pageSize) => {
-          fetchgetUserPage(pageNum, pageSize);
-        }}
-      ></JTable>
+      ></JSearchTable>
     </JPage>
   );
 };

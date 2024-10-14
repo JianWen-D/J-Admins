@@ -179,6 +179,7 @@ class JAxios {
     this.interface.interceptorsResponse(
       (response: AxiosResponse) => {
         const config = response.config as interceptorsRequestConfig;
+        console.log(response);
         // 消除响应拦截中的loading
         config.loading && this.handleLoading("remove", config.requestKey);
         // 返回自定义响应拦截的对象实例
@@ -214,14 +215,16 @@ class JAxios {
         config.requestKey &&
           config?.loading &&
           this.handleLoading("remove", config.requestKey);
+        console.log(error);
         // 重连
         return error.code === "ECONNABORTED"
           ? this.retry(error)
-          : (this.defaultConfig.handleAfterResponse &&
+          : (error.response &&
+              this.defaultConfig.handleAfterResponse &&
               this.defaultConfig.handleAfterResponse(
                 error.response as AxiosResponse
               )) ||
-              error.response;
+              error;
       }
     );
   }
