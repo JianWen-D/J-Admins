@@ -24,6 +24,10 @@ export interface JFormItemType {
 
 export interface JFormProps<T> {
   /**
+   * 表单实例
+   */
+  form?: FormInstance<T>;
+  /**
    * 默认布局占位，默认值：12，最大：24，最小1
    */
   defalutColumnsNum?: number;
@@ -51,10 +55,6 @@ export interface JFormProps<T> {
    * 是否只读
    */
   readonly?: boolean;
-  /**
-   * 表单实例
-   */
-  form: FormInstance<T>;
 }
 
 export interface JFormItemProps extends JFormItemType {
@@ -104,12 +104,13 @@ export interface JFormItemProps extends JFormItemType {
    * @returns
    */
   onKeyUp?: (e: { keyCode: number }) => void;
-  // 数据源： select，radio，checkbox
   /**
    * 数据源： 适用类型： select，radio，checkbox，cascader
    */
   options?: any[];
-  // 数据源匹配字段： 适用类型： select，radio，checkbox，cascader
+  /**
+   *  数据源匹配字段： 适用类型： select，radio，checkbox，cascader
+   * */
   optionsProps?: {
     value: string;
     label: string;
@@ -118,7 +119,7 @@ export interface JFormItemProps extends JFormItemType {
   /**
    * 自定义FormItem内容
    */
-  slot?: () => React.ReactNode;
+  render?: () => React.ReactNode;
   /**
    * 禁用
    */
@@ -167,4 +168,8 @@ export interface JFormItemProps extends JFormItemType {
    * 选择框child item render，适用类型：Select
    */
   selectOptionRender?: any;
+  /**
+   * 是否只读
+   */
+  readonly?: boolean;
 }

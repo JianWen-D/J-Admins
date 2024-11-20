@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Descriptions, message, Modal, type DescriptionsProps } from "antd";
-import JRead from "../../Base/Read";
+import JReadItem from "../../Base/Read/item";
 import { JColumnsOptions } from "../types";
 
 interface JCheckProps<T> {
@@ -26,15 +26,15 @@ const JCheck = <T,>(props: JCheckProps<T>) => {
         key: item.key,
         label: item.label,
         children: (
-          <JRead
+          <JReadItem
             type={item.type}
-            data={data[item.key]}
+            value={data[item.key]}
             timeFormat={item.timeFormat}
             options={item.options}
             optionsProps={item.optionsProps}
             color={item.color}
             mode={item.mode}
-          ></JRead>
+          ></JReadItem>
         ),
       }));
   };
