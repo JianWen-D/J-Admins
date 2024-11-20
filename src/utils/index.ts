@@ -56,7 +56,7 @@ export const getAllRouterList = (list: any[]) => {
  */
 export const filterInvalidData = (data: any) => {
   return Object.keys(data).reduce((prev: object, next: string) => {
-    if (isNil(data[next])) {
+    if (isNil(data[next]) || data[next] === "") {
       return prev;
     }
     return {

@@ -83,6 +83,7 @@ const App = (props: AppProps) => {
           colorPrimary: "#2d8cf0",
           borderRadius: 4,
           controlHeight: 36,
+          fontSize: 12,
         },
       }}
     >
