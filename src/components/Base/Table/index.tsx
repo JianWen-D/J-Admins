@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { ColumnProps } from "antd/es/table";
 import { useSelector } from "react-redux";
 import { JTableProps } from "./types";
-import JRead from "../Read";
+import JReadItem from "../Read/item";
 import { AnyObject } from "antd/es/_util/type";
 
 const JTable = <T extends AnyObject>(props: JTableProps<T>) => {
@@ -16,15 +16,17 @@ const JTable = <T extends AnyObject>(props: JTableProps<T>) => {
       render: item.render
         ? item.render
         : (value: any) => (
-            <JRead
+            <JReadItem
+              label={item.title as string}
+              key={item.dataIndex as string}
               type={item.type}
-              data={value}
+              value={value}
               timeFormat={item.timeFormat}
               options={item.options}
               optionsProps={item.optionsProps}
               color={item.color}
               mode={item.mode}
-            ></JRead>
+            ></JReadItem>
           ),
     }));
     return formatColumns;

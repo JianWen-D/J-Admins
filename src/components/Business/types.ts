@@ -2,12 +2,16 @@ import { JFormItemProps } from "../Base/Form/types";
 import { JTableOptions } from "../Base/Table/types";
 
 export interface JColumnsOptions<T>
-  extends JFormItemProps,
+  extends Omit<JFormItemProps, "render">,
     Omit<JTableOptions<T>, "key"> {
   /**
    * 表格渲染栏
    */
   tableRender?: (record: T, refresh: () => void) => React.ReactNode;
+  /**
+   * 表单渲染
+   */
+  formRender?: (record: T, refresh: () => void) => React.ReactNode;
   /**
    * 表单排序
    */
