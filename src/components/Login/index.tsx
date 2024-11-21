@@ -141,6 +141,7 @@ const JLogin = (props: JLoginProps) => {
         <div className="login-title">{title}</div>
         <div className="login-form">
           <JForm
+            form={form}
             options={options}
             defalutColumnsNum={24}
             wrapperCol={{

@@ -45,9 +45,9 @@ const JSearch = <T,>(props: JSearchProps<T>) => {
           style={{
             height: unfold
               ? props.options.length % 4 === 0
-                ? Math.floor(props.options.length / 4 + 1) * 54
-                : Math.ceil(props.options.length / 4) * 54
-              : 54,
+                ? Math.floor(props.options.length / 4 + 1) * 56
+                : Math.ceil(props.options.length / 4) * 56
+              : 56,
           }}
         >
           <div className="j-search-form">

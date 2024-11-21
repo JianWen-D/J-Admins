@@ -82,7 +82,7 @@ const App = (props: AppProps) => {
         token: {
           colorPrimary: "#2d8cf0",
           borderRadius: 4,
-          controlHeight: 30,
+          // controlHeight: 36,
           fontSize: 12,
         },
         components: {

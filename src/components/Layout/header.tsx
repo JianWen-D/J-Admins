@@ -41,14 +41,19 @@ const JLayoutHeader = (props: JLayoutHeaderProps) => {
   return (
     <Flex style={{ height: 56 }} justify={"flex-end"} align={"center"}>
       <Dropdown menu={{ items }} placement="bottomRight" arrow>
-        <Flex style={{ height: 56 }} justify={"center"} align={"center"}>
-          <Avatar size="small" src={props.avatar} icon={<UserOutlined />} />
+        <Flex
+          style={{ height: 56, cursor: "pointer" }}
+          justify={"center"}
+          align={"center"}
+        >
+          <Avatar src={props.avatar} icon={<UserOutlined />} />
           <Text style={{ marginLeft: 8 }}>{props.username || ""}</Text>
         </Flex>
       </Dropdown>
       <Tooltip title="退出登录" placement="bottom">
         <Button
           type="text"
+          style={{ marginLeft: 8 }}
           icon={<LogoutOutlined />}
           onClick={() => {
             handleLogout();
