@@ -62,12 +62,14 @@ const JReadItem = (props: JReadItemProps) => {
         (item) => item[props.optionsProps?.value as string] === props.value
       );
       if (findData) {
-        return (
+        return props.color && props.color[props.value] ? (
           <Badge
             color={props.color && props.color[props.value]}
             status="default"
             text={findData[props.optionsProps?.label as string]}
           />
+        ) : (
+          findData[props.optionsProps?.label as string]
         );
       }
       return props.value;

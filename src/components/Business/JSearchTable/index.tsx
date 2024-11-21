@@ -84,6 +84,9 @@ const JSearchTable = <T extends AnyObject>(props: JSearchTableProps<T>) => {
           setSearchParams(data);
           fetchGetDataPage(1, pageSize, data);
         }}
+        onReload={() => {
+          fetchGetDataPage(pageNum, pageSize, searchParams);
+        }}
         operation={(form) =>
           props.searchOperation ? (
             props.searchOperation(form, () => fetchGetDataPage(1, pageSize))

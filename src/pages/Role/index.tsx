@@ -1,7 +1,7 @@
 import JCheck from "../../components/Business/JCheck";
 import JDelete from "../../components/Business/JDelete";
 import JEdit from "../../components/Business/JEdit";
-import JPage from "../../components/Antd/JPage";
+import JPage from "../../components/Business/JPage";
 import JSearchTable from "../../components/Business/JSearchTable";
 import MenuEdit from "./menuEdit";
 import { Button, Divider, Modal, Space } from "antd";
@@ -53,13 +53,11 @@ const RolePage = () => {
         type: "input",
         key: "name",
         label: "角色名",
-        width: 200,
       },
       {
         type: "select",
         key: "applicationId",
         label: "所属应用",
-        width: 200,
         options: appList || [],
         optionsProps: {
           label: "name",
@@ -88,7 +86,7 @@ const RolePage = () => {
           label: "label",
           value: "value",
         },
-        width: 200,
+        width: 100,
         hideInSearch: true,
       },
       {
@@ -97,10 +95,10 @@ const RolePage = () => {
         label: "备注",
         width: 200,
         labelCol: {
-          span: 3,
+          span: 2,
         },
         wrapperCol: {
-          span: 21,
+          span: 22,
         },
         columnsNum: 24,
         hideInSearch: true,
@@ -109,7 +107,7 @@ const RolePage = () => {
         type: "date",
         key: "createdTime",
         label: "创建日期",
-        width: 200,
+        width: 160,
         hideInSearch: true,
         hideInForm: true,
       },
@@ -117,7 +115,7 @@ const RolePage = () => {
         type: "date",
         key: "updatedTime",
         label: "更新时间",
-        width: 200,
+        width: 160,
         hideInSearch: true,
         hideInForm: true,
       },
@@ -125,14 +123,14 @@ const RolePage = () => {
         type: "input",
         key: "options",
         label: "操作",
-        width: 440,
+        width: 400,
         hideInSearch: true,
         hideInForm: true,
         hideInCheck: true,
         fixed: "right",
         tableRender: (record, refresh) => {
           return (
-            <Space split={<Divider type="vertical" />}>
+            <Space size="small" split={<Divider type="vertical" />}>
               <JCheck
                 options={columns}
                 id={record.id}

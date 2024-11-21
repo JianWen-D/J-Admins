@@ -1,5 +1,5 @@
 import { useCommon } from "../../utils/hooks";
-import JNoFound from "../Antd/NoFound";
+import JNoFound from "../Business/NoFound";
 
 interface JAuthProps {
   authKey: string;

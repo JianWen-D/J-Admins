@@ -72,7 +72,12 @@ const useColumn = <T, R extends ColumnType>(
     return options
       .filter((item) => !item.hideInSearch)
       .map((item) => {
-        return ignoreKeyInObject(item);
+        return {
+          ...ignoreKeyInObject(item, ["columnsNum"]),
+          type: ["checkbox", "radio"].includes(item.type)
+            ? "select"
+            : item.type,
+        };
       });
   }, [options]) as ColumnReturnProps<T, R>;
   // Get Check Options

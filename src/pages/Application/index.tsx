@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLoaderData } from "react-router";
-import JPage from "../../components/Antd/JPage";
-import JPageCtrl from "../../components/Antd/PageCtrl";
-import { Button, message, Modal } from "antd";
+import JPage from "../../components/Business/JPage";
+import JPageCtrl from "../../components/Business/PageCtrl";
+import { Button, Divider, message, Modal, Space } from "antd";
 import {
+  AppstoreOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
@@ -11,10 +12,9 @@ import {
   MenuOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import JTable from "../../components/Antd/Table";
 import { JFormItemProps } from "../../components/Antd/Form/types";
-import JCheck from "../../components/Antd/Check";
-import JEdit from "../../components/Antd/Edit";
+import JCheck from "../../components/Business/JCheck";
+import JEdit from "../../components/Business/JEdit";
 import {
   ApplicationProps,
   createApplication,
@@ -25,6 +25,9 @@ import {
 } from "../../api/types/application";
 import { useMount } from "ahooks";
 import PermissionEdit from "./permission";
+import JSearchTable from "../../components/Business/JSearchTable";
+import { JColumnsOptions } from "../../components/Business/types";
+import JDelete from "../../components/Business/JDelete";
 
 const { confirm } = Modal;
 
@@ -64,60 +67,54 @@ const ApplicationPage = () => {
     }
   };
 
-  const columns: JFormItemProps[] = [
+  const columns: JColumnsOptions<ApplicationProps>[] = [
     {
       type: "image",
       key: "icon",
       label: "应用图标",
-      edit: true,
-      show: true,
       width: 100,
-      maxCount: 1,
-      columns: 1,
+      maxUploadCount: 1,
+      columnsNum: 24,
       labelCol: {
         span: 3,
       },
-      groupId: "f20f4a8cb29620bd2dfcc1aacd690988",
+      fileGroupId: "f20f4a8cb29620bd2dfcc1aacd690988",
+      hideInSearch: true,
     },
     {
       type: "input",
       key: "name",
       label: "应用名",
-      edit: true,
-      show: true,
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "input",
       key: "appKey",
       label: "应用Key",
-      edit: true,
-      show: true,
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "input",
       key: "entry",
       label: "应用地址(entry)",
-      edit: true,
-      show: true,
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "input",
       key: "activeRule",
       label: "应用路由",
-      edit: true,
-      show: true,
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "input",
       key: "container",
       label: "容器元素ID",
-      edit: true,
-      show: true,
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "radio",
@@ -141,18 +138,15 @@ const ApplicationPage = () => {
         label: "label",
         value: "value",
       },
-      edit: true,
-      show: true,
-      width: 200,
+      width: 100,
+      columnsNum: 12,
     },
     {
       type: "textarea",
       key: "remark",
       label: "备注",
-      edit: true,
-      show: true,
       width: 200,
-      columns: 1,
+      columnsNum: 24,
       labelCol: {
         span: 3,
       },
@@ -164,154 +158,102 @@ const ApplicationPage = () => {
       type: "date",
       key: "createdTime",
       label: "创建日期",
-      show: true,
-      width: 200,
+      width: 140,
+      hideInForm: true,
     },
     {
       type: "date",
       key: "updatedTime",
       label: "更新时间",
-      show: true,
-      width: 200,
+      width: 140,
+      hideInForm: true,
+    },
+    {
+      type: "input",
+      key: "options",
+      label: "操作",
+      width: 400,
+      hideInSearch: true,
+      hideInForm: true,
+      hideInCheck: true,
+      fixed: "right",
+      tableRender: (record, refresh) => {
+        return (
+          <Space size="small" split={<Divider type="vertical" />}>
+            <JCheck
+              title="新增"
+              options={columns}
+              id={record.id}
+              loadDataApi={getApplicationById}
+            >
+              <Button type="link" size="small" icon={<EyeOutlined />}>
+                查看
+              </Button>
+            </JCheck>
+            <JEdit
+              title="编辑"
+              options={columns}
+              id={record.id}
+              loadDataApi={getApplicationById}
+              onSubmit={() => {
+                refresh();
+              }}
+              saveRequest={updateApplication}
+            >
+              <Button type="link" size="small" icon={<EditOutlined />}>
+                编辑
+              </Button>
+            </JEdit>
+            <JDelete
+              id={record.id as string}
+              request={getApplicationById}
+              onSuccess={() => {
+                refresh();
+              }}
+            >
+              <Button type="link" size="small" icon={<DeleteOutlined />}>
+                删除
+              </Button>
+            </JDelete>
+            <Button
+              type="link"
+              size="small"
+              icon={<AppstoreOutlined />}
+              onClick={() => {
+                setPermissionEditVisible(true);
+                setApplicationId(record.id as string);
+              }}
+            >
+              权限管理
+            </Button>
+          </Space>
+        );
+      },
     },
   ];
-
-  const handleCreate = async (params: ApplicationProps) => {
-    const result = await createApplication(params);
-    if (result.code === "0") {
-      message.success("创建成功");
-      fetchgetApplicationPage(pageNum, 10);
-    } else {
-      message.error(result.msg || "创建失败");
-    }
-  };
-
-  const handleUpdate = async (params: ApplicationProps) => {
-    const result = await updateApplication(params);
-    if (result.code === "0") {
-      message.success("更新成功");
-      fetchgetApplicationPage(pageNum, 10);
-    } else {
-      message.error(result.msg || "更新失败");
-    }
-  };
-
-  const handleDeleted = async (id: string) => {
-    confirm({
-      title: "确定删除该条信息?",
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          deletedApplication(id).then((result) => {
-            if (result.code === "0") {
-              message.success("删除成功");
-              fetchgetApplicationPage(pageNum, 10);
-              resolve(true);
-            } else {
-              message.error(result.msg || "删除失败");
-              reject();
-            }
-          });
-        }).catch(() => console.log("Oops errors!"));
-      },
-      onCancel() {},
-    });
-  };
 
   return (
     <>
       <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
-        <JPageCtrl
-          options={[
-            {
-              type: "input",
-              key: "name",
-              label: "应用名",
-              edit: true,
-            },
-          ]}
-          additionButton={
-            <>
+        <JSearchTable<ApplicationProps>
+          options={columns}
+          request={getApplicationPage}
+          searchOperation={(_form, refresh) => {
+            return (
               <JEdit
-                // titleKey="name"
                 options={columns}
-                onSubmit={(data) => {
-                  handleCreate(data);
+                onSubmit={() => {
+                  refresh();
                 }}
+                saveRequest={createApplication}
               >
                 <Button type="primary" icon={<PlusOutlined />}>
                   新增
                 </Button>
               </JEdit>
-            </>
-          }
-          onSubmit={(params) => {
-            console.log(params);
-            fetchgetApplicationPage(pageNum, pageSize, params);
-          }}
-          onReload={() => {
-            fetchgetApplicationPage(pageNum, pageSize);
-          }}
-        ></JPageCtrl>
-        <JTable
-          data={list}
-          operationWidth={300}
-          operation={(_text, record) => {
-            return (
-              <>
-                <JCheck
-                  titleKey="name"
-                  options={columns}
-                  id={record.id}
-                  loadDataApi={getApplicationById}
-                >
-                  <Button type="link" icon={<EyeOutlined />}>
-                    查看
-                  </Button>
-                </JCheck>
-                <JEdit
-                  titleKey="name"
-                  options={columns}
-                  id={record.id}
-                  loadDataApi={getApplicationById}
-                  onSubmit={(data) => {
-                    handleUpdate(data);
-                  }}
-                >
-                  <Button type="link" icon={<EditOutlined />}>
-                    编辑
-                  </Button>
-                </JEdit>
-                <Button
-                  type="link"
-                  icon={<DeleteOutlined />}
-                  onClick={() => {
-                    handleDeleted(record.id);
-                  }}
-                >
-                  删除
-                </Button>
-                <Button
-                  type="link"
-                  icon={<MenuOutlined />}
-                  onClick={() => {
-                    setApplicationId(record.id);
-                    setPermissionEditVisible(true);
-                  }}
-                >
-                  菜单资源
-                </Button>
-              </>
             );
           }}
-          columns={columns}
-          pageNum={pageNum}
-          pageTotal={total}
-          pageSize={pageSize}
-          onPageChange={(pageNum, pageSize) => {
-            fetchgetApplicationPage(pageNum, pageSize);
-          }}
-        ></JTable>
+        ></JSearchTable>
       </JPage>
       <Modal
         title="权限列表"

@@ -63,7 +63,7 @@ export default defineConfig(({ mode }) => {
       alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     },
     server: {
-      port: 5173,
+      port: 5177,
       headers: {
         "Access-Control-Allow-Origin": "*",
       },

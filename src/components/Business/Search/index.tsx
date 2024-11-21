@@ -37,7 +37,6 @@ const JSearch = <T,>(props: JSearchProps<T>) => {
     form.resetFields();
     props.onSubmit();
   };
-
   return (
     <div className="j-search-box">
       {props.options.length > 0 && (
@@ -46,15 +45,15 @@ const JSearch = <T,>(props: JSearchProps<T>) => {
           style={{
             height: unfold
               ? props.options.length % 4 === 0
-                ? Math.floor(props.options.length / 4 + 1) * 60
-                : Math.ceil(props.options.length / 4) * 60
-              : 60,
+                ? Math.floor(props.options.length / 4 + 1) * 54
+                : Math.ceil(props.options.length / 4) * 54
+              : 54,
           }}
         >
           <div className="j-search-form">
             <JForm
               form={form}
-              options={props.options || []}
+              options={props.options}
               defalutColumnsNum={6}
             ></JForm>
           </div>

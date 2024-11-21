@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Descriptions, message, Modal, type DescriptionsProps } from "antd";
-import JReadItem from "../../Base/Read/item";
+import { message, Modal } from "antd";
 import { JColumnsOptions } from "../types";
+import JRead from "../../Base/Read";
+import useColumn, { ColumnType } from "../../tools";
 
 interface JCheckProps<T> {
   title?: string;
@@ -17,27 +18,6 @@ const JCheck = <T,>(props: JCheckProps<T>) => {
   const [data, setData] = useState<{
     [key: string]: any;
   }>({});
-  const options = (data: {
-    [key: string]: any;
-  }): DescriptionsProps["items"] => {
-    return props.options
-      .filter((item) => !item.hideInCheck)
-      .map((item) => ({
-        key: item.key,
-        label: item.label,
-        children: (
-          <JReadItem
-            type={item.type}
-            value={data[item.key]}
-            timeFormat={item.timeFormat}
-            options={item.options}
-            optionsProps={item.optionsProps}
-            color={item.color}
-            mode={item.mode}
-          ></JReadItem>
-        ),
-      }));
-  };
 
   const handleClick = async (callback: () => void) => {
     if (props.loadDataApi && props.id) {
@@ -52,6 +32,8 @@ const JCheck = <T,>(props: JCheckProps<T>) => {
     }
     callback();
   };
+
+  const formOptions = useColumn(props.options, ColumnType.Form);
 
   return (
     <>
@@ -76,7 +58,7 @@ const JCheck = <T,>(props: JCheckProps<T>) => {
         footer={false}
         closable={false}
       >
-        <Descriptions bordered items={options(data)} />
+        <JRead options={formOptions} data={data} />
       </Modal>
     </>
   );

@@ -82,8 +82,14 @@ const App = (props: AppProps) => {
         token: {
           colorPrimary: "#2d8cf0",
           borderRadius: 4,
-          controlHeight: 36,
+          controlHeight: 30,
           fontSize: 12,
+        },
+        components: {
+          Table: {
+            cellPaddingBlock: 12,
+            cellPaddingInline: 12,
+          },
         },
       }}
     >
@@ -91,7 +97,6 @@ const App = (props: AppProps) => {
         <div id="container">
           <Suspense fallback={<LoadingSuspense />}>
             <JAuth type="page" authKey={location.pathname}>
-              {/* <div>{location.pathname}</div> */}
               <Outlet></Outlet>
             </JAuth>
           </Suspense>

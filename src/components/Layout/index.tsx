@@ -78,7 +78,7 @@ const JLayout = (props: JLayoutProps) => {
       <Layout hasSider>
         <Sider
           theme="light"
-          width={256}
+          width={220}
           style={{
             overflowY: "auto",
             overflowX: "hidden",
@@ -106,7 +106,7 @@ const JLayout = (props: JLayoutProps) => {
         </Sider>
         <Layout
           style={{
-            marginLeft: 256,
+            marginLeft: 220,
             minHeight: "100vh",
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
           }}
@@ -116,6 +116,7 @@ const JLayout = (props: JLayoutProps) => {
               padding: "0 24px",
               background: "#ffffff",
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+              height: 56,
             }}
           >
             <JLayoutHeader

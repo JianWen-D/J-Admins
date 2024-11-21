@@ -33,7 +33,7 @@ const JMenu = (props: JMenuProps) => {
   return (
     <Menu
       onClick={({ key }) => onClick(key)}
-      style={{ width: 256, overflowX: "hidden" }}
+      style={{ width: 220, overflowX: "hidden" }}
       selectedKeys={SelectedKeys}
       openKeys={OpenKeys}
       onOpenChange={(open) => {

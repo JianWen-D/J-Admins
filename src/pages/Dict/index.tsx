@@ -60,7 +60,7 @@ const DictPage = () => {
         label: "label",
         value: "value",
       },
-      width: 200,
+      width: 100,
     },
     {
       type: "textarea",
@@ -82,7 +82,7 @@ const DictPage = () => {
       label: "创建日期",
       hideInForm: true,
       hideInSearch: true,
-      width: 200,
+      width: 140,
     },
     {
       type: "date",
@@ -90,7 +90,7 @@ const DictPage = () => {
       label: "更新时间",
       hideInForm: true,
       hideInSearch: true,
-      width: 200,
+      width: 140,
     },
     {
       type: "input",
