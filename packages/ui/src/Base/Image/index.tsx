@@ -3,8 +3,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Image, message, Upload } from "antd";
 import type { RcFile } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
-import { uploadFile } from "../../../api/types/common";
-// import { uploadFile } from "../../api/file";
 
 interface JUploadImageProps {
   value?: string[] | string;
@@ -12,6 +10,7 @@ interface JUploadImageProps {
   maxCount: number;
   accept?: string[];
   groupId: string | undefined;
+  uploadApi: any;
 }
 
 const getBase64 = (file: RcFile): Promise<string> =>
@@ -28,6 +27,7 @@ const JUploadImage: React.FC<JUploadImageProps> = ({
   maxCount = 1,
   accept = [".png", ".PNG", ".jpg", ".JPG", ".jpeg", "JPEG"],
   groupId = "",
+  uploadApi,
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -76,7 +76,7 @@ const JUploadImage: React.FC<JUploadImageProps> = ({
     const formData = new FormData();
     formData.append("file", file);
     formData.append("groupId", groupId);
-    const result = await uploadFile(formData);
+    const result = await uploadApi(formData);
     if (result.code === "0") {
       setFile(null);
       if (maxCount === 1) {

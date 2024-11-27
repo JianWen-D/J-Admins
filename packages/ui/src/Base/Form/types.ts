@@ -172,4 +172,8 @@ export interface JFormItemProps extends JFormItemType {
    * 是否只读
    */
   readonly?: boolean;
+  /**
+   * 文件上传api
+   */
+  uploadApi?: any;
 }

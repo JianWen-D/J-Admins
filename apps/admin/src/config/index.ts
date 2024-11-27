@@ -1,11 +1,11 @@
 interface ConfigProps {
-  API_HOST: string; // 后端地址
-  APP_ID: string; // 后端地址
-  APP_NAME: string; // 后端地址
+  API_HOST: string;
+  APP_ID: string;
+  APP_NAME: string;
   MINI_PROGRAM: {
-    OPEN: boolean; // 是否开启
-    APP_ID: string; // 应用ID
-    APP_ROUTER: string; // 应用根路由
+    OPEN: boolean;
+    APP_ID: string;
+    APP_ROUTER: string;
   };
   AUTH_WHITE: {
     page: string[];
@@ -24,19 +24,7 @@ const config: ConfigProps = {
     APP_ROUTER: import.meta.env.VITE_APP_APP_ROUTE,
   },
   AUTH_WHITE: {
-    page: [
-      "/about",
-      "/",
-      "/draw",
-      "/drawDetail",
-      "/system/application",
-      "/system/fileGroup",
-      "/system/dict",
-      "/system/user",
-      "/system/account",
-      "/system/role",
-      "/grade/system/role",
-    ],
+    page: [],
     element: [],
     api: [],
   },

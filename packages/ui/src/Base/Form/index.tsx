@@ -12,7 +12,7 @@ import {
   TimePicker,
 } from "antd";
 import { JFormItemProps, JFormProps } from "./types";
-// import JImage from "../Image";
+import JImage from "../Image";
 import JIconSelect from "../../Business/JIconSelect/index";
 
 const { RangePicker } = DatePicker;
@@ -161,13 +161,14 @@ const JForm = <T,>(props: JFormProps<T>) => {
                 {item.type === "time" && (
                   <TimePicker format={item.timeFormat || "HH:mm"} />
                 )}
-                {/* {item.type === "image" && (
+                {item.type === "image" && (
                   <JImage
                     groupId={item.fileGroupId}
                     maxCount={item.maxUploadCount || 1}
                     accept={item.accept}
+                    uploadApi={item.uploadApi}
                   />
-                )} */}
+                )}
                 {item.type === "cascader" && (
                   <Cascader
                     options={item.options}
