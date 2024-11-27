@@ -28,6 +28,7 @@ import PermissionEdit from "./permission";
 import JSearchTable from "../../components/Business/JSearchTable";
 import { JColumnsOptions } from "../../components/Business/types";
 import JDelete from "../../components/Business/JDelete";
+import JButtonList from "../../components/Business/JButtonList";
 
 const { confirm } = Modal;
 
@@ -172,61 +173,63 @@ const ApplicationPage = () => {
       type: "input",
       key: "options",
       label: "操作",
-      width: 400,
+      width: 320,
       hideInSearch: true,
       hideInForm: true,
       hideInCheck: true,
       fixed: "right",
       tableRender: (record, refresh) => {
         return (
-          <Space size="small" split={<Divider type="vertical" />}>
-            <JCheck
-              title="新增"
-              options={columns}
-              id={record.id}
-              loadDataApi={getApplicationById}
-            >
-              <Button type="link" size="small" icon={<EyeOutlined />}>
-                查看
-              </Button>
-            </JCheck>
-            <JEdit
-              title="编辑"
-              options={columns}
-              id={record.id}
-              loadDataApi={getApplicationById}
-              onSubmit={() => {
-                refresh();
-              }}
-              saveRequest={updateApplication}
-            >
-              <Button type="link" size="small" icon={<EditOutlined />}>
-                编辑
-              </Button>
-            </JEdit>
-            <JDelete
-              id={record.id as string}
-              request={getApplicationById}
-              onSuccess={() => {
-                refresh();
-              }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />}>
-                删除
-              </Button>
-            </JDelete>
-            <Button
-              type="link"
-              size="small"
-              icon={<AppstoreOutlined />}
-              onClick={() => {
-                setPermissionEditVisible(true);
-                setApplicationId(record.id as string);
-              }}
-            >
-              权限管理
-            </Button>
-          </Space>
+          <JButtonList
+            options={[
+              <JCheck
+                title="新增"
+                options={columns}
+                id={record.id}
+                loadDataApi={getApplicationById}
+              >
+                <Button type="link" size="small" icon={<EyeOutlined />}>
+                  查看
+                </Button>
+              </JCheck>,
+              <JEdit
+                title="编辑"
+                options={columns}
+                id={record.id}
+                loadDataApi={getApplicationById}
+                onSubmit={() => {
+                  refresh();
+                }}
+                saveRequest={updateApplication}
+              >
+                <Button type="link" size="small" icon={<EditOutlined />}>
+                  编辑
+                </Button>
+              </JEdit>,
+              <JDelete
+                id={record.id as string}
+                request={getApplicationById}
+                onSuccess={() => {
+                  refresh();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />}>
+                  删除
+                </Button>
+              </JDelete>,
+              <Button
+                type="link"
+                size="small"
+                icon={<AppstoreOutlined />}
+                onClick={() => {
+                  setPermissionEditVisible(true);
+                  setApplicationId(record.id as string);
+                }}
+              >
+                权限管理
+              </Button>,
+            ]}
+          ></JButtonList>
         );
       },
     },

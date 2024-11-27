@@ -39,6 +39,7 @@ import JSearchTable from "../../components/Business/JSearchTable";
 import { JColumnsOptions } from "../../components/Business/types";
 import useColumn, { ColumnType } from "../../components/tools";
 import JDelete from "../../components/Business/JDelete";
+import JButtonList from "../../components/Business/JButtonList";
 
 const { confirm } = Modal;
 
@@ -199,101 +200,75 @@ const AccountPage = () => {
       type: "input",
       key: "options",
       label: "操作",
-      width: 360,
+      width: 320,
       hideInSearch: true,
       hideInForm: true,
       hideInCheck: true,
       fixed: "right",
       tableRender: (record, refresh) => {
         return (
-          <Space split={<Divider type="vertical" />}>
-            <JCheck
-              title="查看"
-              options={columns}
-              id={record.id}
-              loadDataApi={getAccountById}
-            >
-              <Button type="link" size="small" icon={<EyeOutlined />}>
-                查看
-              </Button>
-            </JCheck>
-            <JEdit
-              title="编辑"
-              options={columns}
-              id={record.id}
-              loadDataApi={getAccountById}
-              onSubmit={() => {
-                refresh();
-              }}
-              saveRequest={updateAccount}
-            >
-              <Button type="link" size="small" icon={<EditOutlined />}>
-                编辑
-              </Button>
-            </JEdit>
-            <JDelete
-              id={record.id as string}
-              request={deletedAccount}
-              onSuccess={() => {
-                refresh();
-              }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />}>
-                删除
-              </Button>
-            </JDelete>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "1",
-                    label: (
-                      <JEdit
-                        title="修改密码"
-                        options={passwodColumns}
-                        onSubmit={(data) => {
-                          handleChangePassword(record.id as string, data);
-                        }}
-                      >
-                        <Button
-                          type="link"
-                          size="small"
-                          icon={<LockOutlined />}
-                        >
-                          修改密码
-                        </Button>
-                      </JEdit>
-                    ),
-                  },
-                  {
-                    key: "2",
-                    label: (
-                      <Button
-                        type="link"
-                        size="small"
-                        icon={<UserOutlined />}
-                        onClick={() => {
-                          setChangUserVisible(true);
-                          setSelectUserId(record.userId);
-                          setSelectAccount(record);
-                        }}
-                      >
-                        更换用户
-                      </Button>
-                    ),
-                  },
-                ],
-              }}
-            >
-              <Tooltip title="更多操作">
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    <EllipsisOutlined />
-                  </Space>
-                </a>
-              </Tooltip>
-            </Dropdown>
-          </Space>
+          <JButtonList
+            options={[
+              <JCheck
+                title="查看"
+                options={columns}
+                id={record.id}
+                loadDataApi={getAccountById}
+              >
+                <Button type="link" size="small" icon={<EyeOutlined />}>
+                  查看
+                </Button>
+              </JCheck>,
+              <JEdit
+                title="编辑"
+                options={columns}
+                id={record.id}
+                loadDataApi={getAccountById}
+                onSubmit={() => {
+                  refresh();
+                }}
+                saveRequest={updateAccount}
+              >
+                <Button type="link" size="small" icon={<EditOutlined />}>
+                  编辑
+                </Button>
+              </JEdit>,
+              <JDelete
+                id={record.id as string}
+                request={deletedAccount}
+                onSuccess={() => {
+                  refresh();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />}>
+                  删除
+                </Button>
+              </JDelete>,
+              <JEdit
+                title="修改密码"
+                options={passwodColumns}
+                onSubmit={(data) => {
+                  handleChangePassword(record.id as string, data);
+                }}
+              >
+                <Button type="link" size="small" icon={<LockOutlined />}>
+                  修改密码
+                </Button>
+              </JEdit>,
+              <Button
+                type="link"
+                size="small"
+                icon={<UserOutlined />}
+                onClick={() => {
+                  setChangUserVisible(true);
+                  setSelectUserId(record.userId);
+                  setSelectAccount(record);
+                }}
+              >
+                更换用户
+              </Button>,
+            ]}
+          ></JButtonList>
         );
       },
     },

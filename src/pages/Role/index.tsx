@@ -28,6 +28,7 @@ import {
   ApplicationProps,
   getApplicationList,
 } from "../../api/types/application";
+import JButtonList from "../../components/Business/JButtonList";
 
 const RolePage = () => {
   const LoaderData: any = useLoaderData();
@@ -123,59 +124,61 @@ const RolePage = () => {
         type: "input",
         key: "options",
         label: "操作",
-        width: 400,
+        width: 320,
         hideInSearch: true,
         hideInForm: true,
         hideInCheck: true,
         fixed: "right",
         tableRender: (record, refresh) => {
           return (
-            <Space size="small" split={<Divider type="vertical" />}>
-              <JCheck
-                options={columns}
-                id={record.id}
-                loadDataApi={getRoleById}
-              >
-                <Button type="link" size="small" icon={<EyeOutlined />}>
-                  查看
-                </Button>
-              </JCheck>
-              <JEdit
-                options={columns}
-                id={record.id}
-                loadDataApi={getRoleById}
-                onSubmit={() => {
-                  refresh();
-                }}
-                saveRequest={updateRole}
-              >
-                <Button type="link" size="small" icon={<EditOutlined />}>
-                  编辑
-                </Button>
-              </JEdit>
-              <JDelete
-                id={record.id as string}
-                request={deletedRole}
-                onSuccess={() => {
-                  refresh();
-                }}
-              >
-                <Button type="link" size="small" icon={<DeleteOutlined />}>
-                  删除
-                </Button>
-              </JDelete>
-              <Button
-                type="link"
-                size="small"
-                icon={<AppstoreOutlined />}
-                onClick={() => {
-                  setPermissionCheckVisible(true);
-                  setRoleId(record.id as string);
-                }}
-              >
-                菜单管理
-              </Button>
-            </Space>
+            <JButtonList
+              options={[
+                <JCheck
+                  options={columns}
+                  id={record.id}
+                  loadDataApi={getRoleById}
+                >
+                  <Button type="link" size="small" icon={<EyeOutlined />}>
+                    查看
+                  </Button>
+                </JCheck>,
+                <JEdit
+                  options={columns}
+                  id={record.id}
+                  loadDataApi={getRoleById}
+                  onSubmit={() => {
+                    refresh();
+                  }}
+                  saveRequest={updateRole}
+                >
+                  <Button type="link" size="small" icon={<EditOutlined />}>
+                    编辑
+                  </Button>
+                </JEdit>,
+                <JDelete
+                  id={record.id as string}
+                  request={deletedRole}
+                  onSuccess={() => {
+                    refresh();
+                  }}
+                >
+                  <Button type="link" size="small" icon={<DeleteOutlined />}>
+                    删除
+                  </Button>
+                </JDelete>,
+                <Button
+                  type="link"
+                  size="small"
+                  icon={<AppstoreOutlined />}
+                  onClick={() => {
+                    setPermissionCheckVisible(true);
+                    setRoleId(record.id as string);
+                  }}
+                >
+                  菜单管理
+                </Button>,
+              ]}
+            ></JButtonList>
           );
         },
       },

@@ -22,6 +22,7 @@ import {
   getUserPage,
   updateUser,
 } from "../../api/types/user";
+import JButtonList from "../../components/Business/JButtonList";
 
 const UserPage = () => {
   const { dictList } = useCommon();
@@ -152,50 +153,52 @@ const UserPage = () => {
       type: "input",
       key: "options",
       label: "操作",
-      width: 360,
+      width: 300,
       hideInSearch: true,
       hideInForm: true,
       hideInCheck: true,
       fixed: "right",
       tableRender: (record, refresh) => {
         return (
-          <Space split={<Divider type="vertical" />}>
-            <JCheck
-              title="查看"
-              options={columns}
-              id={record.id}
-              loadDataApi={getUserById}
-            >
-              <Button type="link" size="small" icon={<EyeOutlined />}>
-                查看
-              </Button>
-            </JCheck>
-            <JEdit
-              title="编辑"
-              options={columns}
-              id={record.id}
-              loadDataApi={getUserById}
-              onSubmit={() => {
-                refresh();
-              }}
-              saveRequest={updateUser}
-            >
-              <Button type="link" size="small" icon={<EditOutlined />}>
-                编辑
-              </Button>
-            </JEdit>
-            <JDelete
-              id={record.id as string}
-              request={deletedUser}
-              onSuccess={() => {
-                refresh();
-              }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />}>
-                删除
-              </Button>
-            </JDelete>
-          </Space>
+          <JButtonList
+            options={[
+              <JCheck
+                title="查看"
+                options={columns}
+                id={record.id}
+                loadDataApi={getUserById}
+              >
+                <Button type="link" size="small" icon={<EyeOutlined />}>
+                  查看
+                </Button>
+              </JCheck>,
+              <JEdit
+                title="编辑"
+                options={columns}
+                id={record.id}
+                loadDataApi={getUserById}
+                onSubmit={() => {
+                  refresh();
+                }}
+                saveRequest={updateUser}
+              >
+                <Button type="link" size="small" icon={<EditOutlined />}>
+                  编辑
+                </Button>
+              </JEdit>,
+              <JDelete
+                id={record.id as string}
+                request={deletedUser}
+                onSuccess={() => {
+                  refresh();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />}>
+                  删除
+                </Button>
+              </JDelete>,
+            ]}
+          ></JButtonList>
         );
       },
     },

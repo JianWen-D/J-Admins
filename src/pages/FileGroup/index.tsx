@@ -20,6 +20,7 @@ import {
 import JSearchTable from "../../components/Business/JSearchTable";
 import { JColumnsOptions } from "../../components/Business/types";
 import JDelete from "../../components/Business/JDelete";
+import JButtonList from "../../components/Business/JButtonList";
 
 const FileGroupPage = () => {
   const LoaderData: any = useLoaderData();
@@ -128,41 +129,43 @@ const FileGroupPage = () => {
       fixed: "right",
       tableRender: (record, refresh) => {
         return (
-          <Space size="small" split={<Divider type="vertical" />}>
-            <JCheck
-              options={columns}
-              id={record.id}
-              loadDataApi={getFileGroupById}
-            >
-              <Button type="link" size="small" icon={<EyeOutlined />}>
-                查看
-              </Button>
-            </JCheck>
-            <JEdit
-              options={columns}
-              id={record.id}
-              loadDataApi={getFileGroupById}
-              onSubmit={() => {
-                refresh();
-              }}
-              saveRequest={updateFileGroup}
-            >
-              <Button type="link" size="small" icon={<EditOutlined />}>
-                编辑
-              </Button>
-            </JEdit>
-            <JDelete
-              id={record.id as string}
-              request={deletedFileGroup}
-              onSuccess={() => {
-                refresh();
-              }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />}>
-                删除
-              </Button>
-            </JDelete>
-          </Space>
+          <JButtonList
+            options={[
+              <JCheck
+                options={columns}
+                id={record.id}
+                loadDataApi={getFileGroupById}
+              >
+                <Button type="link" size="small" icon={<EyeOutlined />}>
+                  查看
+                </Button>
+              </JCheck>,
+              <JEdit
+                options={columns}
+                id={record.id}
+                loadDataApi={getFileGroupById}
+                onSubmit={() => {
+                  refresh();
+                }}
+                saveRequest={updateFileGroup}
+              >
+                <Button type="link" size="small" icon={<EditOutlined />}>
+                  编辑
+                </Button>
+              </JEdit>,
+              <JDelete
+                id={record.id as string}
+                request={deletedFileGroup}
+                onSuccess={() => {
+                  refresh();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />}>
+                  删除
+                </Button>
+              </JDelete>,
+            ]}
+          ></JButtonList>
         );
       },
     },
