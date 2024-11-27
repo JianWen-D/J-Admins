@@ -1,72 +1,35 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useLoaderData } from "react-router";
 import JPage from "../../components/Business/JPage";
-import JPageCtrl from "../../components/Business/PageCtrl";
-import { Button, Divider, message, Modal, Space } from "antd";
+import { Button, Divider, Modal, Space } from "antd";
 import {
   AppstoreOutlined,
   DeleteOutlined,
   EditOutlined,
-  ExclamationCircleFilled,
   EyeOutlined,
-  MenuOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { JFormItemProps } from "../../components/Antd/Form/types";
 import JCheck from "../../components/Business/JCheck";
 import JEdit from "../../components/Business/JEdit";
 import {
   ApplicationProps,
   createApplication,
-  deletedApplication,
   getApplicationById,
   getApplicationPage,
   updateApplication,
 } from "../../api/types/application";
-import { useMount } from "ahooks";
 import PermissionEdit from "./permission";
 import JSearchTable from "../../components/Business/JSearchTable";
 import { JColumnsOptions } from "../../components/Business/types";
 import JDelete from "../../components/Business/JDelete";
 import JButtonList from "../../components/Business/JButtonList";
 
-const { confirm } = Modal;
-
 const ApplicationPage = () => {
   const LoaderData: any = useLoaderData();
   // 基础变量
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [total, setTotal] = useState<number>(0);
-
-  //
-  const [list, setList] = useState<ApplicationProps[]>([]);
   const [permissionEditVisible, setPermissionEditVisible] =
     useState<boolean>(false);
   const [applicationId, setApplicationId] = useState<string>("");
-
-  useMount(() => {
-    fetchgetApplicationPage(1, 10);
-  });
-
-  const fetchgetApplicationPage = async (
-    pageNum?: number,
-    pageSize?: number,
-    searchParams?: any
-  ) => {
-    const params = {
-      pageNum: pageNum || 1,
-      pageSize: pageSize || 10,
-      ...searchParams,
-    };
-    const result = await getApplicationPage(params);
-    if (result.code === "0") {
-      setTotal(result.data.total);
-      setPageNum(result.data.pages);
-      setPageSize(result.data.size);
-      setList(result.data.records);
-    }
-  };
 
   const columns: JColumnsOptions<ApplicationProps>[] = [
     {
@@ -274,12 +237,12 @@ const ApplicationPage = () => {
         }}
         footer={false}
       >
-        <PermissionEdit
+        {/* <PermissionEdit
           applicationId={applicationId}
           onSelect={() => {
             // setSelectUserId(id);
           }}
-        ></PermissionEdit>
+        ></PermissionEdit> */}
       </Modal>
     </>
   );

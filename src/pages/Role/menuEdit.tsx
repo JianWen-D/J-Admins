@@ -1,6 +1,6 @@
 import JCheck from "../../components/Business/JCheck";
 import JEdit from "../../components/Business/JEdit";
-import JPageCtrl from "../../components/Antd/PageCtrl";
+// import JPageCtrl from "../../components/Business/PageCtrl";
 import JTable from "../../components/Base/Table";
 import { Button, message, Modal, Space, Tag } from "antd";
 import { useMount } from "ahooks";
@@ -290,7 +290,7 @@ const MenuEdit = (props: {
 
   return (
     <>
-      <JPageCtrl
+      {/* <JPageCtrl
         options={[]}
         additionButton={
           <>
@@ -318,7 +318,7 @@ const MenuEdit = (props: {
         onReload={() => {
           fetchGetRoleMenuById();
         }}
-      ></JPageCtrl>
+      ></JPageCtrl> */}
       <JTable
         data={list}
         columns={tableOperation}

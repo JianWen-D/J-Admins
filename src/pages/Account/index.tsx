@@ -14,7 +14,6 @@ import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
-  ExclamationCircleFilled,
   EyeOutlined,
   LockOutlined,
   PlusOutlined,
@@ -31,7 +30,6 @@ import {
   getAccountPage,
   updateAccount,
 } from "../../api/types/account";
-import { useMount } from "ahooks";
 import { getPasswordKey } from "../../api/types/auth";
 import JSEncrypt from "jsencrypt";
 import ChangeUser from "./changeUser";
@@ -41,16 +39,8 @@ import useColumn, { ColumnType } from "../../components/tools";
 import JDelete from "../../components/Business/JDelete";
 import JButtonList from "../../components/Business/JButtonList";
 
-const { confirm } = Modal;
-
 const AccountPage = () => {
   const LoaderData: any = useLoaderData();
-  // 基础变量
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [total, setTotal] = useState<number>(0);
-  //
-  const [list, setList] = useState<AccountProps[]>([]);
   const [changUserVisible, setChangUserVisible] = useState<boolean>(false);
   const [selectUserId, setSelectUserId] = useState<any>("");
   const [selectAccount, setSelectAccount] = useState<any>();
@@ -362,12 +352,12 @@ const AccountPage = () => {
           });
         }}
       >
-        <ChangeUser
+        {/* <ChangeUser
           selectId={selectUserId}
           onSelect={(id) => {
             setSelectUserId(id);
           }}
-        ></ChangeUser>
+        ></ChangeUser> */}
       </Modal>
     </>
   );
