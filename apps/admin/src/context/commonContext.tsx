@@ -15,7 +15,11 @@ export const CommonContext = React.createContext<
   | {
       loading: boolean;
       setLoading: (data: boolean) => void;
-      auth: AuthProps;
+      auth: {
+        page: string[];
+        element: string[];
+        api: string[];
+      };
       setAuth: (type: "page" | "element" | "api", data: string[]) => void;
       dictList: {
         [key: string]: DictProps[];

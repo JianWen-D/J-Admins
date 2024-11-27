@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import JForm from "../Base/Form";
+import JForm from "@devin/ui/form";
 import { Button, Checkbox, Col, Form, Row } from "antd";
 import "./index.less";
 import { JFormItemProps } from "../Base/Form/types";

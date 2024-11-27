@@ -29,6 +29,7 @@ export const useAuth = () => {
   }
   return context;
 };
+
 export const useCommon = () => {
   const context = React.useContext(CommonContext);
   if (!context) {

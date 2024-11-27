@@ -1,0 +1,28 @@
+.j-search-box {
+  position: relative;
+  transition: .2s all ease-in-out;
+  overflow: hidden;
+  > .j-search-form-box {
+    position: relative;
+    transition: .2s all ease-in-out;
+    overflow: hidden;
+    > .j-search-form-ctrl {
+      height: 60px;
+      background-color: #fff;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 25%;
+      display: flex;
+      justify-content: flex-end;
+      > .j-search-ctrl-btn + .j-search-ctrl-btn {
+        margin-left: 8px;
+      }
+    }
+  }
+  > .j-search-ctrl-second {
+    padding-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
