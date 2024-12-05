@@ -6,7 +6,6 @@ import JSearchTable from "../../components/Business/JSearchTable";
 import useColumn, { ColumnType } from "../../components/tools";
 import { Button, Divider, Space, Tag } from "antd";
 import { JColumnsOptions } from "../../components/Business/types";
-import { useCommon } from "../../utils/hooks";
 import { useLoaderData } from "react-router";
 import { UserProps } from "../../api/types/user";
 import {
@@ -23,6 +22,7 @@ import {
   updateUser,
 } from "../../api/types/user";
 import JButtonList from "../../components/Business/JButtonList";
+import { useCommon } from "../../context/commonContext";
 
 const UserPage = () => {
   const { dictList } = useCommon();

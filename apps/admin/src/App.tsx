@@ -2,7 +2,6 @@ import { Suspense } from "react";
 // import "./App.css";
 import { ConfigProvider, message } from "antd";
 import locale from "antd/locale/zh_CN";
-import { useAuth, useCommon } from "./utils/hooks";
 import { JLogin } from "@devin/ui";
 import JLayout from "./components/Layout";
 import { Outlet, useLocation } from "react-router";
@@ -13,15 +12,17 @@ import { fetchLogin, getPasswordKey } from "./api/types/auth";
 import JSEncrypt from "jsencrypt";
 import request from "./api";
 import { useKeepOutlet } from "./components/Keepalive";
+import { useAuth } from "./context/authContext";
+import { useCommon } from "./context/commonContext";
+import theme from "./theme";
+import { qiankunWindow } from "vite-plugin-qiankun/dist/helper";
 
-interface AppProps {
-  miniProgram: boolean | undefined;
-}
-const App = (props: AppProps) => {
+const App = () => {
   const { isLogin, onLogin, appInfo } = useAuth();
-  const { loading, setLoading, setAuth } = useCommon();
+  const { loading, setLoading, setAuth, auth } = useCommon();
   const location = useLocation();
   const element = useKeepOutlet();
+  const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
 
   const fetchGetPasswordKey = async (
     password: string,
@@ -71,44 +72,28 @@ const App = (props: AppProps) => {
     }
   };
 
-  if (props.miniProgram) {
+  if (miniProgram) {
     setAuth("page", config.AUTH_WHITE.page);
   }
 
   return (
-    <ConfigProvider
-      locale={locale}
-      theme={{
-        token: {
-          colorPrimary: "#2d8cf0",
-          borderRadius: 4,
-          // controlHeight: 36,
-          fontSize: 12,
-        },
-        components: {
-          Table: {
-            cellPaddingBlock: 12,
-            cellPaddingInline: 12,
-          },
-        },
-      }}
-    >
-      {props.miniProgram && (
+    <ConfigProvider locale={locale} theme={theme}>
+      {miniProgram && (
         <div id="container">
           <Suspense fallback={<LoadingSuspense />}>
-            <JAuth type="page" authKey={location.pathname}>
+            <JAuth type="page" authKey={location.pathname} auth={auth}>
               <Outlet></Outlet>
             </JAuth>
           </Suspense>
         </div>
       )}
-      {!props.miniProgram && (
+      {!miniProgram && (
         <div className="app">
           {isLogin ? (
             <JLayout>
               <Suspense fallback={<LoadingSuspense />}>
                 <div id="container">
-                  <JAuth type="page" authKey={location.pathname}>
+                  <JAuth type="page" authKey={location.pathname} auth={auth}>
                     {element}
                   </JAuth>
                 </div>

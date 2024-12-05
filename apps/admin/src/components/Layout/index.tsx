@@ -6,11 +6,11 @@ import React, { useMemo, useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
 import JLayoutHeader from "./header";
 import JHeaderBreadcrumb from "./breadcrumb";
-import { useAuth } from "../../utils/hooks";
 import { MenuProps } from "antd/lib";
 import * as Icons from "@ant-design/icons";
 import { RoleMenuProps } from "../../api/types/role";
 import config from "../../config";
+import { useAuth } from "../../context/authContext";
 const { Sider, Header, Content, Footer } = Layout;
 
 export type MenuItem = Required<MenuProps>["items"][number];

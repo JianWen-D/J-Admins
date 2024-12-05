@@ -1,4 +1,4 @@
-import JNoFound from "../Business/NoFound";
+import JNoFound from "../NoFound";
 
 interface JAuthProps {
   authKey: string;

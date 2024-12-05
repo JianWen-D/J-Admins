@@ -13,7 +13,7 @@ import {
 } from "../../api/types/permission";
 import JCheck from "../../components/Antd/Check";
 import { Button, message, Modal } from "antd";
-import JEdit from "../../components/Antd/Edit";
+import { JEdit } from "../../components/Antd/Edit";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -21,7 +21,7 @@ import {
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { useCommon } from "../../utils/hooks";
+import { useCommon } from "../../context/commonContext";
 
 const { confirm } = Modal;
 

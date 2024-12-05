@@ -2,7 +2,7 @@ import { EditOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Flex, Tooltip, Typography } from "antd";
 import { MenuProps } from "antd/lib";
 import request from "../../api";
-import { useAuth } from "../../utils/hooks";
+import { useAuth } from "../../context/authContext";
 const { Text } = Typography;
 
 interface JLayoutHeaderProps {

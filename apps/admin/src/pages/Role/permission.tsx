@@ -9,7 +9,7 @@ import {
 } from "../../api/types/permission";
 import { Tabs, TabsProps } from "antd";
 import { getApplicationList } from "../../api/types/application";
-import { useCommon } from "../../utils/hooks";
+import { useCommon } from "../../context/commonContext";
 
 const PermissionCheck = (props: {
   onSelect: (id: React.Key) => void;

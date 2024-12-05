@@ -12,6 +12,7 @@ import "./public-path.js";
 import router from "./router/index.tsx";
 import request from "./api/index.ts";
 import KeepAliveLayout from "./components/Keepalive/index.tsx";
+import App from "./App.tsx";
 
 let root: any = null;
 // 判断当前环境状态
@@ -21,7 +22,7 @@ const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
 const render = (props: any) => {
   const { container } = props;
   // 获取路由信息
-  const _router = createBrowserRouter(router(miniProgram), {
+  const _router = createBrowserRouter(router, {
     basename: miniProgram ? config.MINI_PROGRAM.APP_ROUTER : "/",
   });
   // 存储token

@@ -2,9 +2,9 @@ import { useUpdateEffect } from "ahooks";
 import { Menu } from "antd";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { useAuth } from "../../utils/hooks";
 import { flattenTreeArray } from "../../utils";
 import { RoleMenuProps } from "../../api/types/role";
+import { useAuth } from "../../context/authContext";
 
 interface JMenuProps {
   menu: any[];

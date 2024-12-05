@@ -13,12 +13,12 @@ const lazyComponent = (path: string): React.ReactElement => {
 };
 
 // 路由数组
-const router = (miniProgram: boolean | undefined) => [
+const router = [
   {
     path: "/",
     id: "layout",
     loader: () => ({ title: "英才中台" }),
-    element: <App miniProgram={miniProgram}></App>,
+    element: <App></App>,
     children: [
       {
         path: "",
