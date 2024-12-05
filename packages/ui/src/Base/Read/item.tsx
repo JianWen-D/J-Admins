@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { isNil } from "lodash";
 import { useMemo } from "react";
 import JIcon from "../Icon";
-import { JFormItemProps, JFormItemType } from "../Form/types";
+import { JFormItemProps, JFormItemType } from "../Form";
 
 export interface JReadItemProps
   extends JFormItemType,

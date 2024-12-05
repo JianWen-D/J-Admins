@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import JForm from "@devin/ui/form";
+import JForm from "./../../Base/Form";
+import { JFormItemProps } from "./../../Base/Form/index.d";
 import { Button, Checkbox, Col, Form, Row } from "antd";
-import "./index.less";
-import { JFormItemProps } from "../Base/Form/types";
+import styles from "./index.module.less";
 import { useForm } from "antd/es/form/Form";
 
 interface FormDataProps {
@@ -15,7 +15,7 @@ interface JLoginProps {
   loading: boolean;
   title: string;
   applicationName?: string;
-  logoSrc?: string;
+  logoSrc?: string | null;
   onSubmit?: (data: FormDataProps) => void;
   onForget?: () => void;
 }
@@ -131,24 +131,22 @@ const JLogin = (props: JLoginProps) => {
     });
   };
   return (
-    <div className="login-page">
-      <div className="login-container">
+    <div className={styles.login}>
+      <div className={styles.container}>
         {logoSrc && (
-          <div className="login-logo">
+          <div className={styles.logo}>
             <img src={logoSrc} alt="" />
           </div>
         )}
-        <div className="login-title">{title}</div>
-        <div className="login-form">
-          <JForm
-            form={form}
-            options={options}
-            defalutColumnsNum={24}
-            wrapperCol={{
-              span: 24,
-            }}
-          ></JForm>
-        </div>
+        <div className={styles.title}>{title}</div>
+        <JForm
+          form={form}
+          options={options}
+          defalutColumnsNum={24}
+          wrapperCol={{
+            span: 24,
+          }}
+        ></JForm>
         <Button
           block
           type="primary"

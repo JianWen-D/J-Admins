@@ -2,7 +2,7 @@ import { Descriptions } from "antd";
 import { useMemo } from "react";
 import JReadItem from "./item";
 import { DescriptionsItemType } from "antd/es/descriptions";
-import { JFormItemProps } from "../Form/types";
+import { JFormItemProps } from "../Form";
 
 interface JReadProps {
   title?: string;

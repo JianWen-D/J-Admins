@@ -11,9 +11,9 @@ import {
   Select,
   TimePicker,
 } from "antd";
-import { JFormItemProps, JFormProps } from "./types";
+import type { JFormItemProps, JFormProps } from "./index.d";
 import JImage from "../Image";
-import JIconSelect from "../../Business/JIconSelect/index";
+import JIconSelect from "../../Business/IconSelect/index";
 
 const { RangePicker } = DatePicker;
 

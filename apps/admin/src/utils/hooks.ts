@@ -21,19 +21,3 @@ export const useDebounce = (value: any, delay?: number) => {
 
   return debounceValue;
 };
-
-export const useAuth = () => {
-  const context = React.useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth必须在AuthProvider中使用");
-  }
-  return context;
-};
-
-export const useCommon = () => {
-  const context = React.useContext(CommonContext);
-  if (!context) {
-    throw new Error("useCommonState必须在CommonProvider中使用");
-  }
-  return context;
-};

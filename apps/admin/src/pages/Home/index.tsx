@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useForm } from "antd/es/form/Form";
-import JForm from "../../components/Base/Form";
+import { JForm } from "@devin/ui";
 import { JFormItemProps } from "../../components/Base/Form/types";
-import JRead from "../../components/Base/Read";
+import { JRead } from "@devin/ui";
 import { Button } from "antd";
 
 const HomePage = () => {

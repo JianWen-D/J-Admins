@@ -14,9 +14,13 @@ import request from "./api/index.ts";
 import KeepAliveLayout from "./components/Keepalive/index.tsx";
 
 let root: any = null;
+// 判断当前环境状态
 const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
+
+// 根目录加载方法
 const render = (props: any) => {
   const { container } = props;
+  // 获取路由信息
   const _router = createBrowserRouter(router(miniProgram), {
     basename: miniProgram ? config.MINI_PROGRAM.APP_ROUTER : "/",
   });
@@ -49,21 +53,21 @@ if (!miniProgram) {
 
 // 在乾坤环境中
 if (miniProgram) {
-  console.log(`mini program`);
+  console.log(`${config.APP_NAME} run in mini program`);
   // some code
   renderWithQiankun({
     mount(props) {
-      console.log("[react18] props from main framework", props);
+      console.log(`${config.APP_NAME} app is mount`, props);
       render(props);
     },
     bootstrap() {
-      console.log("[react18] react app bootstraped");
+      console.log(`${config.APP_NAME} app is bootstraped`);
     },
     update() {
-      console.log("[react18] react app update");
+      console.log(`${config.APP_NAME} app is update`);
     },
     unmount() {
-      console.log("unmount");
+      console.log(`${config.APP_NAME} app is unmount`);
       root.unmount();
       root = null;
     },

@@ -15,8 +15,6 @@ export const KeepAliveContext = createContext({
   },
 });
 
-console.log(KeepAliveContext, 99999);
-
 //keepPaths和当前路径做比较，keepPaths可以是字符串也可以是正则表达式，所以通过if else判断即可，
 const isKeepPath = (keepPaths: string[], path: string) => {
   let isKeep = false;

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { ConfigProvider, message } from "antd";
 import locale from "antd/locale/zh_CN";
 import { useAuth, useCommon } from "./utils/hooks";
-import JLogin from "./components/Login";
+import { JLogin } from "@devin/ui";
 import JLayout from "./components/Layout";
 import { Outlet, useLocation } from "react-router";
 import LoadingSuspense from "./components/Loading";
@@ -109,7 +109,6 @@ const App = (props: AppProps) => {
               <Suspense fallback={<LoadingSuspense />}>
                 <div id="container">
                   <JAuth type="page" authKey={location.pathname}>
-                    {/* <Outlet></Outlet> */}
                     {element}
                   </JAuth>
                 </div>
@@ -120,10 +119,7 @@ const App = (props: AppProps) => {
               title={appInfo.name || "管理后台"}
               applicationName={config.APP_NAME}
               loading={loading}
-              logoSrc={
-                appInfo.icon ||
-                "https://file.iviewui.com/admin-cloud-dist/img/logo-small.4a34a883.png"
-              }
+              logoSrc={appInfo.icon || null}
               onSubmit={(data) => handleLogin(data)}
             />
           )}

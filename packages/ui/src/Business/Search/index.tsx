@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
 import { useState } from "react";
-import { JFormItemProps } from "../../Base/Form/types";
+import { JFormItemProps } from "../../Base/Form/index.d";
 import JForm from "../../Base/Form";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd";

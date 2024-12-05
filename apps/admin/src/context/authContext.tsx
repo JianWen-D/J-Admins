@@ -9,7 +9,6 @@ import request from "../api";
 import config from "../config";
 import { registerMicroApps, start } from "qiankun";
 import { getMenuListByApplicationId } from "../api/types/role";
-import { useCommon } from "../utils/hooks";
 
 export const AuthContext = React.createContext<
   | {
@@ -34,7 +33,6 @@ export const AuthProvider = ({
   children: ReactNode;
   userInfo?: any;
 }) => {
-  const { setAuth } = useCommon();
   const [user, setUser] = useState<any>(userInfo || {});
   const [appList, setAppList] = useState<any[]>([]);
   const [menuList, setMenuList] = useState<any[]>([]);
@@ -70,14 +68,13 @@ export const AuthProvider = ({
 
   // 获取当前用户可用的应用列表
   const fetchGetAppListByUser = async (id?: string) => {
-    console.log(activeAppId);
     const result = await getApplicationListByUser();
     if (result.code === "0") {
       setAppList(result.data);
-      const activeApp = result.data.find(
-        (item: { id: string }) => item.id === (id || activeAppId)
-      );
-      setAuth("page", activeApp.permissions.page);
+      // const activeApp = result.data.find(
+      //   (item: { id: string }) => item.id === (id || activeAppId)
+      // );
+      // setAuth("page", activeApp.permissions.page);
       initMicroApp(
         result.data.filter(
           (item: { id: string }) => item.id !== (id || activeAppId)
@@ -170,4 +167,12 @@ export const AuthProvider = ({
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth必须在AuthProvider中使用");
+  }
+  return context;
 };

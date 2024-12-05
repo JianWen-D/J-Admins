@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { JFormItemProps } from "../../Base/Form/types";
 import { message, Modal } from "antd";
-import JForm from "../../Base/Form";
+import { JForm } from "@devin/ui";
 import { JColumnsOptions } from "../types";
 import useColumn, { ColumnType } from "../../tools";
 import { useForm } from "antd/es/form/Form";

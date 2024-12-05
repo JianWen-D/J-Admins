@@ -90,3 +90,11 @@ export const CommonProvider = ({
     </CommonContext.Provider>
   );
 };
+
+export const useCommon = () => {
+  const context = React.useContext(CommonContext);
+  if (!context) {
+    throw new Error("useCommonState必须在CommonProvider中使用");
+  }
+  return context;
+};
