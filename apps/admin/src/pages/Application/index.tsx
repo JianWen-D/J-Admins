@@ -1,7 +1,15 @@
+import {
+  JButtonList,
+  JCheck,
+  JEdit,
+  JColumnsOptions,
+  JSearchTable,
+  JDelete,
+  JPage,
+} from "@devin/ui";
 import { useState } from "react";
 import { useLoaderData } from "react-router";
-import JPage from "../../components/Business/JPage";
-import { Button, Divider, Modal, Space } from "antd";
+import { Button, Modal } from "antd";
 import {
   AppstoreOutlined,
   DeleteOutlined,
@@ -9,8 +17,6 @@ import {
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import JCheck from "../../components/Business/JCheck";
-import JEdit from "../../components/Business/JEdit";
 import {
   ApplicationProps,
   createApplication,
@@ -19,10 +25,6 @@ import {
   updateApplication,
 } from "../../api/types/application";
 import PermissionEdit from "./permission";
-import JSearchTable from "../../components/Business/JSearchTable";
-import { JColumnsOptions } from "../../components/Business/types";
-import JDelete from "../../components/Business/JDelete";
-import JButtonList from "../../components/Business/JButtonList";
 
 const ApplicationPage = () => {
   const LoaderData: any = useLoaderData();
@@ -117,6 +119,7 @@ const ApplicationPage = () => {
       wrapperCol: {
         span: 21,
       },
+      hideInSearch: true,
     },
     {
       type: "date",
@@ -124,6 +127,7 @@ const ApplicationPage = () => {
       label: "创建日期",
       width: 140,
       hideInForm: true,
+      hideInSearch: true,
     },
     {
       type: "date",
@@ -131,6 +135,7 @@ const ApplicationPage = () => {
       label: "更新时间",
       width: 140,
       hideInForm: true,
+      hideInSearch: true,
     },
     {
       type: "input",
@@ -222,7 +227,7 @@ const ApplicationPage = () => {
         ></JSearchTable>
       </JPage>
       <Modal
-        title="权限列表"
+        title="资源列表"
         width={1400}
         open={permissionEditVisible}
         destroyOnClose
@@ -237,12 +242,12 @@ const ApplicationPage = () => {
         }}
         footer={false}
       >
-        {/* <PermissionEdit
+        <PermissionEdit
           applicationId={applicationId}
           onSelect={() => {
             // setSelectUserId(id);
           }}
-        ></PermissionEdit> */}
+        ></PermissionEdit>
       </Modal>
     </>
   );

@@ -45,6 +45,9 @@ const JTable = <T extends AnyObject>(props: JTableProps<T>) => {
           x: "maxCount",
           y: props.scrollY || undefined,
         }}
+        expandable={{
+          defaultExpandAllRows: true,
+        }}
       />
       {(props.showPage ?? true) && (
         <div className={Style.JTablePagination}>

@@ -1,11 +1,15 @@
-import JCheck from "../../components/Business/JCheck";
-import JDelete from "../../components/Business/JDelete";
-import JEdit from "../../components/Business/JEdit";
-import JPage from "../../components/Business/JPage";
-import JSearchTable from "../../components/Business/JSearchTable";
-import useColumn, { ColumnType } from "../../components/tools";
-import { Button, Divider, Space, Tag } from "antd";
-import { JColumnsOptions } from "../../components/Business/types";
+import {
+  JCheck,
+  JDelete,
+  JEdit,
+  JPage,
+  JSearchTable,
+  JColumnsOptions,
+  ColumnType,
+  useColumn,
+  JButtonList,
+} from "@devin/ui";
+import { Button, Tag } from "antd";
 import { useLoaderData } from "react-router";
 import { UserProps } from "../../api/types/user";
 import {
@@ -21,7 +25,6 @@ import {
   getUserPage,
   updateUser,
 } from "../../api/types/user";
-import JButtonList from "../../components/Business/JButtonList";
 import { useCommon } from "../../context/commonContext";
 
 const UserPage = () => {
@@ -37,7 +40,7 @@ const UserPage = () => {
       maxUploadCount: 1,
       columnsNum: 24,
       labelCol: {
-        span: 3,
+        span: 2,
       },
       fileGroupId: "7cd169f80fa6da7d7b97a1320bc029eb",
       hideInSearch: true,
@@ -82,6 +85,7 @@ const UserPage = () => {
       type: "input",
       key: "createdByApplicationName",
       hideInForm: true,
+      hideInSearch: true,
       label: "用户来源",
       width: 200,
     },
@@ -91,6 +95,7 @@ const UserPage = () => {
       label: "账号",
       width: 200,
       hideInForm: true,
+      hideInSearch: true,
       render: (text) => {
         return text ? <Tag color="blue">已绑定</Tag> : <Tag>未绑定</Tag>;
       },
@@ -126,10 +131,10 @@ const UserPage = () => {
       width: 200,
       columnsNum: 24,
       labelCol: {
-        span: 3,
+        span: 2,
       },
       wrapperCol: {
-        span: 21,
+        span: 22,
       },
       hideInSearch: true,
     },

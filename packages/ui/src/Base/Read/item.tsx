@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { isNil } from "lodash";
 import { useMemo } from "react";
 import JIcon from "../Icon";
-import { JFormItemProps, JFormItemType } from "../Form";
+import { JFormItemProps, JFormItemType } from "../Form/index.d";
 
 export interface JReadItemProps
   extends JFormItemType,
@@ -72,7 +72,7 @@ const JReadItem = (props: JReadItemProps) => {
           findData[props.optionsProps?.label as string]
         );
       }
-      return props.value;
+      return props.value || "-";
     }
     // 多选
     if (

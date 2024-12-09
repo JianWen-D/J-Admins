@@ -1,4 +1,4 @@
-import { JFormItemProps } from "../Base/Form";
+import { JFormItemProps } from "../Base/Form/index.d";
 import { JTableOptions } from "../Base/Table/types";
 
 export interface JColumnsOptions<T>

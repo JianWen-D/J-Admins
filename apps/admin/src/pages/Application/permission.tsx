@@ -1,8 +1,14 @@
+import {
+  JCheck,
+  JEdit,
+  JColumnsOptions,
+  JTable,
+  useColumn,
+  ColumnType,
+  JButtonList,
+} from "@devin/ui";
 import { useState } from "react";
-import JPageCtrl from "../../components/Antd/PageCtrl";
-import { JFormItemProps } from "../../components/Antd/Form/types";
 import { useMount } from "ahooks";
-import JTable from "../../components/Antd/Table";
 import {
   createPermission,
   deletedPermission,
@@ -11,9 +17,7 @@ import {
   PermissionProps,
   updatePermission,
 } from "../../api/types/permission";
-import JCheck from "../../components/Antd/Check";
 import { Button, message, Modal } from "antd";
-import { JEdit } from "../../components/Antd/Edit";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -47,29 +51,23 @@ const PermissionEdit = (props: {
     }
   };
 
-  const columns: JFormItemProps[] = [
+  const columns: JColumnsOptions<PermissionProps>[] = [
     {
       type: "input",
       key: "name",
       label: "资源名称",
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "input",
       key: "value",
       label: "资源KEY",
-      edit: true,
-      show: true,
       width: 200,
     },
     {
       type: "select",
       key: "type",
       label: "资源类型",
-      edit: true,
-      show: true,
       width: 120,
       options: (dictList.PermissionType || []).map((item: any) => ({
         ...item,
@@ -83,14 +81,6 @@ const PermissionEdit = (props: {
         1: "blue",
         2: "red",
       },
-    },
-    {
-      type: "input",
-      key: "remark",
-      label: "备注",
-      edit: true,
-      show: true,
-      width: 200,
     },
     {
       type: "radio",
@@ -114,9 +104,81 @@ const PermissionEdit = (props: {
         label: "label",
         value: "value",
       },
-      edit: true,
-      show: true,
       width: 100,
+    },
+    {
+      type: "textarea",
+      key: "remark",
+      label: "备注",
+      width: 200,
+      columnsNum: 24,
+      labelCol: {
+        span: 2,
+      },
+      wrapperCol: {
+        span: 22,
+      },
+    },
+    {
+      label: "操作",
+      key: "operation",
+      type: "input",
+      hideInSearch: true,
+      hideInForm: true,
+      hideInCheck: true,
+      width: 360,
+      render: (_text, record) => {
+        return (
+          <JButtonList
+            options={[
+              <JCheck
+                options={columns}
+                id={record.id}
+                loadDataApi={getPermissionById}
+              >
+                <Button type="link" icon={<EyeOutlined />}>
+                  查看
+                </Button>
+              </JCheck>,
+              <JEdit
+                options={columns}
+                id={record.id}
+                loadDataApi={getPermissionById}
+                onSubmit={(data) => {
+                  handleUpdate(data);
+                }}
+              >
+                <Button type="link" icon={<EditOutlined />}>
+                  编辑
+                </Button>
+              </JEdit>,
+              <JEdit
+                title="新增子资源"
+                options={columns}
+                onSubmit={(data) => {
+                  handleCreate({
+                    ...data,
+                    parentId: record.id,
+                  });
+                }}
+              >
+                <Button type="link" icon={<PlusOutlined />}>
+                  新增子资源
+                </Button>
+              </JEdit>,
+              <Button
+                type="link"
+                icon={<DeleteOutlined />}
+                onClick={() => {
+                  handleDeleted(record.id as string);
+                }}
+              >
+                删除
+              </Button>,
+            ]}
+          />
+        );
+      },
     },
   ];
 
@@ -168,92 +230,27 @@ const PermissionEdit = (props: {
     });
   };
 
+  const tableOperation = useColumn(columns, ColumnType.Table);
+
   return (
     <>
-      <JPageCtrl
-        options={[]}
-        additionButton={
-          <>
-            <JEdit
-              titleKey="name"
-              options={columns}
-              onSubmit={(data) => {
-                handleCreate(data);
-              }}
-            >
-              <Button type="primary" icon={<PlusOutlined />}>
-                新增
-              </Button>
-            </JEdit>
-          </>
-        }
-        onSubmit={() => {
-          fetchGetPermission();
-        }}
-        onReload={() => {
-          fetchGetPermission();
-        }}
-      ></JPageCtrl>
+      <div style={{ marginBottom: 24 }}>
+        <JEdit
+          options={columns}
+          onSubmit={(data) => {
+            handleCreate(data);
+          }}
+        >
+          <Button type="primary" icon={<PlusOutlined />}>
+            新增
+          </Button>
+        </JEdit>
+      </div>
       <JTable
         data={list}
-        columns={columns}
+        columns={tableOperation}
         showPage={false}
         scrollY={480}
-        operationWidth={380}
-        operation={(_text, record) => {
-          return (
-            <>
-              <JCheck
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getPermissionById}
-              >
-                <Button type="link" icon={<EyeOutlined />}>
-                  查看
-                </Button>
-              </JCheck>
-              <JEdit
-                titleKey="name"
-                options={columns}
-                id={record.id}
-                loadDataApi={getPermissionById}
-                onSubmit={(data) => {
-                  handleUpdate(data);
-                }}
-              >
-                <Button type="link" icon={<EditOutlined />}>
-                  编辑
-                </Button>
-              </JEdit>
-              <Button
-                type="link"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  handleDeleted(record.id);
-                }}
-              >
-                删除
-              </Button>
-              {!record.parentId && (
-                <JEdit
-                  title="新增子资源"
-                  options={columns}
-                  onSubmit={(data) => {
-                    handleCreate({
-                      ...data,
-                      parentId: record.id,
-                    });
-                  }}
-                >
-                  <Button type="link" icon={<PlusOutlined />}>
-                    新增
-                  </Button>
-                </JEdit>
-              )}
-            </>
-          );
-        }}
       ></JTable>
     </>
   );

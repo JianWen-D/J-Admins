@@ -19,8 +19,9 @@ const JButtonList = (props: JButtonListProps) => {
               label: item,
             })),
           }}
+          trigger={["click"]}
         >
-          <Tooltip title="更多操作">
+          <Tooltip title="更多">
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 <EllipsisOutlined />

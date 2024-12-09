@@ -1,11 +1,15 @@
-import JCheck from "../../components/Business/JCheck";
-import JDelete from "../../components/Business/JDelete";
-import JEdit from "../../components/Business/JEdit";
-import JPage from "../../components/Business/JPage";
-import JSearchTable from "../../components/Business/JSearchTable";
-import useColumn, { ColumnType } from "../../components/tools";
-import { Button, Divider, Space } from "antd";
-import { JColumnsOptions } from "../../components/Business/types";
+import {
+  JCheck,
+  JDelete,
+  JEdit,
+  JPage,
+  JSearchTable,
+  useColumn,
+  ColumnType,
+  JColumnsOptions,
+  JButtonList,
+} from "@devin/ui";
+import { Button } from "antd";
 import { useLoaderData } from "react-router";
 import { DictProps } from "../../api/types/dict";
 import {
@@ -21,7 +25,6 @@ import {
   getDictPage,
   updateDict,
 } from "../../api/types/dict";
-import JButtonList from "../../components/Business/JButtonList";
 
 const DictPage = () => {
   const LoaderData: any = useLoaderData();
@@ -70,10 +73,10 @@ const DictPage = () => {
       width: 200,
       columnsNum: 24,
       labelCol: {
-        span: 3,
+        span: 2,
       },
       wrapperCol: {
-        span: 21,
+        span: 22,
       },
       hideInSearch: true,
     },

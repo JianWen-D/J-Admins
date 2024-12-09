@@ -1,14 +1,20 @@
+import {
+  JButtonList,
+  JCheck,
+  JEdit,
+  JColumnsOptions,
+  JSearchTable,
+  JDelete,
+  JPage,
+} from "@devin/ui";
 import { useLoaderData } from "react-router";
-import JPage from "../../components/Business//JPage";
-import { Button, Divider, Space } from "antd";
+import { Button } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import JCheck from "../../components/Business/JCheck";
-import JEdit from "../../components/Business/JEdit";
 import {
   FileGroupProps,
   createFileGroup,
@@ -17,10 +23,6 @@ import {
   getFileGroupPage,
   updateFileGroup,
 } from "../../api/types/filtGroup";
-import JSearchTable from "../../components/Business/JSearchTable";
-import { JColumnsOptions } from "../../components/Business/types";
-import JDelete from "../../components/Business/JDelete";
-import JButtonList from "../../components/Business/JButtonList";
 
 const FileGroupPage = () => {
   const LoaderData: any = useLoaderData();
@@ -31,18 +33,22 @@ const FileGroupPage = () => {
       key: "id",
       label: "文件组ID",
       width: 280,
+      hideInForm: true,
+      columnsNum: 12,
     },
     {
       type: "input",
       key: "groupName",
       label: "文件组名称",
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "input",
       key: "bucket",
-      label: "bucket",
+      label: "Bucket",
       width: 200,
+      columnsNum: 12,
     },
     {
       type: "input",
@@ -50,6 +56,7 @@ const FileGroupPage = () => {
       label: "最大文件大小",
       width: 200,
       hideInSearch: true,
+      columnsNum: 12,
     },
     {
       type: "input",
@@ -57,6 +64,7 @@ const FileGroupPage = () => {
       label: "文件类型",
       width: 200,
       hideInSearch: true,
+      columnsNum: 12,
     },
     {
       type: "input",
@@ -64,6 +72,7 @@ const FileGroupPage = () => {
       label: "文件存放路径",
       width: 200,
       hideInSearch: true,
+      columnsNum: 12,
     },
     {
       type: "radio",
@@ -88,6 +97,7 @@ const FileGroupPage = () => {
         value: "value",
       },
       width: 100,
+      columnsNum: 12,
     },
     {
       type: "textarea",
@@ -101,6 +111,7 @@ const FileGroupPage = () => {
       wrapperCol: {
         span: 21,
       },
+      hideInSearch: true,
     },
     {
       type: "date",
@@ -148,6 +159,7 @@ const FileGroupPage = () => {
                   refresh();
                 }}
                 saveRequest={updateFileGroup}
+                title={`编辑 - ${record.groupName}`}
               >
                 <Button type="link" size="small" icon={<EditOutlined />}>
                   编辑

@@ -23,7 +23,7 @@ const App = () => {
   const location = useLocation();
   const element = useKeepOutlet();
   const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
-
+  console.log(location);
   const fetchGetPasswordKey = async (
     password: string,
     callback: (password: string) => void

@@ -1,11 +1,14 @@
-import JCheck from "../../components/Business/JCheck";
-import JDelete from "../../components/Business/JDelete";
-import JEdit from "../../components/Business/JEdit";
-import JPage from "../../components/Business/JPage";
-import JSearchTable from "../../components/Business/JSearchTable";
+import {
+  JCheck,
+  JDelete,
+  JEdit,
+  JPage,
+  JSearchTable,
+  JColumnsOptions,
+  JButtonList,
+} from "@devin/ui";
 import MenuEdit from "./menuEdit";
-import { Button, Divider, Modal, Space } from "antd";
-import { JColumnsOptions } from "../../components/Business/types";
+import { Button, Modal } from "antd";
 import { useLoaderData } from "react-router";
 import { useMemo, useState } from "react";
 import { useMount } from "ahooks";
@@ -28,7 +31,6 @@ import {
   ApplicationProps,
   getApplicationList,
 } from "../../api/types/application";
-import JButtonList from "../../components/Business/JButtonList";
 
 const RolePage = () => {
   const LoaderData: any = useLoaderData();
@@ -94,7 +96,7 @@ const RolePage = () => {
         type: "textarea",
         key: "remark",
         label: "备注",
-        width: 200,
+        width: 240,
         labelCol: {
           span: 2,
         },

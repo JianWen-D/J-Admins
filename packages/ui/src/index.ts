@@ -19,10 +19,10 @@ export { default as JNoFound } from "./Business/NoFound";
 export { default as JPage } from "./Business/Page";
 export { default as JSearch } from "./Business/Search";
 export { default as JSearchTable } from "./Business/SearchTable";
-export { default as JKeepalive } from "./Business/Keepalive";
 export { default as JLogin } from "./Business/Login";
 
 /**
  * Tools
  */
 export { default as useColumn } from "./tools";
+export { ColumnType } from "./tools";

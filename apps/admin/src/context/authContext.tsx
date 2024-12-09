@@ -9,6 +9,7 @@ import request from "../api";
 import config from "../config";
 import { registerMicroApps, start } from "qiankun";
 import { getMenuListByApplicationId } from "../api/types/role";
+import { useCommon } from "./commonContext";
 
 export const AuthContext = React.createContext<
   | {
@@ -33,6 +34,7 @@ export const AuthProvider = ({
   children: ReactNode;
   userInfo?: any;
 }) => {
+  const { setAuth } = useCommon();
   const [user, setUser] = useState<any>(userInfo || {});
   const [appList, setAppList] = useState<any[]>([]);
   const [menuList, setMenuList] = useState<any[]>([]);
@@ -49,6 +51,10 @@ export const AuthProvider = ({
   useEffect(() => {
     if (request.getToken()) {
       fetchGetUserInfo();
+      fetchGetApplicationInfo();
+      fetchGetAppListByUser();
+      fetchGetMenuListByApplicationId();
+      setIsLogin(true);
     } else {
       fetchApplicationInfoWithoutLogin(activeAppId);
     }
@@ -59,10 +65,6 @@ export const AuthProvider = ({
     const result = await getUserInfo();
     if (result.code === "0") {
       setUser(result.data);
-      fetchGetApplicationInfo();
-      fetchGetAppListByUser();
-      fetchGetMenuListByApplicationId();
-      setIsLogin(true);
     }
   };
 
@@ -71,10 +73,10 @@ export const AuthProvider = ({
     const result = await getApplicationListByUser();
     if (result.code === "0") {
       setAppList(result.data);
-      // const activeApp = result.data.find(
-      //   (item: { id: string }) => item.id === (id || activeAppId)
-      // );
-      // setAuth("page", activeApp.permissions.page);
+      const activeApp = result.data.find(
+        (item: { id: string }) => item.id === (id || activeAppId)
+      );
+      setAuth("page", activeApp.permissions.page);
       initMicroApp(
         result.data.filter(
           (item: { id: string }) => item.id !== (id || activeAppId)
@@ -144,9 +146,6 @@ export const AuthProvider = ({
     fetchGetAppListByUser(id);
   };
 
-  const handleLogin = async () => {
-    fetchGetUserInfo();
-  };
   const handleLogout = async () => {
     setIsLogin(false);
   };
@@ -158,7 +157,7 @@ export const AuthProvider = ({
         appList,
         appInfo,
         isLogin,
-        onLogin: handleLogin,
+        onLogin: fetchGetUserInfo,
         logout: handleLogout,
         changeActiveApp,
         menuList,

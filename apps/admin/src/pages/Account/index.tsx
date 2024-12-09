@@ -1,26 +1,25 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router";
-import JPage from "../../components/Business/JPage";
 import {
-  Button,
-  Divider,
-  Dropdown,
-  message,
-  Modal,
-  Space,
-  Tooltip,
-} from "antd";
+  JSearchTable,
+  JColumnsOptions,
+  JCheck,
+  JEdit,
+  useColumn,
+  ColumnType,
+  JDelete,
+  JButtonList,
+  JPage,
+} from "@devin/ui";
+import { Button, message, Modal } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
-  EllipsisOutlined,
   EyeOutlined,
   LockOutlined,
   PlusOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import JCheck from "../../components/Business/JCheck";
-import JEdit from "../../components/Business/JEdit";
 import {
   AccountProps,
   changePassword,
@@ -33,11 +32,6 @@ import {
 import { getPasswordKey } from "../../api/types/auth";
 import JSEncrypt from "jsencrypt";
 import ChangeUser from "./changeUser";
-import JSearchTable from "../../components/Business/JSearchTable";
-import { JColumnsOptions } from "../../components/Business/types";
-import useColumn, { ColumnType } from "../../components/tools";
-import JDelete from "../../components/Business/JDelete";
-import JButtonList from "../../components/Business/JButtonList";
 
 const AccountPage = () => {
   const LoaderData: any = useLoaderData();
@@ -45,7 +39,11 @@ const AccountPage = () => {
   const [selectUserId, setSelectUserId] = useState<any>("");
   const [selectAccount, setSelectAccount] = useState<any>();
 
-  const passwodColumns: JColumnsOptions<any>[] = [
+  const passwodColumns: JColumnsOptions<{
+    oldPassword: string;
+    password: string;
+    confirmPassword: string;
+  }>[] = [
     {
       type: "input",
       key: "oldPassword",
@@ -57,6 +55,7 @@ const AccountPage = () => {
           message: "请输入旧密码",
         },
       ],
+      columnsNum: 12,
     },
     {
       type: "input",
@@ -69,6 +68,7 @@ const AccountPage = () => {
           message: "请输入新密码",
         },
       ],
+      columnsNum: 12,
     },
     {
       type: "input",
@@ -81,6 +81,7 @@ const AccountPage = () => {
           message: "请输入确认密码",
         },
       ],
+      columnsNum: 12,
     },
   ];
 
@@ -341,6 +342,7 @@ const AccountPage = () => {
             padding: "24px 0",
           },
         }}
+        okText="确定更换"
         onCancel={() => {
           setChangUserVisible(false);
           setSelectUserId("");
@@ -352,12 +354,12 @@ const AccountPage = () => {
           });
         }}
       >
-        {/* <ChangeUser
+        <ChangeUser
           selectId={selectUserId}
           onSelect={(id) => {
             setSelectUserId(id);
           }}
-        ></ChangeUser> */}
+        ></ChangeUser>
       </Modal>
     </>
   );

@@ -2,7 +2,6 @@
  * Base Components
  */
 export { default as JForm } from "./Base/Form";
-export type { JFormItemProps, JFormProps, JFormItemProps } from "./Base/Form";
 export { default as JIcon } from "./Base/Icon";
 export { default as JImage } from "./Base/Image";
 export { default as JRead } from "./Base/Read";
@@ -20,12 +19,11 @@ export { default as JNoFound } from "./Business/NoFound";
 export { default as JPage } from "./Business/Page";
 export { default as JSearch } from "./Business/Search";
 export { default as JSearchTable } from "./Business/SearchTable";
-// export { default as JKeepalive } from "./Business/Keepalive";
-export * as JKeepalive from "./Business/Keepalive";
 export { default as JLogin } from "./Business/Login";
+export type { JColumnsOptions } from "./Business/types";
 
 /**
  * Tools
  */
 export { default as useColumn } from "./tools";
-export type { ColumnType } from "./tools";
+export { ColumnType } from "./tools";

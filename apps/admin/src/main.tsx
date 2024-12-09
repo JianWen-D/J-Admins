@@ -12,7 +12,6 @@ import "./public-path.js";
 import router from "./router/index.tsx";
 import request from "./api/index.ts";
 import KeepAliveLayout from "./components/Keepalive/index.tsx";
-import App from "./App.tsx";
 
 let root: any = null;
 // 判断当前环境状态

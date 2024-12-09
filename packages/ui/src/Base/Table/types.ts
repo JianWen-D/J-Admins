@@ -1,6 +1,6 @@
 import { TableColumnProps } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
-import { JFormItemType } from "../Form";
+import { JFormItemType } from "../Form/index.d";
 import { AnyObject } from "antd/es/_util/type";
 
 export interface JTableOptions<T> extends TableColumnProps<T>, JFormItemType {
