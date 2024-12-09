@@ -9,7 +9,7 @@ import {
   JColumnsOptions,
   JButtonList,
 } from "@devin/ui";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useLoaderData } from "react-router";
 import { DictProps } from "../../api/types/dict";
 import {
@@ -100,7 +100,7 @@ const DictPage = () => {
       type: "input",
       key: "options",
       label: "操作",
-      width: 300,
+      width: 320,
       hideInSearch: true,
       hideInForm: true,
       hideInCheck: true,
@@ -131,6 +131,24 @@ const DictPage = () => {
               >
                 <Button type="link" size="small" icon={<EditOutlined />}>
                   编辑
+                </Button>
+              </JEdit>,
+              <JEdit
+                title="新增子字典"
+                options={columns}
+                onSubmit={(data) => {
+                  createDict({
+                    ...data,
+                    parentId: record.dictCode,
+                  }).then((res) => {
+                    if (res.code === "0") {
+                      message.success("创建成功");
+                    }
+                  });
+                }}
+              >
+                <Button type="link" icon={<PlusOutlined />}>
+                  新增子字典
                 </Button>
               </JEdit>,
               <JDelete
