@@ -318,12 +318,29 @@ const MenuEdit = (props: {
         render: (_text, record) => operationRender(columns, record),
       },
     ];
-  }, [permissionChildList, permissionList]) as JColumnsOptions<RoleMenuProps>[];
+  }, [operationRender, permissionChildList, permissionList]) as JColumnsOptions<RoleMenuProps>[];
 
   const tableOperation = useColumn(columns, ColumnType.Table);
 
   return (
     <>
+    <div style={{ marginBottom: 24 }}>
+      <JEdit
+        options={columns}
+        onSubmit={(data) => {
+          handleCreate({
+            ...data,
+            auths: data.authList?.join(",") || "",
+            roleId: props.roleId,
+            applicationId,
+          });
+        }}
+      >
+        <Button type="primary" icon={<PlusOutlined />}>
+          新增
+        </Button>
+      </JEdit>
+    </div>
       <JTable
         data={list}
         columns={tableOperation}

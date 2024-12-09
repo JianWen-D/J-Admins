@@ -141,10 +141,10 @@ const AccountPage = () => {
       width: 200,
       columnsNum: 24,
       labelCol: {
-        span: 3,
+        span: 2,
       },
       wrapperCol: {
-        span: 21,
+        span: 22,
       },
     },
     {

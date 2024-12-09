@@ -76,6 +76,7 @@ export const AuthProvider = ({
       const activeApp = result.data.find(
         (item: { id: string }) => item.id === (id || activeAppId)
       );
+      console.log(activeApp)
       setAuth("page", activeApp.permissions.page);
       initMicroApp(
         result.data.filter(
@@ -119,7 +120,6 @@ export const AuthProvider = ({
 
   // 注册微应用
   const initMicroApp = (appList: any[]) => {
-    console.log(appList)
     if (appList.length !== 0) {
       registerMicroApps(
         appList.map((item) => ({
