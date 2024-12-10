@@ -154,3 +154,15 @@ export const deletedRoleMenu = (id: string) => {
     params: {},
   });
 };
+
+/**
+ * 获取该角色的所有用户id，用作选择
+ * @param params
+ * @returns
+ */
+export const getUserIdsByRoleId = (id: string) => {
+  return request.get<string[]>({
+    url: `/base-service/role/getUserListByRoleId/${id}`,
+    params: {},
+  });
+};

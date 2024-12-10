@@ -9,9 +9,9 @@ import {
   useColumn,
   JButtonList,
 } from "@devin/ui";
-import { Button, Tag } from "antd";
+import { Button } from "antd";
 import { useLoaderData } from "react-router";
-import { UserProps } from "../../api/types/user";
+import { ArchiveProps } from "../../api/types/archive";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -19,61 +19,34 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import {
-  createUser,
-  deletedUser,
-  getUserById,
-  getUserPage,
-  updateUser,
-} from "../../api/types/user";
-import { useCommon } from "../../context/commonContext";
+  createArchive,
+  deletedArchive,
+  getArchiveById,
+  getArchivePage,
+  updateArchive,
+} from "../../api/types/archive";
 
 const ProvincePage = () => {
-  const { dictList } = useCommon();
   const LoaderData: any = useLoaderData();
 
-  const columns: JColumnsOptions<UserProps>[] = [
-    {
-      type: "image",
-      key: "avatar",
-      label: "用户头像",
-      width: 100,
-      maxUploadCount: 1,
-      columnsNum: 24,
-      labelCol: {
-        span: 2,
-      },
-      fileGroupId: "7cd169f80fa6da7d7b97a1320bc029eb",
-      hideInSearch: true,
-    },
-    {
-      type: "input",
-      key: "nickName",
-      label: "昵称",
-      width: 200,
-    },
+  const columns: JColumnsOptions<ArchiveProps>[] = [
     {
       type: "input",
       key: "name",
-      label: "姓名",
+      label: "名称",
       width: 200,
     },
     {
-      type: "select",
-      key: "gender",
-      label: "性别",
+      type: "input",
+      key: "user",
+      label: "负责人",
       width: 200,
-      options: (dictList.Gender || []).map((item: any) => ({
-        ...item,
-        dictCode: Number(item.dictCode),
-      })),
-      optionsProps: {
-        label: "dictName",
-        value: "dictCode",
-      },
-      color: {
-        1: "blue",
-        2: "red",
-      },
+    },
+    {
+      type: "input",
+      key: "phone",
+      label: "联系方式",
+      width: 200,
     },
     {
       type: "input",
@@ -83,22 +56,30 @@ const ProvincePage = () => {
     },
     {
       type: "input",
-      key: "createdByApplicationName",
-      hideInForm: true,
-      hideInSearch: true,
-      label: "用户来源",
+      key: "email",
+      label: "邮箱",
       width: 200,
     },
     {
       type: "input",
-      key: "accountId",
-      label: "账号",
+      key: "email",
+      label: "微信号",
       width: 200,
+    },
+    {
+      type: "input",
+      key: "areaCode",
+      hideInTable: true,
+      label: "所在地区",
+      width: 200,
+    },
+    {
+      type: "input",
+      key: "areaName",
       hideInForm: true,
       hideInSearch: true,
-      render: (text) => {
-        return text ? <Tag color="blue">已绑定</Tag> : <Tag>未绑定</Tag>;
-      },
+      label: "所在地区",
+      width: 200,
     },
     {
       type: "radio",
@@ -171,7 +152,7 @@ const ProvincePage = () => {
                 title="查看"
                 options={columns}
                 id={record.id}
-                loadDataApi={getUserById}
+                loadDataApi={getArchiveById}
               >
                 <Button type="link" size="small" icon={<EyeOutlined />}>
                   查看
@@ -181,11 +162,11 @@ const ProvincePage = () => {
                 title="编辑"
                 options={columns}
                 id={record.id}
-                loadDataApi={getUserById}
+                loadDataApi={getArchiveById}
                 onSubmit={() => {
                   refresh();
                 }}
-                saveRequest={updateUser}
+                saveRequest={updateArchive}
               >
                 <Button type="link" size="small" icon={<EditOutlined />}>
                   编辑
@@ -193,7 +174,7 @@ const ProvincePage = () => {
               </JEdit>,
               <JDelete
                 id={record.id as string}
-                request={deletedUser}
+                request={deletedArchive}
                 onSuccess={() => {
                   refresh();
                 }}
@@ -213,9 +194,9 @@ const ProvincePage = () => {
 
   return (
     <JPage title={LoaderData?.title || "-"} desc={LoaderData?.desc || "-"}>
-      <JSearchTable<UserProps>
+      <JSearchTable<ArchiveProps>
         options={columns}
-        request={getUserPage}
+        request={getArchivePage}
         searchOperation={(_form, refresh) => {
           return (
             <JEdit
@@ -224,7 +205,7 @@ const ProvincePage = () => {
               onSubmit={() => {
                 refresh();
               }}
-              saveRequest={createUser}
+              saveRequest={createArchive}
             >
               <Button type="primary" icon={<PlusOutlined />}>
                 新增

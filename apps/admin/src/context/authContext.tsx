@@ -50,9 +50,9 @@ export const AuthProvider = ({
 
   useEffect(() => {
     if (request.getToken()) {
+      fetchGetAppListByUser();
       fetchGetUserInfo();
       fetchGetApplicationInfo();
-      fetchGetAppListByUser();
       fetchGetMenuListByApplicationId();
       setIsLogin(true);
     } else {
@@ -77,14 +77,20 @@ export const AuthProvider = ({
         (item: { id: string }) => item.id === (id || activeAppId)
       );
       setAuth("page", activeApp.permissions.page);
-      initMicroApp(
-        result.data.filter(
-          (item: { id: string }) => item.id !== (id || activeAppId)
-        )
-      );
+      if (!id) {
+        initMicroApp(
+          result.data.filter(
+            (item: { id: string }) => item.id !== (id || activeAppId)
+          )
+        );
+      }
     }
   };
 
+  /**
+   * 获取应用的菜单
+   * @param id
+   */
   const fetchGetMenuListByApplicationId = async (id?: string) => {
     const result = await getMenuListByApplicationId(id || activeAppId);
     if (result.code === "0") {
@@ -92,7 +98,10 @@ export const AuthProvider = ({
     }
   };
 
-  // 获取当前应用信息\ - 非登陆
+  /**
+   * 获取当前应用信息 - 非登陆
+   * @param id
+   */
   const fetchApplicationInfoWithoutLogin = async (id: string) => {
     const result = await getApplicationInfoWithoutLogin(id);
     if (result.code === "0") {
@@ -104,7 +113,10 @@ export const AuthProvider = ({
       setAppInfo(result.data);
     }
   };
-  // 获取当前应用信息
+  /**
+   * 获取当前应用信息
+   * @param id
+   */
   const fetchGetApplicationInfo = async (id?: string) => {
     const result = await getApplicationInfo(id || activeAppId);
     if (result.code === "0") {
@@ -117,9 +129,11 @@ export const AuthProvider = ({
     }
   };
 
-  // 注册微应用
+  /**
+   * 注册微应用
+   * @param appList
+   */
   const initMicroApp = (appList: any[]) => {
-    console.log(appList)
     if (appList.length !== 0) {
       registerMicroApps(
         appList.map((item) => ({
@@ -141,10 +155,13 @@ export const AuthProvider = ({
     }
   };
 
+  /**
+   * 切换应用
+   * @param id
+   */
   const changeActiveApp = (id?: string) => {
     fetchGetApplicationInfo(id);
     fetchGetMenuListByApplicationId(id);
-    fetchGetAppListByUser(id);
   };
 
   const handleLogout = async () => {

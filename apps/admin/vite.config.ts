@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
         targets: ["ie >= 11"],
         additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
       }),
-      qiankun(env.VITE_APP_APP_NAME, { useDevMode: true }),
+      qiankun(env.VITE_APP_APP_NAME, { useDevMode: false }),
       importCDN({
         modules: [
           {

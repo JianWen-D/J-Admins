@@ -32,10 +32,7 @@ import {
 
 const { confirm } = Modal;
 
-const MenuEdit = (props: {
-  roleId: string;
-  onSubmit: (id: React.Key) => void;
-}) => {
+const MenuEdit = (props: { roleId: string }) => {
   const [list, setList] = useState<RoleMenuProps[]>([]);
   const [permissionList, setPermissionList] = useState<any>([]);
   const [permissionChildList, setPermissionChildList] = useState<any>([]);
@@ -318,29 +315,33 @@ const MenuEdit = (props: {
         render: (_text, record) => operationRender(columns, record),
       },
     ];
-  }, [operationRender, permissionChildList, permissionList]) as JColumnsOptions<RoleMenuProps>[];
+  }, [
+    operationRender,
+    permissionChildList,
+    permissionList,
+  ]) as JColumnsOptions<RoleMenuProps>[];
 
   const tableOperation = useColumn(columns, ColumnType.Table);
 
   return (
     <>
-    <div style={{ marginBottom: 24 }}>
-      <JEdit
-        options={columns}
-        onSubmit={(data) => {
-          handleCreate({
-            ...data,
-            auths: data.authList?.join(",") || "",
-            roleId: props.roleId,
-            applicationId,
-          });
-        }}
-      >
-        <Button type="primary" icon={<PlusOutlined />}>
-          新增
-        </Button>
-      </JEdit>
-    </div>
+      <div style={{ marginBottom: 24 }}>
+        <JEdit
+          options={columns}
+          onSubmit={(data) => {
+            handleCreate({
+              ...data,
+              auths: data.authList?.join(",") || "",
+              roleId: props.roleId,
+              applicationId,
+            });
+          }}
+        >
+          <Button type="primary" icon={<PlusOutlined />}>
+            新增
+          </Button>
+        </JEdit>
+      </div>
       <JTable
         data={list}
         columns={tableOperation}

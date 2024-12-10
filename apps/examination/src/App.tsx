@@ -72,7 +72,7 @@ const App = () => {
   };
 
   if (miniProgram) {
-    console.log(111)
+    console.log(111);
     // setAuth("page", config.AUTH_WHITE.page);
   }
 
@@ -81,9 +81,10 @@ const App = () => {
       {miniProgram && (
         <div id="container">
           <Suspense fallback={<LoadingSuspense />}>
-            <JAuth type="page" authKey={location.pathname} auth={auth}>
-              <Outlet></Outlet>
-            </JAuth>
+            {location.pathname}-{auth.page}
+            {/* <JAuth type="page" authKey={location.pathname} auth={auth}> */}
+            <Outlet></Outlet>
+            {/* </JAuth> */}
           </Suspense>
         </div>
       )}

@@ -24,7 +24,7 @@ const JLogin = (props: JLoginProps) => {
   const {
     loading = false,
     applicationName = "",
-    title = "后台管理系统",
+    title = "",
     logoSrc = "",
     onSubmit = () => {},
     onForget = () => {},
@@ -138,7 +138,7 @@ const JLogin = (props: JLoginProps) => {
             <img src={logoSrc} alt="" />
           </div>
         )}
-        <div className={styles.title}>{title}</div>
+        {title && <div className={styles.title}>{title}</div>}
         <JForm
           form={form}
           options={options}

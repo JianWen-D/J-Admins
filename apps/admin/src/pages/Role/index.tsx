@@ -18,6 +18,7 @@ import {
   EditOutlined,
   EyeOutlined,
   PlusOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import {
   RoleProps,
@@ -31,12 +32,14 @@ import {
   ApplicationProps,
   getApplicationList,
 } from "../../api/types/application";
+import UserEdit from "./userEdit";
 
 const RolePage = () => {
   const LoaderData: any = useLoaderData();
   const [appList, setAppList] = useState<ApplicationProps[]>([]);
   const [permissionCheckVisible, setPermissionCheckVisible] =
     useState<boolean>(false);
+  const [userCheckVisible, setUserCheckVisible] = useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>("");
 
   useMount(() => {
@@ -144,6 +147,28 @@ const RolePage = () => {
                     查看
                   </Button>
                 </JCheck>,
+                <Button
+                  type="link"
+                  size="small"
+                  icon={<AppstoreOutlined />}
+                  onClick={() => {
+                    setPermissionCheckVisible(true);
+                    setRoleId(record.id as string);
+                  }}
+                >
+                  菜单管理
+                </Button>,
+                <Button
+                  type="link"
+                  size="small"
+                  icon={<UserOutlined />}
+                  onClick={() => {
+                    setUserCheckVisible(true);
+                    setRoleId(record.id as string);
+                  }}
+                >
+                  用户管理
+                </Button>,
                 <JEdit
                   options={columns}
                   id={record.id}
@@ -168,17 +193,6 @@ const RolePage = () => {
                     删除
                   </Button>
                 </JDelete>,
-                <Button
-                  type="link"
-                  size="small"
-                  icon={<AppstoreOutlined />}
-                  onClick={() => {
-                    setPermissionCheckVisible(true);
-                    setRoleId(record.id as string);
-                  }}
-                >
-                  菜单管理
-                </Button>,
               ]}
             ></JButtonList>
           );
@@ -227,12 +241,32 @@ const RolePage = () => {
         }}
         okText="提交"
       >
-        <MenuEdit
+        <MenuEdit roleId={roleId}></MenuEdit>
+      </Modal>
+      <Modal
+        title="用户管理"
+        width={1400}
+        maskClosable={false}
+        open={userCheckVisible}
+        destroyOnClose
+        styles={{
+          body: {
+            padding: "24px 0",
+          },
+        }}
+        onCancel={() => {
+          setUserCheckVisible(false);
+          setRoleId("");
+        }}
+        footer={null}
+      >
+        <UserEdit
           roleId={roleId}
-          onSubmit={() => {
-            // setSelectUserId(id);
+          onClose={() => {
+            setUserCheckVisible(false);
+            setRoleId("");
           }}
-        ></MenuEdit>
+        ></UserEdit>
       </Modal>
     </>
   );
