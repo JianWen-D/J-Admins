@@ -258,7 +258,8 @@ const RolePage = () => {
           setUserCheckVisible(false);
           setRoleId("");
         }}
-        footer={null}
+        okText="提交"
+        // footer={null}
       >
         <UserEdit
           roleId={roleId}

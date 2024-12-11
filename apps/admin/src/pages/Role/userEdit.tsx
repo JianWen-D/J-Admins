@@ -29,12 +29,6 @@ const UserEdit = (props: { roleId: string; onClose: () => void }) => {
   const columns = useMemo(() => {
     return [
       {
-        type: "image",
-        key: "avatar",
-        label: "用户头像",
-        width: 100,
-      },
-      {
         type: "input",
         key: "nickName",
         label: "昵称",

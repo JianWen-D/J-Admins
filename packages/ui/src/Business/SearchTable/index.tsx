@@ -5,7 +5,7 @@ import { JColumnsOptions } from "../types";
 import { JTableOptions, JTableProps } from "../../Base/Table/types";
 import { FormInstance } from "antd";
 import useColumn, { ColumnType } from "../../tools";
-import { JFormItemProps } from "../../Base/Form";
+import { JFormItemProps } from "../../Base/Form/index.d";
 import { useMount } from "ahooks";
 import { AnyObject } from "antd/es/_util/type";
 

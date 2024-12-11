@@ -1,6 +1,6 @@
 import { message } from "antd";
 import config from "../config";
-import JAxios from "../utils/request";
+import JAxios from "@devin/utils/request";
 import { handleLoadingChange } from "../store/reducers/common";
 import store from "../store";
 

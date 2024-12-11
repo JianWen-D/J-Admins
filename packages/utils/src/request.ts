@@ -179,7 +179,7 @@ class JAxios {
     this.interface.interceptorsResponse(
       (response: AxiosResponse) => {
         const config = response.config as interceptorsRequestConfig;
-        console.log(response);
+        // console.log(response);
         // 消除响应拦截中的loading
         config.loading && this.handleLoading("remove", config.requestKey);
         // 返回自定义响应拦截的对象实例

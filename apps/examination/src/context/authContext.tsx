@@ -80,7 +80,7 @@ export const AuthProvider = ({
       setAuth("page", activeApp.permissions.page);
       initMicroApp(
         result.data.filter(
-          (item: { id: string }) => item.id !== (id || activeAppId)
+          (item: { id: string }) => item.id !== (config.APP_ID)
         )
       );
     }
