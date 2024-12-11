@@ -145,8 +145,8 @@ const UserEdit = (props: {
           onChange: (selectedRowKeys) => {
             setSelectUserIds(selectedRowKeys);
             props.onChange({
-              create: difference(selectUserIds, userIds),
-              delete: difference(userIds, selectUserIds),
+              create: difference(selectedRowKeys, userIds),
+              delete: difference(userIds, selectedRowKeys),
             });
           },
         }}

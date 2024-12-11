@@ -71,6 +71,8 @@ const RolePage = () => {
         create: [],
         delete: [],
       });
+    } else {
+      message.error(result.msg || '修改失败')
     }
   };
 
