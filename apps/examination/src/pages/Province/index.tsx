@@ -197,6 +197,9 @@ const ProvincePage = () => {
       <JSearchTable<ArchiveProps>
         options={columns}
         request={getArchivePage}
+        defaultParams={{
+          archiveType: 1,
+        }}
         searchOperation={(_form, refresh) => {
           return (
             <JEdit

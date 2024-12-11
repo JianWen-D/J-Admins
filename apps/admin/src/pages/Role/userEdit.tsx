@@ -5,8 +5,12 @@ import { useMemo, useState } from "react";
 import { getUserIdsByRoleId } from "../../api/types/role";
 import { useCommon } from "../../context/commonContext";
 import { getUserPage, UserProps } from "../../api/types/user";
+import { difference } from "lodash";
 
-const UserEdit = (props: { roleId: string; onClose: () => void }) => {
+const UserEdit = (props: {
+  roleId: string;
+  onChange: (data: { create: React.Key[]; delete: React.Key[] }) => void;
+}) => {
   const { dictList } = useCommon();
   const [userIds, setUserIds] = useState<string[]>([]);
   const [selectUserIds, setSelectUserIds] = useState<React.Key[]>([]);
@@ -129,7 +133,7 @@ const UserEdit = (props: { roleId: string; onClose: () => void }) => {
         hideInSearch: true,
       },
     ];
-  }, []) as JColumnsOptions<UserProps>[];
+  }, [dictList.Gender]) as JColumnsOptions<UserProps>[];
 
   return (
     <>
@@ -140,6 +144,10 @@ const UserEdit = (props: { roleId: string; onClose: () => void }) => {
           selectedRowKeys: selectUserIds,
           onChange: (selectedRowKeys) => {
             setSelectUserIds(selectedRowKeys);
+            props.onChange({
+              create: difference(selectUserIds, userIds),
+              delete: difference(userIds, selectUserIds),
+            });
           },
         }}
       ></JSearchTable>

@@ -166,3 +166,20 @@ export const getUserIdsByRoleId = (id: string) => {
     params: {},
   });
 };
+/**
+ * 获取该角色的所有用户id，用作选择
+ * @param params
+ * @returns
+ */
+export const updateUserByRole = (
+  id: string,
+  userIds: {
+    create: React.Key[];
+    delete: React.Key[];
+  }
+) => {
+  return request.post<string>({
+    url: `/base-service/role/updateUserByRole/${id}`,
+    params: userIds,
+  });
+};

@@ -8,7 +8,7 @@ import {
   JButtonList,
 } from "@devin/ui";
 import MenuEdit from "./menuEdit";
-import { Button, Modal } from "antd";
+import { Button, message, Modal } from "antd";
 import { useLoaderData } from "react-router";
 import { useMemo, useState } from "react";
 import { useMount } from "ahooks";
@@ -27,6 +27,7 @@ import {
   getRoleById,
   getRolePage,
   updateRole,
+  updateUserByRole,
 } from "../../api/types/role";
 import {
   ApplicationProps,
@@ -41,6 +42,13 @@ const RolePage = () => {
     useState<boolean>(false);
   const [userCheckVisible, setUserCheckVisible] = useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>("");
+  const [userChange, seUserChange] = useState<{
+    create: React.Key[];
+    delete: React.Key[];
+  }>({
+    create: [],
+    delete: [],
+  });
 
   useMount(() => {
     fetchGetApplicationList();
@@ -50,6 +58,19 @@ const RolePage = () => {
     const result = await getApplicationList({});
     if (result.code === "0") {
       setAppList(result.data);
+    }
+  };
+
+  const handleUpdateUserByRole = async () => {
+    const result = await updateUserByRole(roleId, userChange);
+    if (result.code === "0") {
+      message.success("修改成功");
+      setUserCheckVisible(false);
+      setRoleId("");
+      seUserChange({
+        create: [],
+        delete: [],
+      });
     }
   };
 
@@ -257,15 +278,20 @@ const RolePage = () => {
         onCancel={() => {
           setUserCheckVisible(false);
           setRoleId("");
+          seUserChange({
+            create: [],
+            delete: [],
+          });
+        }}
+        onOk={() => {
+          handleUpdateUserByRole();
         }}
         okText="提交"
-        // footer={null}
       >
         <UserEdit
           roleId={roleId}
-          onClose={() => {
-            setUserCheckVisible(false);
-            setRoleId("");
+          onChange={(data) => {
+            seUserChange(data);
           }}
         ></UserEdit>
       </Modal>

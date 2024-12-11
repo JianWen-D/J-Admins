@@ -18,10 +18,13 @@ interface JSearchTableProps<T extends AnyObject>
     refresh: () => Promise<void>
   ) => React.ReactElement;
   tableOperation?: (record?: T) => React.ReactElement;
+  defaultParams?: {
+    [key: string]: any;
+  };
 }
 
 const JSearchTable = <T extends AnyObject>(props: JSearchTableProps<T>) => {
-  const { options = [], ...tableProps } = props;
+  const { options = [], defaultParams = {}, ...tableProps } = props;
   const [list, setList] = useState<T[]>([]);
   // 基础变量
   const [pageNum, setPageNum] = useState<number>(1);
@@ -47,18 +50,18 @@ const JSearchTable = <T extends AnyObject>(props: JSearchTableProps<T>) => {
       const params = {
         pageNum: pageNum || 1,
         pageSize: pageSize || 10,
+        ...defaultParams,
         ...(searchData || searchParams || {}),
       };
       const result = await props.request(params);
       if (result.code === "0") {
-        // console.log(result);
         setTotal(result.data.total);
         setPageNum(result.data.pages);
         setPageSize(result.data.size);
         setList(result.data.records);
       }
     },
-    [props, searchParams]
+    [defaultParams, props, searchParams]
   );
 
   useMount(() => {
