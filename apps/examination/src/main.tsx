@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/index.ts";
 import "./index.css";
@@ -35,6 +35,7 @@ const render = (props: any) => {
         : document.getElementById("root")!
     );
   root.render(
+    <BrowserRouter>
     <Provider store={store}>
       <AppProviders auth={props.auth} userInfo={props.userInfo}>
         <KeepAliveLayout keepPaths={[]}>
@@ -42,6 +43,7 @@ const render = (props: any) => {
         </KeepAliveLayout>
       </AppProviders>
     </Provider>
+    </BrowserRouter>
   );
 };
 

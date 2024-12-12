@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/index.ts";
 import "./index.css";
@@ -9,9 +9,8 @@ import renderWithQiankun, {
   qiankunWindow,
 } from "vite-plugin-qiankun/dist/helper";
 import "./public-path.js";
-import router from "./router/index.tsx";
 import request from "./api/index.ts";
-import KeepAliveLayout from "./components/Keepalive/index.tsx";
+import App from "./App.tsx";
 
 let root: any = null;
 // 判断当前环境状态
@@ -21,9 +20,6 @@ const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
 const render = (props: any) => {
   const { container } = props;
   // 获取路由信息
-  const _router = createBrowserRouter(router, {
-    basename: miniProgram ? config.MINI_PROGRAM.APP_ROUTER : "/",
-  });
   // 存储token
   if (props.token) {
     request.setToken(props.token);
@@ -36,13 +32,16 @@ const render = (props: any) => {
         : document.getElementById("root")!
     );
   root.render(
+    // <BrowserRouter>
     <Provider store={store}>
       <AppProviders auth={props.auth} userInfo={props.userInfo}>
-        <KeepAliveLayout keepPaths={[]}>
-          <RouterProvider router={_router}></RouterProvider>
-        </KeepAliveLayout>
+        {/* <KeepAliveLayout keepPaths={[]}> */}
+        {/* </KeepAliveLayout> */}
+        <App></App>
+        {/* 123123 */}
       </AppProviders>
     </Provider>
+    // </BrowserRouter>
   );
 };
 

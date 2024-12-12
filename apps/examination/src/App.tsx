@@ -71,20 +71,14 @@ const App = () => {
     }
   };
 
-  if (miniProgram) {
-    console.log(111);
-    // setAuth("page", config.AUTH_WHITE.page);
-  }
-
   return (
     <ConfigProvider locale={locale} theme={theme}>
       {miniProgram && (
         <div id="container">
           <Suspense fallback={<LoadingSuspense />}>
-            {location.pathname}-{auth.page}
-            {/* <JAuth type="page" authKey={location.pathname} auth={auth}> */}
+            <JAuth type="page" authKey={location.pathname} auth={auth}>
             <Outlet></Outlet>
-            {/* </JAuth> */}
+            </JAuth>
           </Suspense>
         </div>
       )}

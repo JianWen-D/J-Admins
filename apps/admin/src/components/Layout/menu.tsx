@@ -12,22 +12,23 @@ interface JMenuProps {
 
 const JMenu = (props: JMenuProps) => {
   const navigate = useNavigate();
-  const Location = useLocation();
+  // const Location = useLocation();
   const { menuList } = useAuth();
   const [SelectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [OpenKeys, setOpenKeys] = useState<string[]>([]);
   const onClick = (key: string) => {
-    navigate(key);
+    // navigate(key);
+    window.location.href=key
     setSelectedKeys([key]);
   };
 
   useUpdateEffect(() => {
     const flattenData = flattenTreeArray<RoleMenuProps>(menuList);
     setOpenKeys([
-      flattenData.find((item) => item.path === Location.pathname)
+      flattenData.find((item) => item.path === window.location.pathname)
         ?.parentId as string,
     ]);
-    setSelectedKeys([Location.pathname]);
+    setSelectedKeys([window.location.pathname]);
   }, [props]);
 
   return (
