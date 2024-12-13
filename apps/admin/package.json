@@ -12,9 +12,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@devin/ui": "workspace:*",
     "@devin/utils": "workspace:*",
-    "@ant-design/icons": "^5.3.7",
     "@reduxjs/toolkit": "^2.2.6",
     "@types/lodash": "^4.17.7",
     "ahooks": "^3.8.0",
@@ -22,6 +22,7 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "jsencrypt": "^3.3.2",
+    "keepalive-for-react": "^3.0.6",
     "less": "^4.2.0",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
@@ -39,8 +40,8 @@
     "react-zoom-pan-pinch": "^3.6.1"
   },
   "devDependencies": {
-    "@devin/typescript-config": "workspace:*",
     "@devin/eslint-config": "workspace:*",
+    "@devin/typescript-config": "workspace:*",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-legacy": "^5.4.1",

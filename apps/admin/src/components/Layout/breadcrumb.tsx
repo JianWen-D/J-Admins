@@ -1,22 +1,29 @@
-import { Breadcrumb } from "antd";
-import { useMatches } from "react-router";
+import { AndroidOutlined, AppleOutlined } from "@ant-design/icons";
+import { Tabs } from "antd";
 
 const JHeaderBreadcrumb = () => {
-  const Matches = useMatches();
   return (
     <div
       style={{
         lineHeight: 32,
-        padding: "12px 16px",
-        display: "flex",
-        alignItems: "center",
+        marginBottom: 16,
+        background: "#fff",
       }}
     >
-      <Breadcrumb
-        items={Matches.map((item: any) => ({
-          href: item.pathname,
-          title: item.data.title,
-        }))}
+      <Tabs
+        tabBarStyle={{
+          marginBottom: 0,
+          padding: "0 12px",
+        }}
+        items={[AppleOutlined, AndroidOutlined].map((Icon, i) => {
+          const id = String(i + 1);
+          return {
+            key: id,
+            label: `Tab ${id}`,
+            children: null,
+            icon: <Icon />,
+          };
+        })}
       />
     </div>
   );

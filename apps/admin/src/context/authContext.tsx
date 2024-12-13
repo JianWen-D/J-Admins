@@ -7,7 +7,7 @@ import {
 } from "../api/types/auth";
 import request from "../api";
 import config from "../config";
-import { registerMicroApps, start } from "qiankun";
+import { loadMicroApp, registerMicroApps, start } from "qiankun";
 import { getMenuListByApplicationId } from "../api/types/role";
 import { useCommon } from "./commonContext";
 
@@ -50,6 +50,8 @@ export const AuthProvider = ({
 
   useEffect(() => {
     if (request.getToken()) {
+      registerMicroApps([]);
+      start();
       fetchGetUserInfo();
       fetchGetApplicationInfo();
       fetchGetAppListByUser();
@@ -78,9 +80,7 @@ export const AuthProvider = ({
       );
       setAuth("page", activeApp.permissions.page);
       initMicroApp(
-        result.data.filter(
-          (item: { id: string }) => item.id !== (config.APP_ID)
-        )
+        result.data.filter((item: { id: string }) => item.id !== config.APP_ID)
       );
     }
   };
@@ -120,12 +120,12 @@ export const AuthProvider = ({
   // 注册微应用
   const initMicroApp = (appList: any[]) => {
     if (appList.length !== 0) {
-      registerMicroApps(
-        appList.map((item) => ({
+      appList.map((item) =>
+        loadMicroApp({
           name: item.name,
           entry: item.entry,
           container: item.container,
-          activeRule: item.activeRule,
+          // activeRule: item.activeRule,
           props: {
             token: request.getToken(),
             auth: {
@@ -134,9 +134,8 @@ export const AuthProvider = ({
               api: [],
             },
           },
-        }))
+        })
       );
-      start();
     }
   };
 

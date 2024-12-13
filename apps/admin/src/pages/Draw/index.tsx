@@ -22,7 +22,7 @@ import JEdit from "../../components/Antd/Edit";
 
 const DrawPage = () => {
   const RouteLoaderData = useRouteLoaderData("home");
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
   const Matches = useMatches();
   const navigate = useNavigate();
 

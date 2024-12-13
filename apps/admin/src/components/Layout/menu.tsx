@@ -1,7 +1,7 @@
 import { useUpdateEffect } from "ahooks";
 import { Menu } from "antd";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { flattenTreeArray } from "../../utils";
 import { RoleMenuProps } from "../../api/types/role";
 import { useAuth } from "../../context/authContext";
@@ -12,13 +12,11 @@ interface JMenuProps {
 
 const JMenu = (props: JMenuProps) => {
   const navigate = useNavigate();
-  // const Location = useLocation();
   const { menuList } = useAuth();
   const [SelectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [OpenKeys, setOpenKeys] = useState<string[]>([]);
   const onClick = (key: string) => {
-    // navigate(key);
-    window.location.href=key
+    navigate(key);
     setSelectedKeys([key]);
   };
 

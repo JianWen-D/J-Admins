@@ -34,7 +34,7 @@ import JSEncrypt from "jsencrypt";
 import ChangeUser from "./changeUser";
 
 const AccountPage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
   const [changUserVisible, setChangUserVisible] = useState<boolean>(false);
   const [selectUserId, setSelectUserId] = useState<any>("");
   const [selectAccount, setSelectAccount] = useState<any>();

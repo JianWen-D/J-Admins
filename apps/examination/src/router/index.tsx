@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
-import App from "../App";
-import { Button, Result } from "antd";
+import { KeepAliveRouteOutlet } from "keepalive-for-react";
+import { JNoFound } from "@devin/ui";
+import config from "../config";
 
 /**
  * 懒加载页面
@@ -13,43 +14,32 @@ const lazyComponent = (path: string): React.ReactElement => {
 };
 
 // 路由数组
-const router = [
-  {
-    path: "/",
-    id: "layout",
-    loader: () => ({ title: "英才考级" }),
-    element: <App></App>,
-    children: [
-      {
-        path: "/archives/province",
-        id: "archivesProvince",
-        loader: () => ({ title: "省级档案" }),
-        element: lazyComponent("Province"),
-      },
-      {
-        path: "*",
-        id: "nofund",
-        loader: () => ({ title: "页面不存在" }),
-        element: (
-          <Result
-            status="404"
-            title="404"
-            subTitle="抱歉，该页面不存在"
-            extra={
-              <Button
-                type="primary"
-                onClick={() => {
-                  window.history.go(-1);
-                }}
-              >
-                返回上一页
-              </Button>
-            }
-          />
-        ),
-      },
-    ],
-  },
-];
+const router = (isMirco: boolean) => {
+  const formatPath = (path: string): string => {
+    return `${isMirco ? config.MINI_PROGRAM.APP_ROUTER : ""}${path}`;
+  };
+  return [
+    {
+      path: "/",
+      id: "layout",
+      loader: () => ({ title: "c" }),
+      element: <KeepAliveRouteOutlet />,
+      children: [
+        {
+          path: formatPath("/archives/province"),
+          id: "archivesProvince",
+          loader: () => ({ title: "省级档案" }),
+          element: lazyComponent("Province"),
+        },
+        {
+          path: "*",
+          id: "nofund",
+          loader: () => ({ title: "页面不存在" }),
+          element: <JNoFound hiden />,
+        },
+      ],
+    },
+  ];
+};
 
 export default router;

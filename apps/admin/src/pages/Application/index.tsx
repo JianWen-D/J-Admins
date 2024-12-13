@@ -27,7 +27,7 @@ import {
 import PermissionEdit from "./permission";
 
 const ApplicationPage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
   // 基础变量
   const [permissionEditVisible, setPermissionEditVisible] =
     useState<boolean>(false);

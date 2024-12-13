@@ -27,7 +27,7 @@ import {
 } from "../../api/types/dict";
 
 const DictPage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
 
   const columns: JColumnsOptions<DictProps>[] = [
     {

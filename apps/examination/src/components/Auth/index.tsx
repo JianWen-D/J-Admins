@@ -1,4 +1,5 @@
-import {JNoFound} from "@devin/ui";
+import { JNoFound } from "@devin/ui";
+import { qiankunWindow } from "vite-plugin-qiankun/dist/helper";
 
 interface JAuthProps {
   authKey: string;
@@ -26,7 +27,7 @@ const JAuth = (props: JAuthProps) => {
     return auth[type].find((item: string) => authKey.includes(item)) ? (
       children
     ) : (
-      <JNoFound />
+      <JNoFound hiden={qiankunWindow.__POWERED_BY_QIANKUN__} />
     );
   }
   return auth[type].find((item: string) => item === authKey) ? (

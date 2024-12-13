@@ -1,6 +1,10 @@
 import { Button, Result } from "antd";
 
-const JNoFound: React.FC = () => {
+const JNoFound = (props: { hiden?: boolean }) => {
+  if (props.hiden) {
+    console.log("hiden");
+    return null;
+  }
   return (
     <Result
       status="404"

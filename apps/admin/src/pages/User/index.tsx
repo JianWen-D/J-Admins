@@ -29,7 +29,7 @@ import { useCommon } from "../../context/commonContext";
 
 const UserPage = () => {
   const { dictList } = useCommon();
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
 
   const columns: JColumnsOptions<UserProps>[] = [
     {

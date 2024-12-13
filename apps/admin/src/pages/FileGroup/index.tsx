@@ -25,7 +25,7 @@ import {
 } from "../../api/types/filtGroup";
 
 const FileGroupPage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
 
   const columns: JColumnsOptions<FileGroupProps>[] = [
     {

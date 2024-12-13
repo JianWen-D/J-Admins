@@ -36,7 +36,7 @@ import {
 import UserEdit from "./userEdit";
 
 const RolePage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
   const [appList, setAppList] = useState<ApplicationProps[]>([]);
   const [permissionCheckVisible, setPermissionCheckVisible] =
     useState<boolean>(false);
@@ -72,7 +72,7 @@ const RolePage = () => {
         delete: [],
       });
     } else {
-      message.error(result.msg || '修改失败')
+      message.error(result.msg || "修改失败");
     }
   };
 

@@ -20,6 +20,7 @@ export { default as JPage } from "./Business/Page";
 export { default as JSearch } from "./Business/Search";
 export { default as JSearchTable } from "./Business/SearchTable";
 export { default as JLogin } from "./Business/Login";
+export { default as JAuth } from "./Business/Auth";
 
 /**
  * Tools

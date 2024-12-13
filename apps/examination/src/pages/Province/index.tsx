@@ -27,7 +27,7 @@ import {
 } from "../../api/types/archive";
 
 const ProvincePage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
 
   const columns: JColumnsOptions<ArchiveProps>[] = [
     {

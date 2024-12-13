@@ -124,7 +124,7 @@ const JLayout = (props: JLayoutProps) => {
               avatar={user.avatar}
             ></JLayoutHeader>
           </Header>
-          {/* <JHeaderBreadcrumb></JHeaderBreadcrumb> */}
+          <JHeaderBreadcrumb></JHeaderBreadcrumb>
           <Content style={{ margin: "0 16px", overflow: "initial" }}>
             {props.children}
           </Content>

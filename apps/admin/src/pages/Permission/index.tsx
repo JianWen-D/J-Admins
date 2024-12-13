@@ -28,7 +28,7 @@ import { getDictList } from "../../api/types/dict";
 const { confirm } = Modal;
 
 const UserPage = () => {
-  const LoaderData: any = useLoaderData();
+  const LoaderData: any = {};
   // 基础变量
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);

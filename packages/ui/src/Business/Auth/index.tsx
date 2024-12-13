@@ -4,6 +4,7 @@ interface JAuthProps {
   authKey: string;
   type: "page" | "element" | "api";
   children?: React.ReactElement;
+  hideNoFound?: boolean;
   auth: {
     page: string[];
     api: string[];
@@ -26,7 +27,7 @@ const JAuth = (props: JAuthProps) => {
     return auth[type].find((item: string) => authKey.includes(item)) ? (
       children
     ) : (
-      <JNoFound />
+      <JNoFound hiden={props.hideNoFound} />
     );
   }
   return auth[type].find((item: string) => item === authKey) ? (

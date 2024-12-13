@@ -4,31 +4,21 @@ import { ConfigProvider, message } from "antd";
 import locale from "antd/locale/zh_CN";
 import { JLogin } from "@devin/ui";
 import JLayout from "./components/Layout";
-import { Outlet, RouterProvider, useLocation, useRoutes } from "react-router";
+import { useRoutes } from "react-router";
 import LoadingSuspense from "./components/Loading";
-import JAuth from "./components/Auth";
 import config from "./config";
 import { fetchLogin, getPasswordKey } from "./api/types/auth";
 import JSEncrypt from "jsencrypt";
 import request from "./api";
-import { useKeepOutlet } from "./components/Keepalive";
 import { useAuth } from "./context/authContext";
 import { useCommon } from "./context/commonContext";
 import theme from "./theme";
-import { qiankunWindow } from "vite-plugin-qiankun/dist/helper";
 import router from "./router";
-import { createBrowserRouter } from "react-router-dom";
 
 const App = () => {
   const { isLogin, onLogin, appInfo } = useAuth();
-  const { loading, setLoading, setAuth, auth } = useCommon();
-  // const location = useLocation();
+  const { loading, setLoading } = useCommon();
 
-  const miniProgram = qiankunWindow.__POWERED_BY_QIANKUN__;
-  const _router = createBrowserRouter(router, {
-    basename: miniProgram ? config.MINI_PROGRAM.APP_ROUTER : "/",
-  });
-  // const element = useKeepOutlet();
   const fetchGetPasswordKey = async (
     password: string,
     callback: (password: string) => void
@@ -77,48 +67,26 @@ const App = () => {
     }
   };
 
-  if (miniProgram) {
-    console.log(111);
-    // setAuth("page", config.AUTH_WHITE.page);
-  }
-
   return (
     <ConfigProvider locale={locale} theme={theme}>
-      {miniProgram && (
-        <div id="container">
-          <Suspense fallback={<LoadingSuspense />}>
-            {/* <JAuth type="page" authKey={location.pathname} auth={auth}> */}
-              <Outlet></Outlet>
-            {/* </JAuth> */}
-          </Suspense>
-        </div>
-      )}
-      {!miniProgram && (
-        <div className="app">
-          {isLogin ? (
-            // 123
-            <JLayout>
-              <Suspense fallback={<LoadingSuspense />}>
-                <div id="container">
-                  {/* <JAuth type="page" authKey={location.pathname} auth={auth}> */}
-                    {/* <Outlet></Outlet> */}
-                    {/* {useRoutes(router)} */}
-                  {/* </JAuth> */}
-                  <RouterProvider router={_router}></RouterProvider>
-                </div>
-              </Suspense>
-            </JLayout>
-          ) : (
-            <JLogin
-              title={appInfo.name || "管理后台"}
-              applicationName={config.APP_NAME}
-              loading={loading}
-              logoSrc={appInfo.icon || null}
-              onSubmit={(data) => handleLogin(data)}
-            />
-          )}
-        </div>
-      )}
+      <div className="app">
+        {isLogin ? (
+          <JLayout>
+            <Suspense fallback={<LoadingSuspense />}>
+              <div id="container"></div>
+              {useRoutes(router(false))}
+            </Suspense>
+          </JLayout>
+        ) : (
+          <JLogin
+            title={appInfo.name || "管理后台"}
+            applicationName={config.APP_NAME}
+            loading={loading}
+            logoSrc={appInfo.icon || null}
+            onSubmit={(data) => handleLogin(data)}
+          />
+        )}
+      </div>
     </ConfigProvider>
   );
 };
